@@ -1,0 +1,27 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+// css代码
+._css-animation-router-enter {
+  opacity: 0;
+  transform: scale(0.6)
+}
+
+._css-animation-router-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: all 1000ms;
+}
+
+._css-animation-router-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+
+._css-animation-router-exit-active {
+  opacity: 0;
+  transform: scale(.6);
+  transition: all 1000ms
+}

@@ -1,0 +1,37 @@
+/* eslint-env node */
+module.exports = {
+  root: true,
+  parser: "@typescript-eslint/parser",
+  env: {
+    browser: true,
+    es2021: true,
+  },
+  extends: [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+  ],
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
+    ecmaVersion: "latest",
+    sourceType: "module",
+  },
+  globals: {
+    JSX: "readonly",
+  },
+  settings: {
+    react: {
+      pragma: "React", // Pragma to use, default to "React"
+      fragment: "Fragment", // Fragment to use (may be a property of <pragma>), default to "Fragment"
+      version: "detect", // React version. "detect" automatically picks the version you have installed.
+      flowVersion: "0.53", // Flow version
+    },
+  },
+  plugins: ["react", "prettier", "react-hooks", "@typescript-eslint/eslint-plugin"],
+  rules: {
+    "prettier/prettier": ["error", { arrowParens: "avoid", printWidth: 90 }],
+    "no-unused-vars": [2, { vars: "all", args: "none" }],
+  },
+};
