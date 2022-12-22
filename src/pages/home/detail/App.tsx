@@ -13,7 +13,7 @@ const itemOptions: ItemConfig[] = [
       label: "文本",
       name: "text",
       required: true,
-      rules: [{ required: true, message: '请输入文本' }]
+      rules: [{ required: true, message: "请输入文本" }],
     },
   },
   {
@@ -22,7 +22,7 @@ const itemOptions: ItemConfig[] = [
       label: "下拉选项",
       name: "select",
       required: true,
-      rules: [{ required: true, message: '请选择选项' }]
+      rules: [{ required: true, message: "请选择选项" }],
     },
     valueProps: {
       allowClear: true,
@@ -46,7 +46,7 @@ interface FormData {
 }
 
 interface ActionFormData {
-  user?: string
+  user?: string;
 }
 
 export default function Detail() {
@@ -57,7 +57,7 @@ export default function Detail() {
   const ActionOnSubmit = (data: ActionFormData) => {
     return new Promise(rev => {
       console.log("data", data);
-      console.log('mock fetch');
+      console.log("mock fetch");
       setTimeout(() => rev, 3000);
     });
   };

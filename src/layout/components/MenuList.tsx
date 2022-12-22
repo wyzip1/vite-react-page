@@ -4,6 +4,7 @@ import { Menu } from "antd";
 import type { MenuProps } from "antd";
 import type { router } from "src/types";
 import { useLocation, useNavigate } from "react-router-dom";
+import routerList from "src/router";
 
 interface MenuListProps {
   routerList: router[];
@@ -24,7 +25,7 @@ const getItems = (routers?: router[]): MenuProps["items"] => {
 
   const itemList = routers.filter(item => item.name && !item.hidden);
 
-  return itemList.map(mapMenu) as MenuProps["items"];
+  return itemList.map(mapMenu);
 };
 
 const mapRouter = (router: router, parent?: router): router => {
@@ -32,6 +33,23 @@ const mapRouter = (router: router, parent?: router): router => {
     router.children.forEach(_router => mapRouter(_router, router));
   router._parent = parent;
   return router;
+};
+
+const matchRouter = (
+  url: string,
+  idx: number = 0,
+  base: string = "",
+  list: router[] = routerList
+): router | undefined => {
+  for (const router of list) {
+    if (!router.component) continue;
+    const path = router.path.replace("/*", "");
+    const findIdx = url.indexOf(path);
+    if (findIdx !== idx) continue;
+    base += (idx === 0 ? "" : "/") + path;
+    if (url === base) return router;
+    return matchRouter(url, idx + path.length + 1, base, router.children || []);
+  }
 };
 
 export default function MenuList({ routerList }: MenuListProps) {
@@ -50,13 +68,18 @@ export default function MenuList({ routerList }: MenuListProps) {
     return mapRouteList.filter(router => router.children?.length).map(mapPathLink);
   }, [mapRouteList]);
 
+  const activePath = useMemo(() => {
+    const router = matchRouter(Location.pathname);
+    return router?.activePath;
+  }, [Location.pathname]);
+
   return (
     <Menu
       items={items}
       mode="inline"
       theme="dark"
       defaultOpenKeys={expandAll}
-      selectedKeys={[Location.pathname]}
+      selectedKeys={[activePath || Location.pathname]}
       onSelect={({ selectedKeys }) => navigate(selectedKeys[0])}
     />
   );

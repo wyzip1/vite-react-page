@@ -33,7 +33,7 @@ export default function List() {
   };
 
   return (
-    <PageList<TableData>
+    <PageList
       searchOptions={SearchOptions}
       rowKey="id"
       doSearch={onSearch}

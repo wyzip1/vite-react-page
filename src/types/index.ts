@@ -17,6 +17,7 @@ export interface router {
   component?: LazyExoticComponent<(props: defaultComponentProps) => JSX.Element>;
   children?: router[];
   _parent?: router;
+  activePath?: string;
 }
 
 export type SortType<T> = SorterResult<T> | SorterResult<T>[];

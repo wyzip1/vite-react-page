@@ -14,8 +14,8 @@ interface ActionToFormProps {
   btnProps: ButtonProps;
   formProps: ATFormProps;
   modalTitle?: string;
-  children: React.ReactNode
-  autoConfirmClose?: Boolean
+  children: React.ReactNode;
+  autoConfirmClose?: Boolean;
 }
 
 type OnClick = (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
@@ -36,7 +36,7 @@ export default function ActionToForm({
   children,
   formProps,
   modalTitle,
-  autoConfirmClose = true
+  autoConfirmClose = true,
 }: ActionToFormProps) {
   const [open, setOpen] = useState<boolean>(false);
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
@@ -48,7 +48,7 @@ export default function ActionToForm({
     FormInstance.current?.reset();
   };
 
-  const onConfirm = () => FormInstance.current?.submit()
+  const onConfirm = () => FormInstance.current?.submit();
 
   setBtnProps(btnProps, () => setOpen(true));
 
@@ -58,7 +58,7 @@ export default function ActionToForm({
     try {
       setConfirmLoading(true);
       await originSubmit?.(data);
-      autoConfirmClose && cancel()
+      autoConfirmClose && cancel();
     } catch (error) {
       console.log("onSubmit Error:", error);
     } finally {
