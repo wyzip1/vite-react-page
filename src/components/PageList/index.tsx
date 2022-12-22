@@ -113,6 +113,7 @@ export default function Page<DataType extends object = {}>({
   return (
     <div>
       <Search
+        loading={loading}
         config={searchOptions}
         onSearch={onSearch}
         onChange={setFormData}

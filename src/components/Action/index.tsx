@@ -7,7 +7,7 @@ import type { ButtonProps, PopconfirmProps } from "antd";
 
 interface ActionProps {
   children: ReactNode;
-  btnProps?: ButtonProps;
+  btnProps?: ButtonProps | true;
   confirmProps?: PopconfirmProps;
 }
 
@@ -25,7 +25,7 @@ function getNode<T extends TypeMap>(type: T, node: ReactNode, props?: GetProps<T
 }
 
 export default function Action({ children, btnProps, confirmProps }: ActionProps) {
-  const btnNode = getNode("button", children, btnProps);
+  const btnNode = getNode("button", children, btnProps === true ? {} : btnProps);
   const confirmNode = getNode("confirm", btnNode, confirmProps);
 
   return <ActionStyled>{confirmNode}</ActionStyled>;

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { Menu } from "antd";
 
 import type { MenuProps } from "antd";
@@ -38,8 +38,6 @@ export default function MenuList({ routerList }: MenuListProps) {
   const Location = useLocation();
   const navigate = useNavigate();
 
-  const [selectedKeys, setSelectedKeys] = useState<string[]>();
-
   const mapRouteList = useMemo<router[]>(() => {
     return routerList.map(router => mapRouter(router));
   }, [routerList]);
@@ -58,12 +56,8 @@ export default function MenuList({ routerList }: MenuListProps) {
       mode="inline"
       theme="dark"
       defaultOpenKeys={expandAll}
-      defaultSelectedKeys={[Location.pathname]}
-      selectedKeys={selectedKeys}
-      onSelect={({ selectedKeys }) => {
-        setSelectedKeys(selectedKeys);
-        navigate(selectedKeys[0]);
-      }}
+      selectedKeys={[Location.pathname]}
+      onSelect={({ selectedKeys }) => navigate(selectedKeys[0])}
     />
   );
 }
