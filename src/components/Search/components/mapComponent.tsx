@@ -1,33 +1,26 @@
 /* eslint-disable react/display-name */
 import React from "react";
-import { Input, Select } from "antd";
+import { Select } from "antd";
+import createInput from "./items/Input";
+import createDateRangePicker from "./items/DateRangePicker";
 import { covertLength } from "../utils";
 
 import type { ChangeState, Options } from "../type";
+import type { RangeValue } from "./items/DateRangePicker";
 
 const mapComponent = (options: Options) => {
   const width = covertLength(options.width) || "100%";
   switch (options.type) {
     case "input":
-      return (onChange: ChangeState, value: unknown, search: () => void) => {
-        return (
-          <Input
-            value={value as string}
-            onChange={ev => onChange(ev.target.value)}
-            style={{ width }}
-            {...options.props}
-            onKeyDown={ev => {
-              if (ev.code !== "Enter") return;
-              search();
-              options.props?.onKeyDown?.(ev);
-            }}
-          />
-        );
-      };
+      return (onChange: ChangeState, value: unknown, search: () => void) =>
+        createInput({ width, props: options.props, onChange, search, value });
     case "select":
       return (onChange: ChangeState, value: unknown) => (
         <Select value={value} onChange={onChange} style={{ width }} {...options.props} />
       );
+    case "date":
+      return (onChange: ChangeState, value: RangeValue<string>) =>
+        createDateRangePicker({ value, width, onChange, props: options.props });
     default:
       return () => <></>;
   }

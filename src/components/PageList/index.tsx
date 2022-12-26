@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Search from "coms/Search";
 import { Table } from "antd";
 
 import type { Config, State } from "coms/Search/type";
 import type { TablePaginationConfig } from "antd/es/table";
+import type { TableRowSelection } from "antd/es/table/interface";
 import type {
   ColumnsType,
   FilterValue,
@@ -31,7 +32,10 @@ interface PageProps<DataType> {
   ): SearchResult<DataType> | Promise<SearchResult<DataType>>;
   columns: ColumnsType<DataType>;
   rowKey?: string;
+  showSelection?: boolean | "checkbox" | "radio";
   searchBtnExtend?: React.ReactNode;
+  disabledName?: keyof DataType;
+  batchControl?: (selectedRowData?: DataType[]) => React.ReactNode;
 }
 
 export interface Sorter {
@@ -47,6 +51,9 @@ export default function Page<DataType extends object = {}>({
   columns,
   rowKey,
   searchBtnExtend,
+  showSelection,
+  disabledName,
+  batchControl,
 }: PageProps<DataType>) {
   const [formData, setFormData] = useState<State>({});
   const [loading, setLoading] = useState<boolean>(false);
@@ -55,6 +62,8 @@ export default function Page<DataType extends object = {}>({
   const [pageSize, setPageSize] = useState<number>(10);
   const [total, setTotal] = useState<number>(0);
   const [sorter, setSorter] = useState<SortType<DataType>>({});
+  const [selectedRowKeys, setSelectedRowKeys] = useState<(string | number)[]>([]);
+  const [selectedRowData, setSelectedRowData] = useState<DataType[]>([]);
 
   const covertSorter = (sorter: SortType<DataType>): SorterOption => {
     let option: SortType<DataType>;
@@ -110,6 +119,24 @@ export default function Page<DataType extends object = {}>({
     setSorter(sorter);
   };
 
+  const rowSelection = useMemo<TableRowSelection<DataType> | undefined>(() => {
+    if (!showSelection) return;
+    const options: TableRowSelection<DataType> = {};
+    if (showSelection === true) options.type = "checkbox";
+    else options.type = showSelection;
+    options.selectedRowKeys = selectedRowKeys;
+    options.onChange = (selectedKeys, selectedData) => {
+      setSelectedRowKeys(selectedKeys);
+      setSelectedRowData(selectedData);
+    };
+    const disbaledFn = (record: DataType) => ({
+      disabled: Boolean(record[disabledName!]),
+    });
+    options.getCheckboxProps = disabledName === undefined ? undefined : disbaledFn;
+    return options;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showSelection, selectedRowKeys]);
+
   return (
     <div>
       <Search
@@ -120,7 +147,9 @@ export default function Page<DataType extends object = {}>({
         onReset={onReset}
         searchBtnExtend={searchBtnExtend}
       />
-
+      {batchControl && (
+        <div style={{ marginTop: 15 }}>{batchControl(selectedRowData)}</div>
+      )}
       <Table
         style={{ marginTop: 15 }}
         bordered
@@ -128,6 +157,7 @@ export default function Page<DataType extends object = {}>({
         dataSource={list}
         columns={columns}
         rowKey={rowKey}
+        rowSelection={rowSelection}
         pagination={{
           pageSizeOptions: [10, 20, 30],
           current: pageNum,

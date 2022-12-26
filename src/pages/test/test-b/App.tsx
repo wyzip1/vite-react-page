@@ -1,5 +1,5 @@
 import React from "react";
 
 export default function Test() {
-  return <div>TestA</div>;
+  return <div>TestB</div>;
 }

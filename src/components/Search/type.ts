@@ -1,6 +1,8 @@
+import type React from "react";
 import type { InputProps, SelectProps } from "antd";
 import type { Dispatch, SetStateAction } from "react";
-import type React from "react";
+import type { RangePickerProps } from "antd/es/date-picker/generatePicker";
+import type { Dayjs } from "dayjs";
 
 export interface ComOptions<T = "input", P = {}> {
   label: string;
@@ -8,11 +10,7 @@ export interface ComOptions<T = "input", P = {}> {
   width?: number | string;
   type?: T;
   props?: P;
-  component?: (
-    onChange: ChangeState,
-    value: string | unknown,
-    search: () => void
-  ) => JSX.Element;
+  component?: (onChange: ChangeState, value: any, search: () => void) => JSX.Element;
 }
 
 export type State = { [key: string]: unknown };
@@ -20,8 +18,9 @@ export type ChangeState = (value: unknown) => void;
 
 export type inputOptions = ComOptions<"input", InputProps>;
 export type selectProps = ComOptions<"select", SelectProps>;
+export type dateRangeProps = ComOptions<"date", RangePickerProps<Dayjs>>;
 
-export type Options = inputOptions | selectProps;
+export type Options = inputOptions | selectProps | dateRangeProps;
 export type Config = Options[][];
 
 export interface SearchProps {

@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "antd";
 import PageList, { PageOptions, SorterOption } from "coms/PageList/index";
 
 import SearchOptions, { FormData } from "./searchOptions";
@@ -13,7 +14,7 @@ const columns: ColumnsType<TableData> = [
     title: "性别",
     dataIndex: "sex",
     sorter: { multiple: 2 },
-    render(sex) {
+    render(sex: -1 | 1 | 0) {
       return ["女", "男"][sex] || "未知";
     },
   },
@@ -26,10 +27,14 @@ export default function List() {
     pageOptions: PageOptions,
     sorterOption: SorterOption
   ) => {
-    console.log("sorterOption", sorterOption);
+    console.log(formData);
     const res = await getTableList({ ...formData, ...pageOptions, sorterOption });
     if (res.code !== 200) throw res.msg;
     return res.data!;
+  };
+
+  const batchAction = (data?: TableData[]) => {
+    console.log(data);
   };
 
   return (
@@ -37,7 +42,9 @@ export default function List() {
       searchOptions={SearchOptions}
       rowKey="id"
       doSearch={onSearch}
+      showSelection
       columns={columns}
+      batchControl={data => <Button onClick={() => batchAction(data)}>TEST</Button>}
     />
   );
 }
