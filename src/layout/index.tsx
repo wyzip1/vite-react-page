@@ -10,6 +10,8 @@ interface LayoutProps {
   children?: ReactNode;
 }
 
+const LayoutRouterList =
+  routerList.find(router => router.name === "Layout")?.children || [];
 const { Header, Sider, Content } = Layout;
 
 export default function LayoutPage(props: LayoutProps) {
@@ -17,7 +19,7 @@ export default function LayoutPage(props: LayoutProps) {
     <LayoutPageStyled>
       <Layout className="layout">
         <Sider theme="dark">
-          <MenuList routerList={routerList} />
+          <MenuList routerList={LayoutRouterList} />
         </Sider>
         <Layout>
           <Header>Header</Header>

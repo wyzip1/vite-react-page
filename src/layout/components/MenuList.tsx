@@ -6,6 +6,9 @@ import type { router } from "src/types";
 import { useLocation, useNavigate } from "react-router-dom";
 import routerList from "src/router";
 
+const LayoutRouterList =
+  routerList.find(router => router.name === "Layout")?.children || [];
+
 interface MenuListProps {
   routerList: router[];
 }
@@ -37,9 +40,9 @@ const mapRouter = (router: router, parent?: router): router => {
 
 const matchRouter = (
   url: string,
-  idx: number = 0,
-  base: string = "",
-  list: router[] = routerList
+  idx: number = 8,
+  base: string = "/layout",
+  list: router[] = LayoutRouterList
 ): router | undefined => {
   for (const router of list) {
     if (!router.component) continue;
@@ -79,7 +82,7 @@ export default function MenuList({ routerList }: MenuListProps) {
       mode="inline"
       theme="dark"
       defaultOpenKeys={expandAll}
-      selectedKeys={[activePath || Location.pathname]}
+      selectedKeys={[activePath || Location.pathname.replace("/layout/", "")]}
       onSelect={({ selectedKeys }) => navigate(selectedKeys[0])}
     />
   );
