@@ -53,6 +53,12 @@ const routerList: router[] = [
       },
     ],
   },
+  {
+    path: "/online-script",
+    name: "OnlineScript",
+    title: "在线代码执行",
+    component: lazy(() => import("pages/online-script/App")),
+  },
 ];
 
 export default routerList;
