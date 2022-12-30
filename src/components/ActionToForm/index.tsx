@@ -18,10 +18,11 @@ interface ActionToFormProps {
   autoConfirmClose?: Boolean;
 }
 
-type OnClick = (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+type OnClick = React.MouseEventHandler<HTMLAnchorElement> &
+  React.MouseEventHandler<HTMLButtonElement>;
 
 const covertOnClick = (callback: OnClick, origin?: OnClick): OnClick => {
-  return e => {
+  return (e: React.MouseEvent<HTMLButtonElement & HTMLAnchorElement, MouseEvent>) => {
     callback(e);
     origin?.(e);
   };
