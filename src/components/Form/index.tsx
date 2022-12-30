@@ -49,7 +49,7 @@ function Form(
     onSubmit,
     showBtns = true,
   }: FormProps,
-  ref: React.Ref<FormInstace>
+  ref?: React.Ref<FormInstace>
 ) {
   const [form] = AForm.useForm();
 

@@ -18,7 +18,8 @@
     "sourceType": "module"
   },
   "globals": {
-    "JSX": "readonly"
+    "JSX": "readonly",
+    "process": "readonly"
   },
   "settings": {
     "react": {

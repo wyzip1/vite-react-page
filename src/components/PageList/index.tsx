@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, {
+  ForwardedRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from "react";
 import Search from "coms/Search";
 import { Table } from "antd";
 
@@ -22,6 +28,12 @@ export interface PageOptions {
   pageSize: number;
 }
 
+interface PageInstace<T> {
+  setList: React.Dispatch<React.SetStateAction<T[]>>;
+  search(): Promise<void>;
+  reset(): void;
+}
+
 interface PageProps<DataType> {
   searchOptions: Config;
   doSearch(
@@ -36,6 +48,7 @@ interface PageProps<DataType> {
   searchBtnExtend?: React.ReactNode;
   disabledName?: keyof DataType;
   batchControl?: (selectedRowData?: DataType[]) => React.ReactNode;
+  toRef?: ForwardedRef<PageInstace<DataType>>;
 }
 
 export interface Sorter {
@@ -54,6 +67,7 @@ export default function Page<DataType extends object = {}>({
   showSelection,
   disabledName,
   batchControl,
+  toRef,
 }: PageProps<DataType>) {
   const [formData, setFormData] = useState<State>({});
   const [loading, setLoading] = useState<boolean>(false);
@@ -101,6 +115,12 @@ export default function Page<DataType extends object = {}>({
     setPageSize(10);
     onSearch({}, { pageNum: 1, pageSize: 10 });
   };
+
+  useImperativeHandle(toRef, () => ({
+    setList,
+    search: () => onSearch(formData),
+    reset: onReset,
+  }));
 
   useEffect(() => {
     if (loading) return;
