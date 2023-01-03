@@ -1,13 +1,13 @@
 import React, { useState, createRef } from "react";
 import { Modal } from "antd";
 import Action from "../Action";
-import Form, { FormInstace } from "../Form";
+import Form, { FormInstance } from "../Form";
 
 import type { ButtonProps } from "antd";
 import type { FormProps } from "../Form";
 
 interface ATFormProps extends Omit<FormProps, "onSubmit"> {
-  onSubmit: (data: Record<string, unknown>) => Promise<unknown | undefined>;
+  onSubmit: (data: any) => Promise<unknown | undefined>;
 }
 
 interface ActionToFormProps {
@@ -16,6 +16,7 @@ interface ActionToFormProps {
   modalTitle?: string;
   children: React.ReactNode;
   autoConfirmClose?: Boolean;
+  modalWidth?: number | string;
 }
 
 type OnClick = React.MouseEventHandler<HTMLAnchorElement> &
@@ -38,11 +39,12 @@ export default function ActionToForm({
   formProps,
   modalTitle,
   autoConfirmClose = true,
+  modalWidth,
 }: ActionToFormProps) {
   const [open, setOpen] = useState<boolean>(false);
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
 
-  const FormInstance = createRef<FormInstace>();
+  const FormInstance = createRef<FormInstance>();
 
   const cancel = () => {
     setOpen(false);
@@ -71,6 +73,7 @@ export default function ActionToForm({
     <>
       <Action btnProps={btnProps}>{children}</Action>
       <Modal
+        width={modalWidth}
         title={modalTitle}
         open={open}
         closable

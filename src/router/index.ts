@@ -24,7 +24,6 @@ const routerList: router[] = [
         path: "detail",
         name: "Detail",
         title: "detail",
-        activePath: "list",
         component: lazy(() => import("pages/home/detail/App")),
       },
       {
@@ -37,8 +36,6 @@ const routerList: router[] = [
             path: "test-a",
             name: "TestA",
             title: "test-a",
-            hidden: true,
-            activePath: "group/test-b",
             component: lazy(() => import("pages/test/test-a/App")),
           },
           {
