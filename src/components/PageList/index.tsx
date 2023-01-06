@@ -1,10 +1,4 @@
-import React, {
-  ForwardedRef,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useState,
-} from "react";
+import React, { ForwardedRef, useEffect, useImperativeHandle, useMemo, useState } from "react";
 import Search from "coms/Search";
 import { Table } from "antd";
 
@@ -47,7 +41,10 @@ interface PageProps<DataType> {
   showSelection?: boolean | "checkbox" | "radio";
   searchBtnExtend?: React.ReactNode;
   disabledName?: keyof DataType;
-  batchControl?: (selectedRowData?: DataType[]) => React.ReactNode;
+  batchControl?: (
+    getSelectedRowData: () => DataType[],
+    removeSelectRowData: (ids?: (number | string)[]) => void
+  ) => React.ReactNode;
   toRef?: ForwardedRef<PageInstace<DataType>>;
 }
 
@@ -58,7 +55,7 @@ export interface Sorter {
 
 export type SorterOption = Sorter[];
 
-export default function Page<DataType extends object = {}>({
+export default function PageList<DataType extends object = {}>({
   searchOptions,
   doSearch,
   columns,
@@ -79,6 +76,11 @@ export default function Page<DataType extends object = {}>({
   const [selectedRowKeys, setSelectedRowKeys] = useState<(string | number)[]>([]);
   const [selectedRowData, setSelectedRowData] = useState<DataType[]>([]);
 
+  const clearSelectRowData = () => {
+    setSelectedRowKeys([]);
+    setSelectedRowData([]);
+  };
+
   const covertSorter = (sorter: SortType<DataType>): SorterOption => {
     let option: SortType<DataType>;
     if (Array.isArray(sorter)) option = sorter;
@@ -98,6 +100,7 @@ export default function Page<DataType extends object = {}>({
     try {
       setLoading(true);
       const sorterOption = covertSorter(sorter);
+      clearSelectRowData();
       const { list, total } = await doSearch(formData, pageOptions, sorterOption, false);
       setList(list);
       setTotal(total);
@@ -110,10 +113,28 @@ export default function Page<DataType extends object = {}>({
     }
   };
 
+  const _doSearch = (formData: State) => {
+    setPageNum(1);
+    onSearch(formData);
+  };
+
   const onReset = () => {
     setPageNum(1);
     setPageSize(10);
-    onSearch({}, { pageNum: 1, pageSize: 10 });
+    clearSelectRowData();
+    onSearch(formData, { pageNum: 1, pageSize: 10 });
+  };
+
+  const removeSelectRowData = (ids?: (number | string)[]) => {
+    if (!ids) return clearSelectRowData();
+    for (const id of ids) {
+      const idx = selectedRowKeys.indexOf(id);
+      if (idx === -1) continue;
+      selectedRowKeys.splice(idx, 1);
+      selectedRowData.splice(idx, 1);
+    }
+    setSelectedRowKeys([...selectedRowKeys]);
+    setSelectedRowData([...selectedRowData]);
   };
 
   useImperativeHandle(toRef, () => ({
@@ -162,13 +183,15 @@ export default function Page<DataType extends object = {}>({
       <Search
         loading={loading}
         config={searchOptions}
-        onSearch={onSearch}
+        onSearch={_doSearch}
         onChange={setFormData}
         onReset={onReset}
         searchBtnExtend={searchBtnExtend}
       />
       {batchControl && (
-        <div style={{ marginTop: 15 }}>{batchControl(selectedRowData)}</div>
+        <div style={{ marginTop: 15 }}>
+          {batchControl(() => selectedRowData, removeSelectRowData)}
+        </div>
       )}
       <Table
         style={{ marginTop: 15 }}

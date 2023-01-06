@@ -1,12 +1,7 @@
 import React from "react";
 import type { RenderItemProps } from "../type";
 
-export default function RenderItem({
-  options,
-  state,
-  setState,
-  search,
-}: RenderItemProps) {
+export default function RenderItem({ options, state, setState, search }: RenderItemProps) {
   const onChange = (value: unknown) => {
     state[options.key] = value;
     setState({ ...state });
@@ -16,7 +11,7 @@ export default function RenderItem({
     <div className="search-item">
       <div className="label">{options.label}</div>
       <div className="value">
-        {options.component!(onChange, state[options.key], search)}
+        {options.component!(onChange, state[options.key] || options.defaultValue, search)}
       </div>
     </div>
   );

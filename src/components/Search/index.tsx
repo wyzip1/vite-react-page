@@ -15,8 +15,15 @@ export default function Search({
   onReset,
   searchBtnExtend,
 }: SearchProps) {
-  const [formData, setFormData] = useState<State>({});
+  const [formData, setFormData] = useState<State>(initFormData());
   const [isReset, setIsReset] = useState<boolean>(false);
+
+  function initFormData() {
+    return config.reduce((prev, options) => {
+      options.forEach(item => (prev[item.key] = item.defaultValue));
+      return prev;
+    }, {});
+  }
 
   useEffect(() => {
     onChange?.(formData);
@@ -35,9 +42,10 @@ export default function Search({
   );
 
   const reset = () => {
+    const initData = initFormData();
     setIsReset(true);
-    setFormData({});
-    onReset?.({});
+    setFormData(initData);
+    onReset?.(initData);
   };
 
   const search = () => {

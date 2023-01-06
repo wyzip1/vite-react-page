@@ -10,6 +10,7 @@ export interface ComOptions<T = "input", P = {}> {
   width?: number | string;
   type?: T;
   props?: P;
+  defaultValue?: unknown;
   component?: (onChange: ChangeState, value: any, search: () => void) => JSX.Element;
 }
 
