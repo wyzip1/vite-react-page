@@ -47,3 +47,9 @@ export interface RenderItemProps extends RenderBaseProps {
 export interface RenderRowProps extends RenderBaseProps {
   options: Options[];
 }
+
+type ITEM<T> = T extends { key: infer V extends string } ? V : never;
+type OPTION<T> = T extends Array<infer V> ? V : never;
+export type Form<T extends Config> = T extends Array<infer V>
+  ? Record<ITEM<OPTION<V>>, unknown>
+  : never;

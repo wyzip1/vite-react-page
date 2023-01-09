@@ -19,7 +19,8 @@
   },
   "globals": {
     "JSX": "readonly",
-    "process": "readonly"
+    "process": "readonly",
+    "BlobPart": "readonly"
   },
   "settings": {
     "react": {

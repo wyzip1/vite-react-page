@@ -49,7 +49,7 @@ interface PageProps<DataType> {
 }
 
 export interface Sorter {
-  field: string;
+  field: React.Key | readonly React.Key[];
   type: "ascend" | "descend";
 }
 
@@ -81,16 +81,10 @@ export default function PageList<DataType extends object = {}>({
     setSelectedRowData([]);
   };
 
-  const covertSorter = (sorter: SortType<DataType>): SorterOption => {
-    let option: SortType<DataType>;
-    if (Array.isArray(sorter)) option = sorter;
-    else option = [sorter];
-    return option
-      .filter(item => item.field && item.order)
-      .map(item => ({
-        field: item.field! as string,
-        type: item.order!,
-      }));
+  const translateSorter = (sorter: SortType<DataType>): SorterOption => {
+    const option = Array.isArray(sorter) ? sorter : [sorter];
+    const nonullSortList = option.filter(item => item.field && item.order);
+    return nonullSortList.map(item => ({ field: item.field!, type: item.order! }));
   };
 
   const onSearch = async (
@@ -99,7 +93,7 @@ export default function PageList<DataType extends object = {}>({
   ) => {
     try {
       setLoading(true);
-      const sorterOption = covertSorter(sorter);
+      const sorterOption = translateSorter(sorter);
       clearSelectRowData();
       const { list, total } = await doSearch(formData, pageOptions, sorterOption, false);
       setList(list);
