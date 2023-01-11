@@ -22,7 +22,7 @@ const SearchOptions: Config = [
     {
       label: "时间范围",
       key: "date",
-      type: "date",
+      type: "dateRange",
       props: {
         showTime: true,
       },

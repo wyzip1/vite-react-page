@@ -10,8 +10,7 @@ interface LayoutProps {
   children?: ReactNode;
 }
 
-const LayoutRouterList =
-  routerList.find(router => router.name === "Layout")?.children || [];
+const LayoutRouterList = routerList.find(router => router.name === "Layout")?.children || [];
 const { Header, Sider, Content } = Layout;
 
 export default function LayoutPage(props: LayoutProps) {

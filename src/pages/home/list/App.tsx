@@ -27,7 +27,7 @@ export default function List() {
     pageOptions: PageOptions,
     sorterOption: SorterOption
   ) => {
-    console.log(formData);
+    console.log(formData, pageOptions, sorterOption);
     const res = await getTableList({ ...formData, ...pageOptions, sorterOption });
     if (res.code !== 200) throw res.msg;
     return res.data!;
@@ -44,7 +44,7 @@ export default function List() {
       doSearch={onSearch}
       showSelection
       columns={columns}
-      batchControl={data => <Button onClick={() => batchAction(data)}>TEST</Button>}
+      batchControl={getData => <Button onClick={() => batchAction(getData())}>TEST</Button>}
     />
   );
 }

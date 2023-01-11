@@ -57,9 +57,7 @@ const RouterElement = ({
 
 const createRouter = (router: router, index: number) => {
   const { name, path } = router;
-  return (
-    <Route key={name || index} path={path} element={<RouterElement router={router} />} />
-  );
+  return <Route key={name || index} path={path} element={<RouterElement router={router} />} />;
 };
 
 const mapRouter = (routerList: router[]) => {

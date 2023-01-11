@@ -53,7 +53,7 @@ interface DateFormatSetting {
   index: number;
 }
 
-export function parseSetting(setting: string): DateFormatSetting[] {
+export function parseDateFormatSetting(setting: string): DateFormatSetting[] {
   const result: DateFormatSetting[] = [];
   const map: Record<string, number> = {};
   for (const index in setting.split("")) {
@@ -76,7 +76,7 @@ export function formatDate(
   const minute = formatNum(date.getMinutes());
   const second = formatNum(date.getSeconds());
   const map = { Y: year, M: month, D: day, H: hour, m: minute, s: second };
-  const setting = parseSetting(formatSetting);
+  const setting = parseDateFormatSetting(formatSetting);
   let result = "";
   for (const item of setting) {
     const data = map[item.value];

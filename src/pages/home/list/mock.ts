@@ -42,7 +42,9 @@ const handleQueryList = ({ sex, name, sorterOption = [] }: RequestListParams) =>
     return filterName && filterSex;
   });
   for (const sorter of sorterOption) {
-    filterList.sort((a, b) => sortFn(a[sorter.field], b[sorter.field], sorter.type));
+    filterList.sort((a, b) =>
+      sortFn(a[sorter.field as string], b[sorter.field as string], sorter.type)
+    );
   }
   return filterList;
 };

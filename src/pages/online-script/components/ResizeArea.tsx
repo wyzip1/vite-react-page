@@ -72,10 +72,7 @@ export default function ResizeArea({ areaA, areaB }: ResizeAreaProps) {
         <div className="move-area" onMouseMove={resize} onMouseUp={endResize}></div>
       )}
       <div className="left-area">{areaA}</div>
-      <div
-        className={`line${enableResize ? " active" : ""}`}
-        onMouseDown={startResize}
-      ></div>
+      <div className={`line${enableResize ? " active" : ""}`} onMouseDown={startResize}></div>
       <div className="right-area">{areaB}</div>
     </ResizeAreaStyled>
   );

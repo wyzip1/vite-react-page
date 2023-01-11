@@ -6,8 +6,7 @@ import type { router } from "src/types";
 import { useLocation, useNavigate } from "react-router-dom";
 import routerList from "src/router";
 
-const LayoutRouterList =
-  routerList.find(router => router.name === "Layout")?.children || [];
+const LayoutRouterList = routerList.find(router => router.name === "Layout")?.children || [];
 
 interface MenuListProps {
   routerList: router[];
@@ -32,8 +31,7 @@ const getItems = (routers?: router[]): MenuProps["items"] => {
 };
 
 const mapRouter = (router: router, parent?: router): router => {
-  if (router.children?.length)
-    router.children.forEach(_router => mapRouter(_router, router));
+  if (router.children?.length) router.children.forEach(_router => mapRouter(_router, router));
   router._parent = parent;
   return router;
 };
