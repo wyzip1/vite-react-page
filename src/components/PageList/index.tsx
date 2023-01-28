@@ -1,8 +1,15 @@
-import React, { ForwardedRef, useEffect, useImperativeHandle, useMemo, useState } from "react";
+import React, {
+  ForwardedRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Search from "coms/Search";
 import { Table } from "antd";
 
-import type { Config, State } from "coms/Search/type";
+import type { Config, SearchInstance, State } from "coms/Search/type";
 import type { TablePaginationConfig } from "antd/es/table";
 import type { TableRowSelection } from "antd/es/table/interface";
 import type {
@@ -66,6 +73,7 @@ export default function PageList<DataType extends object = {}>({
   batchControl,
   toRef,
 }: PageProps<DataType>) {
+  const searchRef = useRef<SearchInstance>(null);
   const [formData, setFormData] = useState<State>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [list, setList] = useState<DataType[]>([]);
@@ -133,13 +141,13 @@ export default function PageList<DataType extends object = {}>({
 
   useImperativeHandle(toRef, () => ({
     setList,
-    search: () => onSearch(formData),
+    search: () => onSearch(searchRef.current?.getFormData() || {}),
     reset: onReset,
   }));
 
   useEffect(() => {
     if (loading) return;
-    onSearch(formData);
+    onSearch(searchRef.current?.getFormData() || {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNum, pageSize, sorter]);
 
@@ -175,6 +183,7 @@ export default function PageList<DataType extends object = {}>({
   return (
     <div>
       <Search
+        ref={searchRef}
         loading={loading}
         config={searchOptions}
         onSearch={_doSearch}

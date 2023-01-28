@@ -1,20 +1,29 @@
-/* eslint-disable react/display-name */
-import React, { useEffect, useMemo, useState } from "react";
+import React, {
+  ForwardedRef,
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from "react";
 import { Button } from "antd";
 import { SearchStyled } from "./styled";
 import { covertLength, initComponentList } from "./utils";
 import RenderRow from "./components/RenderRow";
-import type { Options, SearchProps, State } from "./type";
+import type { Options, SearchInstance, SearchProps, State } from "./type";
 
-export default function Search({
-  config,
-  defaultLabelWidth = 60,
-  loading,
-  onChange,
-  onSearch,
-  onReset,
-  searchBtnExtend,
-}: SearchProps) {
+function Search(
+  {
+    config,
+    defaultLabelWidth = 60,
+    loading,
+    onChange,
+    onSearch,
+    onReset,
+    searchBtnExtend,
+  }: SearchProps,
+  ref: ForwardedRef<SearchInstance>
+) {
   const [formData, setFormData] = useState<State>(initFormData());
   const [isReset, setIsReset] = useState<boolean>(false);
 
@@ -24,6 +33,10 @@ export default function Search({
       return prev;
     }, {});
   }
+
+  useImperativeHandle(ref, () => ({
+    getFormData: () => formData,
+  }));
 
   useEffect(() => {
     onChange?.(formData);
@@ -75,3 +88,5 @@ export default function Search({
     </SearchStyled>
   );
 }
+
+export default forwardRef(Search);

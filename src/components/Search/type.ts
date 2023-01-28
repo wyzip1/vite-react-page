@@ -14,7 +14,7 @@ export interface ComOptions<T = "input", P = {}> {
   component?: (onChange: ChangeState, value: any, search: () => void) => JSX.Element;
 }
 
-export type State = { [key: string]: unknown };
+export type State = { [key: string]: any };
 export type ChangeState = (value: unknown) => void;
 
 export type inputOptions = ComOptions<"input", InputProps>;
@@ -33,6 +33,10 @@ export interface SearchProps {
   onSearch(state: State): void;
   onReset?(state: State): void;
   searchBtnExtend?: React.ReactNode;
+}
+
+export interface SearchInstance {
+  getFormData(): State;
 }
 
 interface RenderBaseProps {
