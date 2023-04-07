@@ -19,18 +19,12 @@ import type {
 } from "antd/es/table/interface";
 import type { SortType } from "src/types";
 
-interface SearchResult<DataType> {
-  list: DataType[];
-  total: number;
-}
-
 export interface PageOptions {
   pageNum: number;
   pageSize: number;
 }
 
-interface PageInstace<T> {
-  setList: React.Dispatch<React.SetStateAction<T[]>>;
+interface PageInstace {
   search(): Promise<void>;
   reset(): void;
 }
@@ -42,7 +36,7 @@ interface PageProps<DataType> {
     pageOptions: PageOptions,
     sorter: SortType<DataType>,
     isReset: boolean
-  ): SearchResult<DataType> | Promise<SearchResult<DataType>>;
+  ): Promise<unknown>;
   columns: ColumnsType<DataType>;
   rowKey?: string;
   showSelection?: boolean | "checkbox" | "radio";
@@ -52,7 +46,9 @@ interface PageProps<DataType> {
     getSelectedRowData: () => DataType[],
     removeSelectRowData: (ids?: (number | string)[]) => void
   ) => React.ReactNode;
-  toRef?: ForwardedRef<PageInstace<DataType>>;
+  total?: number;
+  dataSource?: Array<DataType>;
+  toRef?: ForwardedRef<PageInstace>;
 }
 
 export interface Sorter {
@@ -71,15 +67,15 @@ export default function PageList<DataType extends object = {}>({
   showSelection,
   disabledName,
   batchControl,
+  total,
+  dataSource,
   toRef,
 }: PageProps<DataType>) {
   const searchRef = useRef<SearchInstance>(null);
   const [formData, setFormData] = useState<State>({});
   const [loading, setLoading] = useState<boolean>(false);
-  const [list, setList] = useState<DataType[]>([]);
   const [pageNum, setPageNum] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
-  const [total, setTotal] = useState<number>(0);
   const [sorter, setSorter] = useState<SortType<DataType>>({});
   const [selectedRowKeys, setSelectedRowKeys] = useState<(string | number)[]>([]);
   const [selectedRowData, setSelectedRowData] = useState<DataType[]>([]);
@@ -103,9 +99,7 @@ export default function PageList<DataType extends object = {}>({
       setLoading(true);
       const sorterOption = translateSorter(sorter);
       clearSelectRowData();
-      const { list, total } = await doSearch(formData, pageOptions, sorterOption, false);
-      setList(list);
-      setTotal(total);
+      await doSearch(formData, pageOptions, sorterOption, false);
     } catch (error) {
       console.group("Page Component doSearch Catch Error:");
       console.log(error);
@@ -140,7 +134,6 @@ export default function PageList<DataType extends object = {}>({
   };
 
   useImperativeHandle(toRef, () => ({
-    setList,
     search: () => onSearch(searchRef.current?.getFormData() || {}),
     reset: onReset,
   }));
@@ -200,7 +193,7 @@ export default function PageList<DataType extends object = {}>({
         style={{ marginTop: 15 }}
         bordered
         loading={loading}
-        dataSource={list}
+        dataSource={dataSource}
         columns={columns}
         rowKey={rowKey}
         rowSelection={rowSelection}

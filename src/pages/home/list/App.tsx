@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "antd";
 import PageList, { PageOptions, SorterOption } from "coms/PageList/index";
 
@@ -22,6 +22,9 @@ const columns: ColumnsType<TableData> = [
 ];
 
 export default function List() {
+  const [dataList, setDataList] = useState<TableData[]>([]);
+  const [total, setTotal] = useState<number>(0);
+
   const onSearch = async (
     formData: FormData,
     pageOptions: PageOptions,
@@ -30,6 +33,8 @@ export default function List() {
     console.log(formData, pageOptions, sorterOption);
     const res = await getTableList({ ...formData, ...pageOptions, sorterOption });
     if (res.code !== 200) throw res.msg;
+    setDataList(res.data?.list || []);
+    setTotal(res.data?.total || 0);
     return res.data!;
   };
 
@@ -45,6 +50,8 @@ export default function List() {
       showSelection
       columns={columns}
       batchControl={getData => <Button onClick={() => batchAction(getData())}>TEST</Button>}
+      dataSource={dataList}
+      total={total}
     />
   );
 }

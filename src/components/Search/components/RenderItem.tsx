@@ -9,7 +9,9 @@ export default function RenderItem({ options, state, setState, search }: RenderI
 
   return (
     <div className="search-item">
-      <div className="label">{options.label}</div>
+      <div className="label" style={{ width: options.labelWidth }}>
+        {options.label}
+      </div>
       <div className="value">
         {options.component!(onChange, state[options.key] || options.defaultValue, search)}
       </div>

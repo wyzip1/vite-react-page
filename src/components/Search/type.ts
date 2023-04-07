@@ -8,6 +8,7 @@ export interface ComOptions<T = "input", P = {}> {
   label: string;
   key: string;
   width?: number | string;
+  labelWidth?: number | string;
   type?: T;
   props?: P;
   defaultValue?: unknown;

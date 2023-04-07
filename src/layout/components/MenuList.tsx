@@ -13,8 +13,9 @@ interface MenuListProps {
 }
 
 const mapPathLink = (router: router): string => {
-  if (!router._parent) return router.path.replace("/*", "");
-  return mapPathLink(router._parent) + "/" + router.path;
+  const path = router.path.replace("/*", "");
+  if (!router._parent) return path;
+  return mapPathLink(router._parent) + "/" + path;
 };
 
 const getItems = (routers?: router[]): MenuProps["items"] => {

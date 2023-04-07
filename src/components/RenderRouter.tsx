@@ -23,7 +23,9 @@ const Profile = ({ redirect, children, path }: ProfileProps) => {
   const Location = useLocation();
 
   useEffect(() => {
-    if (Location.pathname !== path.replace("/*", "")) return;
+    const canRedirect =
+      Location.pathname.split(path.replace("/*", ""))[1].split("/").length === 1;
+    if (!canRedirect) return;
     if (!redirect) return;
     navigate(redirect, { replace: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -30,6 +30,7 @@ const routerList: router[] = [
         path: "group/*",
         name: "group",
         title: "group",
+        redirect: "/layout/group/test-a",
         component: lazy(() => import("pages/test/group")),
         children: [
           {
