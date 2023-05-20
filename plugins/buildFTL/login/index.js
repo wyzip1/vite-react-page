@@ -67,7 +67,8 @@ exports.getUserInfo = getUserInfo;
 
 const login = async function () {
   const gitInfo = await (0, _git.getGitInfo)();
-  let answers = await _inquirer.default.prompt([
+  const inquirer = await _inquirer.default;
+  let answers = await inquirer.default.prompt([
     {
       type: "input",
       name: "username",

@@ -100,3 +100,34 @@ export function getValue<T>(data: T, path: Path<T>) {
   for (const key of path.split(".")) data = data[key];
   return data;
 }
+
+export function debounce(event: Function, delay = 300) {
+  // eslint-disable-next-line no-undef
+  let timer: NodeJS.Timer | undefined;
+  return (...args: unknown[]) => {
+    timer && clearTimeout(timer);
+    timer = setTimeout(() => event(...args), delay);
+  };
+}
+
+export function throttle(fn: Function, delay = 300) {
+  // eslint-disable-next-line no-undef
+  let timer: NodeJS.Timer | undefined;
+  return (...args: unknown[]) => {
+    if (timer) return;
+    fn(...args);
+    timer = setTimeout(() => (timer = undefined), delay);
+  };
+}
+
+interface RangeNumProps {
+  start: number;
+  end: number;
+  format?: boolean;
+  afterValue?: string;
+}
+export function rangeNum({ start = 0, end, format = true, afterValue = "" }: RangeNumProps) {
+  return Array.from({ length: end - start + 1 }, (_, v) =>
+    format ? formatNum(start + v) + afterValue : start + v + afterValue
+  );
+}

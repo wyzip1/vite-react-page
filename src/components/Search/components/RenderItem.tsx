@@ -13,7 +13,11 @@ export default function RenderItem({ options, state, setState, search }: RenderI
         {options.label}
       </div>
       <div className="value">
-        {options.component!(onChange, state[options.key] || options.defaultValue, search)}
+        {options.component!(
+          onChange,
+          [undefined].includes(state[options.key]) || options.defaultValue,
+          search
+        )}
       </div>
     </div>
   );

@@ -11,7 +11,7 @@ interface ATFormProps extends Omit<FormProps, "onSubmit"> {
 }
 
 interface ActionToFormProps {
-  btnProps: ButtonProps;
+  btnProps?: ButtonProps;
   formProps: ATFormProps;
   modalTitle?: string;
   children: React.ReactNode;
@@ -34,7 +34,7 @@ const setBtnProps = (props: ButtonProps, onClick: OnClick) => {
 };
 
 export default function ActionToForm({
-  btnProps,
+  btnProps = {},
   children,
   formProps,
   modalTitle,
@@ -62,6 +62,7 @@ export default function ActionToForm({
       setConfirmLoading(true);
       await originSubmit?.(data);
       autoConfirmClose && cancel();
+      console.log("123123");
     } catch (error) {
       console.log("onSubmit Error:", error);
     } finally {
