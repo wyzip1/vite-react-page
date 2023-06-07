@@ -9,7 +9,14 @@ const dependenciesList = Object.keys(packagesJSON.dependencies);
 // https://vitejs.dev/config/
 /* eslint-env node */
 export default defineConfig(({ mode }) => ({
-  plugins: [react(), buildFTL({ ftlDir: "./dist2" })],
+  plugins: [
+    react({
+      babel: {
+        babelrc: true,
+      },
+    }),
+    buildFTL({ ftlDir: "./dist2" }),
+  ],
   optimizeDeps: {
     include: [...dependenciesList],
   },
