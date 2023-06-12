@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import { resolve } from "path";
 import react from "@vitejs/plugin-react";
 import packagesJSON from "./package.json";
-import buildFTL, { publicPath } from "./plugins/buildFTL";
+import buildFTL, { publicPath } from "build-ftl";
 
 const dependenciesList = Object.keys(packagesJSON.dependencies);
 
@@ -54,6 +54,15 @@ export default defineConfig(({ mode }) => ({
     manifest: true,
     rollupOptions: {
       input: {},
+      output: {
+        manualChunks: {
+          react: ["react"],
+          "react-router-dom": ["react-router-dom"],
+          "react-dom": ["react-dom"],
+          antd: ["antd"],
+          "styled-components": ["styled-components"],
+        },
+      },
     },
   },
   base: mode === "development" ? "/" : publicPath,
