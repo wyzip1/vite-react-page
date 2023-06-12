@@ -27,6 +27,7 @@ export type Options = inputOptions | selectProps | dateRangeProps | dateProps;
 export type Config = Options[][];
 
 export interface SearchProps {
+  inline?: boolean;
   config: Options[][];
   defaultLabelWidth?: number | string;
   loading?: boolean;
@@ -34,6 +35,8 @@ export interface SearchProps {
   onSearch(state: State): void;
   onReset?(state: State): void;
   searchBtnExtend?: React.ReactNode;
+  actionStyle?: React.CSSProperties;
+  actionClassName?: string;
 }
 
 export interface SearchInstance {

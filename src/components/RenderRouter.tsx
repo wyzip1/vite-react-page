@@ -1,7 +1,29 @@
-import React, { Suspense, useEffect, FC } from "react";
+import React, { Suspense, useEffect } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-import type { router, defaultComponentProps } from "src/types";
+
 import Loading from "./Loading";
+
+import type { LazyExoticComponent, CSSProperties, FC } from "react";
+
+export interface RouterComponentProps {
+  children?: null | number | string | JSX.Element;
+  style?: CSSProperties;
+  [key: string]: unknown;
+}
+
+export interface router {
+  hidden?: boolean;
+  title?: string;
+  name?: string;
+  role?: string[];
+  pluginEntry?: boolean;
+  redirect?: string;
+  path: string;
+  component?: LazyExoticComponent<FC<RouterComponentProps>>;
+  children?: router[];
+  _parent?: router;
+  activePath?: string;
+}
 
 interface RenderRouterProps {
   routerList: router[];
@@ -36,7 +58,7 @@ const Profile = ({ redirect, children, path }: ProfileProps) => {
 
 const getComponent = (
   children?: router[],
-  Component?: React.LazyExoticComponent<FC<defaultComponentProps>>
+  Component?: React.LazyExoticComponent<FC<RouterComponentProps>>
 ) => {
   if (!Component) return;
   if (!children?.length) return <Component />;

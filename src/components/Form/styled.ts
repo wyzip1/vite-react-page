@@ -1,6 +1,8 @@
 import styled from "styled-components";
 
-export const FormStyled = styled.div<{ titleAlign: "center" | "left" | "right" }>`
+export const FormStyled = styled.div<{
+  titleAlign: "center" | "left" | "right";
+}>`
   padding: 10px 16px;
   box-sizing: border-box;
 

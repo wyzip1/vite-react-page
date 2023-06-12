@@ -12,9 +12,15 @@ interface ActionProps {
 }
 
 type TypeMap = "button" | "confirm";
-type GetProps<T extends TypeMap> = T extends "button" ? ButtonProps : PopconfirmProps;
+type GetProps<T extends TypeMap> = T extends "button"
+  ? ButtonProps
+  : PopconfirmProps;
 
-function getNode<T extends TypeMap>(type: T, node: ReactNode, props?: GetProps<T>) {
+function getNode<T extends TypeMap>(
+  type: T,
+  node: ReactNode,
+  props?: GetProps<T>
+) {
   if (!props) return <>{node}</>;
   switch (type) {
     // eslint-disable-next-line prettier/prettier
@@ -24,8 +30,16 @@ function getNode<T extends TypeMap>(type: T, node: ReactNode, props?: GetProps<T
   }
 }
 
-export default function Action({ children, btnProps, confirmProps }: ActionProps) {
-  const btnNode = getNode("button", children, btnProps === true ? {} : btnProps);
+export default function Action({
+  children,
+  btnProps,
+  confirmProps,
+}: ActionProps) {
+  const btnNode = getNode(
+    "button",
+    children,
+    btnProps === true ? {} : btnProps
+  );
   const confirmNode = getNode("confirm", btnNode, confirmProps);
 
   return <ActionStyled>{confirmNode}</ActionStyled>;

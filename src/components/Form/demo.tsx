@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Form from "coms/Form";
+import Form from "src/components/Form";
 import dayjs, { Dayjs } from "dayjs";
 
-import type { ItemConfig } from "coms/Form";
+import type { ItemConfig } from "src/components/Form";
 import type { FormProps } from "antd";
 
 const itemOptions: ItemConfig[] = [

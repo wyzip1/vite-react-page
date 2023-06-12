@@ -1,8 +1,8 @@
 import React from "react";
 import dayjs, { Dayjs } from "dayjs";
-import ActionToForm from "coms/ActionToForm";
+import ActionToForm from "src/components/ActionToForm";
 
-import type { ItemConfig } from "coms/Form";
+import type { ItemConfig } from "src/components/Form";
 
 interface FormData {
   item: number;

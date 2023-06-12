@@ -14,6 +14,7 @@ import type { Options, SearchInstance, SearchProps, State } from "./type";
 
 function Search(
   {
+    inline,
     config,
     defaultLabelWidth = 60,
     loading,
@@ -21,6 +22,8 @@ function Search(
     onSearch,
     onReset,
     searchBtnExtend,
+    actionClassName,
+    actionStyle,
   }: SearchProps,
   ref: ForwardedRef<SearchInstance>
 ) {
@@ -66,25 +69,28 @@ function Search(
   };
 
   return (
-    <SearchStyled defaultLabelWidth={_defaultLabelWidth}>
-      {componentList.map((item, idx) => (
-        <RenderRow
-          search={search}
-          options={item}
-          key={idx}
-          state={formData}
-          setState={setFormData}
-        />
-      ))}
-      <div className="action-control">
+    <SearchStyled defaultLabelWidth={_defaultLabelWidth} inline={inline}>
+      <div className="input-content">
+        {componentList.map((item, idx) => (
+          <RenderRow
+            search={search}
+            options={item}
+            key={idx}
+            state={formData}
+            setState={setFormData}
+          />
+        ))}
+      </div>
+      <div className={`action-control ${actionClassName || ""}`} style={actionStyle}>
         <Button loading={!isReset && loading} type="primary" onClick={search}>
           查询
         </Button>
         <Button loading={isReset && loading} type="default" onClick={reset}>
           重置
         </Button>
-        {searchBtnExtend}
+        {!inline && searchBtnExtend}
       </div>
+      {inline && searchBtnExtend && <div className="inline-ext-btns">{searchBtnExtend}</div>}
     </SearchStyled>
   );
 }

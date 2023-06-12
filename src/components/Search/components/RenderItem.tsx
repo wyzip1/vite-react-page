@@ -15,7 +15,7 @@ export default function RenderItem({ options, state, setState, search }: RenderI
       <div className="value">
         {options.component!(
           onChange,
-          [undefined].includes(state[options.key]) ? options.defaultValue : state[options.key],
+          state[options.key] === undefined ? options.defaultValue : state[options.key],
           search
         )}
       </div>

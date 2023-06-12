@@ -82,17 +82,23 @@ function getControlValue<T extends TypeMap>(
 ) {
   switch (type) {
     // eslint-disable-next-line prettier/prettier
-    case "input": return <Input {...(props as InputProps)} />;
+    case "input":
+      return <Input {...(props as InputProps)} />;
     // eslint-disable-next-line prettier/prettier
-    case "select": return <Select {...(props as SelectProps)} />;
+    case "select":
+      return <Select {...(props as SelectProps)} />;
     // eslint-disable-next-line prettier/prettier
-    case "switch": return <Switch {...(props as SwitchProps)} />;
+    case "switch":
+      return <Switch {...(props as SwitchProps)} />;
     // eslint-disable-next-line prettier/prettier
-    case "date": return <DatePicker {...(props as DatePickerProps)} />;
+    case "date":
+      return <DatePicker {...(props as DatePickerProps)} />;
     // eslint-disable-next-line prettier/prettier
-    case "dateRanger": return <DatePicker.RangePicker {...(props as RangePickerProps<Dayjs>)} />
+    case "dateRanger":
+      return <DatePicker.RangePicker {...(props as RangePickerProps<Dayjs>)} />;
     // eslint-disable-next-line prettier/prettier
-    case "cascader": return <Cascader {...(props as CascaderProps<DefaultOptionType>)} />
+    case "cascader":
+      return <Cascader {...(props as CascaderProps<DefaultOptionType>)} />;
     case "checkbox":
       return (
         <Checkbox.Group {...(props as typeof Checkbox.Group)}>

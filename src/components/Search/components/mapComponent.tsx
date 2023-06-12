@@ -20,10 +20,22 @@ const mapComponent = (options: Options) => {
       );
     case "dateRange":
       return (onChange: ChangeState, value: RangeValue<string>) =>
-        createDatePicker({ value, width, onChange, props: options.props, type: "dateRange" });
+        createDatePicker({
+          value,
+          width,
+          onChange,
+          props: options.props,
+          type: "dateRange",
+        });
     case "date":
       return (onChange: ChangeState, value: string) =>
-        createDatePicker({ value, width, onChange, props: options.props, type: "date" });
+        createDatePicker({
+          value,
+          width,
+          onChange,
+          props: options.props,
+          type: "date",
+        });
     default:
       return () => <></>;
   }
