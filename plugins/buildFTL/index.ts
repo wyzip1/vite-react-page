@@ -2,6 +2,7 @@ import { writeFileSync } from "fs";
 import { resolve, parse } from "path";
 import child_process from "child_process";
 import * as utils from "./utils.js";
+import { mkdirp } from "mkdirp";
 
 import type { Plugin } from "vite";
 import type { OutputAsset } from "rollup";
@@ -32,6 +33,8 @@ function getAppName() {
 export default ({ ftlDir }: BuildFTLProps): Plugin => ({
   name: "vite:buildFTL",
   async writeBundle(options, bundle) {
+    mkdirp.sync(ftlDir);
+
     const manifest = bundle["manifest.json"] as OutputAsset;
     const manifestJSON: ManifestJSON = JSON.parse(manifest.source as string);
     for (const key in manifestJSON) {

@@ -17,7 +17,7 @@ export default function LayoutPage(props: LayoutProps) {
   return (
     <LayoutPageStyled>
       <Layout className="layout">
-        <Sider theme="dark">
+        <Sider theme="dark" className="sider-bar">
           <MenuList routerList={LayoutRouterList} />
         </Sider>
         <Layout>
