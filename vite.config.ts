@@ -68,8 +68,8 @@ export default defineConfig(({ mode }) => ({
     },
     postcss: {
       plugins: [
-        // require('tailwindcss'),
-        // require('autoprefixer'),
+        require("tailwindcss"),
+        require("autoprefixer"),
         // 删除样式库中的@charset: UTF-8
         {
           postcssPlugin: "internal:charset-removal",

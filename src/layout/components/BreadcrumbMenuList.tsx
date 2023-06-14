@@ -15,18 +15,24 @@ const getBread = (router: router, location: Location, parentPath = "") => {
     (router.children
       ?.map(item => getBread(item, location, path + "/"))
       .flat(Infinity) as BreadcrumbProps["items"]) || [];
-  result.push(...children);
-  if (["/", "/layout"].includes(path)) return result;
 
-  result.push({
-    key: router.path,
-    title:
-      path !== location.pathname ? (
-        <Link to={path}>{router.title}</Link>
-      ) : (
-        <span>{router.title}</span>
-      ),
-  });
+  if (["/", "/layout"].includes(path)) {
+    result.push(...children);
+    return result;
+  }
+
+  result.push(
+    {
+      key: router.path,
+      title:
+        path !== location.pathname ? (
+          <Link to={path}>{router.title}</Link>
+        ) : (
+          <span>{router.title}</span>
+        ),
+    },
+    ...children
+  );
   return result;
 };
 
