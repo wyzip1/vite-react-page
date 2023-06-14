@@ -1,5 +1,5 @@
 import React from "react";
-import type { defaultComponentProps } from "src/types";
+import type { defaultComponentProps } from "@/types";
 export default function Group({ children }: defaultComponentProps) {
   return <>{children}</>;
 }

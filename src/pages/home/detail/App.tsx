@@ -1,5 +1,5 @@
 import React from "react";
-import FormDemo from "coms/Form/demo";
+import FormDemo from "@/components/Form/demo";
 
 export default function Detail() {
   return <FormDemo />;

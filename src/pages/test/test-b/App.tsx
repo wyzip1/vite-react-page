@@ -1,6 +1,6 @@
 import React from "react";
-import Action from "coms/Action";
-import ActionToForm from "coms/ActionToForm";
+import Action from "@/components/Action";
+import ActionToForm from "@/components/ActionToForm";
 
 export default function Test() {
   return (

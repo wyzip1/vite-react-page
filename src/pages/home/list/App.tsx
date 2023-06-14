@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "antd";
-import PageList, { PageOptions, SorterOption } from "coms/PageList/index";
+import PageList, { PageOptions, SorterOption } from "@/components/PageList/index";
 
 import SearchOptions, { FormData } from "./searchOptions";
 import { getTableList, TableData } from "./mock";

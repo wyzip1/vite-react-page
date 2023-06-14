@@ -1,4 +1,4 @@
-import type { SorterOption } from "src/components/PageList";
+import type { SorterOption } from "@/components/PageList";
 
 const TemplateData = [
   { id: 1, name: "Lark", sex: -1, desc: "是个奇怪的人" },

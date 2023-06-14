@@ -1,4 +1,4 @@
-import type { Config } from "coms/Search/type";
+import type { Config } from "@/components/Search/type";
 import type { Dayjs } from "dayjs";
 
 const SearchOptions: Config = [
