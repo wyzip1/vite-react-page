@@ -34,6 +34,7 @@
   "plugins": ["react", "prettier", "react-hooks", "@typescript-eslint/eslint-plugin"],
   "rules": {
     "prettier/prettier": ["error", { "usePrettierrc": true }],
-    "no-unused-vars": [2, { "vars": "all", "args": "none" }]
+    "no-unused-vars": [2, { "vars": "all", "args": "none" }],
+    "react/prop-types": "off"
   }
 }

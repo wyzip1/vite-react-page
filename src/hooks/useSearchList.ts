@@ -1,11 +1,14 @@
 import List from "@/api/model/List";
+import { Response } from "@/api/request";
 import { PageOptions } from "@/components/PageList";
 import { useEffect, useRef, useState } from "react";
 
 // type FetchApi = (...args: any) => Promise<any>;
-type ItemType<T> = T extends (...args: any) => Promise<List<infer V>> ? V : never;
+type ItemType<T> = T extends (...args: any) => Promise<Response<List<infer V>>> ? V : never;
 
-export default function useSearchList<T extends (...args: any) => Promise<List<any>>>(
+export default function useSearchList<
+  T extends (...args: any) => Promise<Response<List<any>>>
+>(
   fetchApi: T,
   searchParams: Omit<Parameters<T>[0], "pageNum" | "pageSize">,
   searchCall?: () => void,
@@ -36,8 +39,8 @@ export default function useSearchList<T extends (...args: any) => Promise<List<a
 
     fetchApi({ pageNum, pageSize, ...searchParams })
       .then(res => {
-        setList(res.list);
-        setTotal(res.total);
+        setList(res.data.list);
+        setTotal(res.data.total);
       })
       .finally(() => {
         setLoading(false);

@@ -2,9 +2,9 @@ import React, { useMemo } from "react";
 import { Menu } from "antd";
 
 import type { MenuProps } from "antd";
-import type { router } from "src/types";
+import type { router } from "@/types";
 import { useLocation, useNavigate } from "react-router-dom";
-import routerList from "src/router";
+import routerList from "@/router";
 
 const LayoutRouterList = routerList.find(router => router.name === "Layout")?.children || [];
 

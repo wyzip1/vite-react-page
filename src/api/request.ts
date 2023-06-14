@@ -1,6 +1,6 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
 import { message } from "antd";
-import { downloadBlob } from "utils/index";
+import { downloadBlob } from "@/utils/index";
 
 import type { AxiosRequestConfig, AxiosError } from "axios";
 

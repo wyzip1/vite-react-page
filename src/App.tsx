@@ -1,7 +1,7 @@
 import React from "react";
 import { HashRouter } from "react-router-dom";
-import RenderRouter from "coms/RenderRouter";
-import routerList from "router/index";
+import RenderRouter from "@/components/RenderRouter";
+import routerList from "@/router/index";
 import { ConfigProvider } from "antd";
 import zhCN from "antd/es/locale/zh_CN";
 import "dayjs/locale/zh-cn";
