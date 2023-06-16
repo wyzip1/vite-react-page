@@ -24,6 +24,7 @@ function Search(
     searchBtnExtend,
     actionClassName,
     actionStyle,
+    autoWrap = true,
   }: SearchProps,
   ref: ForwardedRef<SearchInstance>
 ) {
@@ -69,7 +70,7 @@ function Search(
   };
 
   return (
-    <SearchStyled defaultLabelWidth={_defaultLabelWidth} inline={inline}>
+    <SearchStyled defaultLabelWidth={_defaultLabelWidth} inline={inline} autoWrap={autoWrap}>
       <div className="input-content">
         {componentList.map((item, idx) => (
           <RenderRow

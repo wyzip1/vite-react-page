@@ -1,10 +1,14 @@
 import styled from "styled-components";
 
-export const SearchStyled = styled.div<{ defaultLabelWidth: string; inline?: boolean }>`
+export const SearchStyled = styled.div<{
+  defaultLabelWidth: string;
+  inline?: boolean;
+  autoWrap?: boolean;
+}>`
+  width: fit-content;
   --default-label-width: ${props => props.defaultLabelWidth};
   font-size: var(--base-size, 14px);
   display: ${props => (props.inline ? "flex" : "block")};
-  flex-wrap: wrap;
 
   & > .input-content {
     & > .search-row {
@@ -13,7 +17,8 @@ export const SearchStyled = styled.div<{ defaultLabelWidth: string; inline?: boo
       }
       display: flex;
       align-items: center;
-      /* flex-wrap: wrap; */
+      row-gap: 10px;
+      flex-wrap: ${props => (props.autoWrap ? "wrap" : "nowrap")};
       & > .search-item {
         display: flex;
         align-items: center;

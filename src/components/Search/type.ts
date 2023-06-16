@@ -37,6 +37,7 @@ export interface SearchProps {
   searchBtnExtend?: React.ReactNode;
   actionStyle?: React.CSSProperties;
   actionClassName?: string;
+  autoWrap?: boolean;
 }
 
 export interface SearchInstance {
