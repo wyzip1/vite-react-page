@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { memo, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getRouterPath, matchRoute } from "@/router/utils";
 
@@ -13,14 +13,15 @@ interface MenuListProps {
 }
 
 const basePath = "/layout/*";
-const formatStartPath = (path: string) => (path.startsWith("/") ? path : "/" + path);
 
 const getItems = (routers?: router[], parentList: router[] = []): MenuProps["items"] => {
   if (!routers) return;
   const mapMenu = (router: router) => {
     const parentPath = parentList.map(item => item.path).join("/");
-    const formatParentPath = parentPath ? formatStartPath(parentPath) : "";
-    const fullPath = basePath + formatParentPath + formatStartPath(router.path);
+    const formatParentPath = parentPath ? "/" + parentPath : "";
+    const fullPath = router.path.startsWith("/")
+      ? router.path
+      : `${basePath}${formatParentPath}/${router.path}`;
     const key = fullPath.replace(/\/\*/g, "");
     const children = getItems(router.children, [...parentList, router]);
 
@@ -34,7 +35,7 @@ const getItems = (routers?: router[], parentList: router[] = []): MenuProps["ite
   return itemList.map(item => mapMenu(item));
 };
 
-export default function MenuList({ routerList }: MenuListProps) {
+function MenuList({ routerList }: MenuListProps) {
   const Location = useLocation();
   const navigate = useNavigate();
 
@@ -80,3 +81,5 @@ export default function MenuList({ routerList }: MenuListProps) {
     />
   );
 }
+
+export default memo(MenuList);

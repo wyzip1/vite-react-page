@@ -17,18 +17,17 @@ export interface router {
   title?: string;
   name?: string;
   role?: string[];
-  pluginEntry?: boolean;
   redirect?: string;
   path: string;
   component?: LazyExoticComponent<FC<RouterComponentProps>>;
   children?: router[];
-  _parent?: router;
   activePath?: string;
+  catch?: boolean;
 }
 
 interface RenderRouterProps {
   routerList: router[];
-  parent?: router;
+  parentList?: router;
 }
 
 interface ProfileProps {
@@ -58,25 +57,26 @@ const Profile = ({ redirect, children, path }: ProfileProps) => {
   return <>{children}</>;
 };
 
-const getComponent = (
-  children?: router[],
-  Component?: React.LazyExoticComponent<FC<RouterComponentProps>>
-) => {
-  if (!Component) return;
-  if (!children?.length) return <Component />;
+interface RenderComponentProps {
+  router?: router;
+}
+
+const RenderComponent: React.FC<RenderComponentProps> = ({ router }) => {
+  if (!router?.component) return;
+  if (!router.children?.length) return <router.component />;
   return (
-    <Component>
-      <RenderRouter routerList={children} />
-    </Component>
+    <router.component path={router.path}>
+      <RenderRouter routerList={router.children} />
+    </router.component>
   );
 };
 
-const RouterElement = ({
-  router: { redirect, path, children, component },
-}: RouterElementProps) => {
+const RouterElement = ({ router }: RouterElementProps) => {
   return (
-    <Profile redirect={redirect} path={path}>
-      <Suspense fallback={<Loading />}>{getComponent(children, component)}</Suspense>
+    <Profile redirect={router.redirect} path={router.path}>
+      <Suspense fallback={<Loading />}>
+        <RenderComponent router={router} />
+      </Suspense>
     </Profile>
   );
 };

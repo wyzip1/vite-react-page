@@ -17,7 +17,7 @@ const global = createSlice<GlobalState, GlobalReducers, "global">({
   name: "global",
   initialState: {
     userInfo: undefined,
-    catchRouters: [],
+    catchRouters: ["/layout/list", "/layout/detail"],
   },
   reducers: {
     SET_USER_INFO: (state, action) => {
