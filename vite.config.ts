@@ -11,9 +11,7 @@ const dependenciesList = Object.keys(packagesJSON.dependencies);
 export default defineConfig(({ mode }) => ({
   plugins: [
     react({
-      babel: {
-        babelrc: true,
-      },
+      // babel: { babelrc: true },
     }),
     buildFTL({ ftlDir: "./dist2" }),
   ],

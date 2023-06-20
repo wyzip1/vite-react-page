@@ -52,6 +52,30 @@ const routerList: router[] = [
         name: "RedirectOnlineScript",
         title: "在线代码执行",
       },
+      {
+        path: "special-router/*",
+        name: "SpecialRouter",
+        title: "特殊路由",
+        component: lazy(() => import("@/pages/special-router/App")),
+        children: [
+          {
+            path: ":params/*",
+            hidden: true,
+            name: "SpecialRouterParams",
+            title: "特殊路由参数",
+            component: lazy(() => import("@/pages/special-router/params/App")),
+            redirect: "plain",
+            children: [
+              {
+                path: "plain",
+                name: "Plain",
+                title: "plain",
+                component: lazy(() => import("@/pages/special-router/params/plain/App")),
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
   {

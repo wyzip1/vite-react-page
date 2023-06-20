@@ -4,6 +4,7 @@ import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import Loading from "./Loading";
 
 import type { LazyExoticComponent, CSSProperties, FC } from "react";
+import { getRouterPath } from "@/router/utils";
 
 export interface RouterComponentProps {
   children?: null | number | string | JSX.Element;
@@ -45,8 +46,9 @@ const Profile = ({ redirect, children, path }: ProfileProps) => {
   const Location = useLocation();
 
   useEffect(() => {
-    const canRedirect =
-      Location.pathname.split(path.replace("/*", ""))[1].split("/").length === 1;
+    const routerPath = getRouterPath(Location.pathname);
+    const lastRouter = routerPath[routerPath.length - 1];
+    const canRedirect = redirect && lastRouter.path === path;
     if (!canRedirect) return;
     if (!redirect) return;
     navigate(redirect, { replace: true });
