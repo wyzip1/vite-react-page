@@ -1,9 +1,10 @@
 import type { router } from "@//types";
 import { lazy } from "react";
+import { formatRouterList } from "./utils";
 
 const Layout = lazy(() => import("@/layout/index"));
 
-const routerList: router[] = [
+const baseRouterList: router[] = [
   {
     path: "/",
     redirect: "/layout",
@@ -44,6 +45,13 @@ const routerList: router[] = [
             name: "TestB",
             title: "test-b",
             component: lazy(() => import("@/pages/test/test-b/App")),
+          },
+          {
+            path: "active-path",
+            name: "ActivePath",
+            title: "ActivePath",
+            component: lazy(() => import("@/pages/test/active-path/App")),
+            activePath: "/layout/list",
           },
         ],
       },
@@ -86,21 +94,6 @@ const routerList: router[] = [
   },
 ];
 
-const formatRouterList = (list: router[] = routerList, parent?: router) => {
-  const result: router[] = [];
-  for (const item of list) {
-    const data = { ...item };
+const routerList = formatRouterList(baseRouterList);
 
-    if (parent && !data.path.startsWith("/")) {
-      data.path = parent.path.replace(/\/\*/g, "") + `/${data.path}`;
-    }
-
-    if (data.children?.length) {
-      data.children = formatRouterList(data.children, data);
-    }
-    result.push(data);
-  }
-  return result;
-};
-
-export default formatRouterList();
+export default routerList;

@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { matchRoute } from "@/router/utils";
+import { getRouter, matchRoute } from "@/router/utils";
 
 import { Menu } from "antd";
 
@@ -47,10 +47,10 @@ function MenuList({ routerList }: MenuListProps) {
     return items?.filter(item => item?.key).map(item => item!.key!.toString());
   }, [items]);
 
-  // const activePath = useMemo(() => {
-  //   const routerPath = getRouterPath(Location.pathname);
-  //   return routerPath[routerPath.length - 1].activePath;
-  // }, [Location.pathname]);
+  const activePath = useMemo(() => {
+    const router = getRouter(Location.pathname);
+    return router?.activePath;
+  }, [Location.pathname]);
 
   const eachItems = (callback: (data: ItemType) => void, list: MenuProps["items"] = items) => {
     for (const item of list || []) {
@@ -76,7 +76,7 @@ function MenuList({ routerList }: MenuListProps) {
       mode="inline"
       theme="dark"
       defaultOpenKeys={expandAll}
-      selectedKeys={selectKeys}
+      selectedKeys={activePath ? [activePath] : selectKeys}
       onSelect={({ selectedKeys }) => navigate(selectedKeys[0])}
     />
   );
