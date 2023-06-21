@@ -42,3 +42,15 @@ export function getRouter(path: string, list = routerList): router | undefined {
     if (result) return result;
   }
 }
+
+export function getRouterPath(
+  path: string,
+  eachList: router[] = routerList,
+  pathList: router[] = []
+): router[] | undefined {
+  for (const router of eachList) {
+    if (matchRoute(router.path, path)) return [...pathList, router];
+    const result = getRouterPath(path, router.children || [], [...pathList, router]);
+    if (result) return result;
+  }
+}

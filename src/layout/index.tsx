@@ -45,7 +45,7 @@ export default function LayoutPage(props: LayoutProps) {
                 height: 64,
               }}
             />
-            <BreadcrumbMenuList routerList={routerList} />
+            <BreadcrumbMenuList />
           </Header>
           <div style={{ height: "100%", overflow: "auto" }}>
             <Content className="layout-content">
