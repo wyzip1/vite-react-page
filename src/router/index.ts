@@ -9,7 +9,7 @@ const routerList: router[] = [
     redirect: "/layout",
   },
   {
-    path: "/layout/*",
+    path: "/layout",
     name: "Layout",
     component: Layout,
     redirect: "/layout/list",
@@ -27,7 +27,7 @@ const routerList: router[] = [
         component: lazy(() => import("@/pages/home/detail/App")),
       },
       {
-        path: "group/*",
+        path: "group",
         name: "group",
         title: "group",
         redirect: "/layout/group/test-a",
@@ -48,18 +48,19 @@ const routerList: router[] = [
         ],
       },
       {
-        path: "/online-script",
+        path: "online-script",
         name: "RedirectOnlineScript",
         title: "在线代码执行",
+        redirect: "/online-script",
       },
       {
-        path: "special-router/*",
+        path: "special-router",
         name: "SpecialRouter",
         title: "特殊路由",
         component: lazy(() => import("@/pages/special-router/App")),
         children: [
           {
-            path: ":params/*",
+            path: ":params",
             hidden: true,
             name: "SpecialRouterParams",
             title: "特殊路由参数",
@@ -85,4 +86,21 @@ const routerList: router[] = [
   },
 ];
 
-export default routerList;
+const formatRouterList = (list: router[] = routerList, parent?: router) => {
+  const result: router[] = [];
+  for (const item of list) {
+    const data = { ...item };
+
+    if (parent && !data.path.startsWith("/")) {
+      data.path = parent.path.replace(/\/\*/g, "") + `/${data.path}`;
+    }
+
+    if (data.children?.length) {
+      data.children = formatRouterList(data.children, data);
+    }
+    result.push(data);
+  }
+  return result;
+};
+
+export default formatRouterList();

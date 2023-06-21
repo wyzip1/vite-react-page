@@ -1,11 +1,6 @@
+import { RouterComponentProps } from "@/components/RenderRouter";
 import { SorterResult } from "antd/es/table/interface";
-import type { LazyExoticComponent, CSSProperties, FC } from "react";
-
-export interface defaultComponentProps {
-  children?: null | number | string | JSX.Element;
-  style?: CSSProperties;
-  [key: string]: unknown;
-}
+import type { LazyExoticComponent, FC } from "react";
 
 export interface router {
   hidden?: boolean;
@@ -14,9 +9,8 @@ export interface router {
   role?: string[];
   redirect?: string;
   path: string;
-  component?: LazyExoticComponent<FC<defaultComponentProps>>;
+  component?: LazyExoticComponent<FC<RouterComponentProps>>;
   children?: router[];
-  _parent?: router;
   activePath?: string;
 }
 

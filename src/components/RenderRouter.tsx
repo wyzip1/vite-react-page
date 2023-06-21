@@ -4,10 +4,9 @@ import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import Loading from "./Loading";
 
 import type { LazyExoticComponent, CSSProperties, FC } from "react";
-import { getRouterPath } from "@/router/utils";
+import { matchRoute } from "@/router/utils";
 
 export interface RouterComponentProps {
-  children?: null | number | string | JSX.Element;
   style?: CSSProperties;
   [key: string]: unknown;
 }
@@ -45,11 +44,8 @@ const Profile = ({ redirect, children, path }: ProfileProps) => {
   const Location = useLocation();
 
   useEffect(() => {
-    const routerPath = getRouterPath(Location.pathname);
-    const lastRouter = routerPath[routerPath.length - 1];
-    const canRedirect = redirect && lastRouter.path === path;
+    const canRedirect = redirect && matchRoute(path, Location.pathname);
     if (!canRedirect) return;
-    if (!redirect) return;
     navigate(redirect, { replace: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Location.pathname]);
@@ -63,12 +59,7 @@ interface RenderComponentProps {
 
 const RenderComponent: React.FC<RenderComponentProps> = ({ router }) => {
   if (!router?.component) return;
-  if (!router.children?.length) return <router.component />;
-  return (
-    <router.component path={router.path}>
-      <RenderRouter routerList={router.children} />
-    </router.component>
-  );
+  return <router.component path={router.path} />;
 };
 
 const RouterElement = ({ router }: RouterElementProps) => {
@@ -81,9 +72,12 @@ const RouterElement = ({ router }: RouterElementProps) => {
   );
 };
 
-const createRouter = (router: router, index: number) => {
-  const { name, path } = router;
-  return <Route key={name || index} path={path} element={<RouterElement router={router} />} />;
+const createRouter = (router: router) => {
+  return (
+    <Route key={router.path} path={router.path} element={<RouterElement router={router} />}>
+      {mapRouter(router.children || [])}
+    </Route>
+  );
 };
 
 const mapRouter = (routerList: router[]) => {

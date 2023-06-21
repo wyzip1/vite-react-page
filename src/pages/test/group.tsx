@@ -1,5 +1,6 @@
+import { RouterComponentProps } from "@/components/RenderRouter";
 import React from "react";
-import type { defaultComponentProps } from "@/types";
-export default function Group({ children }: defaultComponentProps) {
-  return <>{children}</>;
+import { Outlet } from "react-router-dom";
+export default function Group(props: RouterComponentProps) {
+  return <Outlet />;
 }

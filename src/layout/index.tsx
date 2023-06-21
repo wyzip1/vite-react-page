@@ -5,12 +5,10 @@ import MenuList from "./components/MenuList";
 import routerList from "@/router";
 import BreadcrumbMenuList from "./components/BreadcrumbMenuList";
 
-import type { ReactNode } from "react";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import { Outlet } from "react-router-dom";
 
-interface LayoutProps {
-  children?: ReactNode;
-}
+interface LayoutProps {}
 
 const LayoutRouterList = routerList.find(router => router.name === "Layout")?.children || [];
 const { Header, Sider, Content } = Layout;
@@ -50,7 +48,9 @@ export default function LayoutPage(props: LayoutProps) {
             <BreadcrumbMenuList routerList={routerList} />
           </Header>
           <div style={{ height: "100%", overflow: "auto" }}>
-            <Content className="layout-content">{props.children}</Content>
+            <Content className="layout-content">
+              <Outlet />
+            </Content>
           </div>
         </Layout>
       </Layout>
