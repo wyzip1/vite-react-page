@@ -5,6 +5,7 @@ import routerList from "@/router/index";
 import { ConfigProvider } from "antd";
 import zhCN from "antd/es/locale/zh_CN";
 import "dayjs/locale/zh-cn";
+import KeepAliveProvider from "./components/KeepAlive";
 
 export default function App() {
   return (
@@ -16,7 +17,9 @@ export default function App() {
     >
       <main style={{ width: "100%", height: "100vh" }} className="bg-slate-500">
         <HashRouter>
-          <RenderRouter routerList={routerList} />
+          <KeepAliveProvider>
+            <RenderRouter routerList={routerList} />
+          </KeepAliveProvider>
         </HashRouter>
       </main>
     </ConfigProvider>

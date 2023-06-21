@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import Action from "@/components/Action";
 import ActionToForm from "@/components/ActionToForm";
 
 export default function Test() {
+  const [count, setCount] = useState<number>(0);
+
   return (
     <>
+      catch count: {count}
+      <Action btnProps={{ onClick: () => setCount(count + 1), type: "primary" }}>count</Action>
       <Action confirmProps={{ title: "123123" }}>TestB</Action>
       <ActionToForm
         modalTitle="测试表单"

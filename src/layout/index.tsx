@@ -6,7 +6,7 @@ import routerList from "@/router";
 import BreadcrumbMenuList from "./components/BreadcrumbMenuList";
 
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
-import { Outlet } from "react-router-dom";
+import RouterView from "@/components/KeepAlive/RouterView";
 
 interface LayoutProps {}
 
@@ -49,7 +49,7 @@ export default function LayoutPage(props: LayoutProps) {
           </Header>
           <div style={{ height: "100%", overflow: "auto" }}>
             <Content className="layout-content">
-              <Outlet />
+              <RouterView />
             </Content>
           </div>
         </Layout>
