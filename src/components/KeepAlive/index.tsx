@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useRef } from "react";
 
 interface KeepAliveContextProps {
-  includes?: string[];
+  includes?: Array<{ title: string; path: string }>;
   keepElements: Record<string, React.ReactElement>;
 }
 
@@ -14,18 +14,18 @@ interface KeepAliveProviderProps extends Partial<KeepAliveContextProps> {
 }
 
 const KeepAliveProvider: React.FC<KeepAliveProviderProps> = ({ children, includes }) => {
-  const _keepElements = useRef<Record<string, React.ReactElement>>({});
+  const keepElements = useRef<Record<string, React.ReactElement>>({});
 
   useEffect(() => {
     if (!includes) return;
-    for (const pathname of Object.keys(_keepElements)) {
-      if (includes.includes(pathname)) continue;
-      delete _keepElements[pathname];
+    for (const pathname of Object.keys(keepElements.current)) {
+      if (includes.some(item => item.path === pathname)) continue;
+      delete keepElements.current[pathname];
     }
   }, [includes, includes?.length]);
 
   return (
-    <KeepAliveContext.Provider value={{ includes, keepElements: _keepElements.current }}>
+    <KeepAliveContext.Provider value={{ includes, keepElements: keepElements.current }}>
       {children}
     </KeepAliveContext.Provider>
   );

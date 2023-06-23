@@ -7,6 +7,7 @@ import BreadcrumbMenuList from "./components/BreadcrumbMenuList";
 
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import RouterView from "@/components/KeepAlive/RouterView";
+import TagViews from "./components/TagViews";
 
 interface LayoutProps {}
 
@@ -48,6 +49,7 @@ export default function LayoutPage(props: LayoutProps) {
             <BreadcrumbMenuList />
           </Header>
           <div style={{ height: "100%", overflow: "auto" }}>
+            <TagViews />
             <Content className="layout-content">
               <RouterView />
             </Content>

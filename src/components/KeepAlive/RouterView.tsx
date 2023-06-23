@@ -9,7 +9,7 @@ const RouterView: React.FC = () => {
   const element = useOutlet();
   const isKeep = useMemo<boolean>(() => {
     if (!context.includes) return true;
-    return context.includes.some(pathname => matchRoute(pathname, Location.pathname));
+    return context.includes.some(item => matchRoute(item.path, Location.pathname));
   }, [Location.pathname, context.includes]);
 
   if (isKeep && element) {
