@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { TagViewsStyled } from "./styled";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
@@ -43,6 +43,8 @@ const TagItem: React.FC<TagItemProps> = ({ label, path, onClose }) => {
 };
 
 const TagViews: React.FC = () => {
+  const Location = useLocation();
+  const navigate = useNavigate();
   const { token } = theme.useToken();
 
   const catchRouters = useSelector<RootState, CatchRouter[]>(
@@ -54,6 +56,20 @@ const TagViews: React.FC = () => {
   function onClose(item: CatchRouter) {
     dispatch(REMOVE_CATCH_ROUTERS(item.path));
   }
+
+  const initRef = useRef<boolean>(true);
+  useEffect(() => {
+    if (initRef.current) {
+      initRef.current = false;
+      return;
+    }
+    const lastRouter = catchRouters[catchRouters.length - 1];
+    if (!lastRouter) return navigate("/layout", { replace: true });
+    if (Location.pathname === lastRouter.path) return;
+
+    navigate(lastRouter.path, { replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [catchRouters]);
 
   return (
     <TagViewsStyled primary={token.colorPrimary}>

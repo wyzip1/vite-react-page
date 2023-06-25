@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import RenderRouter from "@/components/RenderRouter";
 import routerList from "@/router/index";
 import { ConfigProvider } from "antd";
 import zhCN from "antd/es/locale/zh_CN";
 import "dayjs/locale/zh-cn";
 import KeepAliveProvider from "./components/KeepAlive";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store";
 import { ADD_CATCH_ROUTERS, CatchRouter } from "@/store/global";
@@ -13,8 +13,6 @@ import { getRouter, matchRoute } from "./router/utils";
 
 export default function App() {
   const Location = useLocation();
-  const navigate = useNavigate();
-
   const catchRouters = useSelector<RootState, CatchRouter[]>(
     state => state.global.catchRouters
   );
@@ -35,20 +33,6 @@ export default function App() {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Location.pathname]);
-
-  const initRef = useRef<boolean>(true);
-  useEffect(() => {
-    if (initRef.current) {
-      initRef.current = false;
-      return;
-    }
-    const lastRouter = catchRouters[catchRouters.length - 1];
-    if (!lastRouter) return navigate("/layout", { replace: true });
-    if (Location.pathname === lastRouter.path) return;
-
-    navigate(lastRouter.path, { replace: true });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [catchRouters]);
 
   return (
     <ConfigProvider
