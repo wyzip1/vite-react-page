@@ -63,7 +63,8 @@ function MenuList({ routerList }: MenuListProps) {
   const selectKeys = useMemo(() => {
     const result: string[] = [];
     eachItems(data => {
-      if (!matchRoute(data!.key as string, Location.pathname, false)) return;
+      if (!matchRoute(data!.key as string, Location.pathname, Location.pathname === "/layout"))
+        return;
       result.push(data!.key as string);
     });
     return result;

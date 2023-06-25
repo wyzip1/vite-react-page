@@ -25,6 +25,7 @@ export const TagViewsStyled = styled.div<{
     transition: 0.3s;
     box-shadow: 2px 2px 6px #bebebe, -2px -2px 6px #ffffff;
     border-radius: 5px;
+    white-space: nowrap;
 
     &.show {
       animation: tagInAnimation 0.3s forwards ease-in-out;

@@ -36,8 +36,6 @@ const RouterView: React.FC = () => {
           style={{
             height: "100%",
             width: "100%",
-            position: "relative",
-            overflow: "hidden auto",
           }}
           className="rumtime-keep-alive-layout"
           hidden={!matchRoute(pathname, Location.pathname)}
