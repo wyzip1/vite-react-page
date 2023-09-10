@@ -28,6 +28,12 @@ const baseRouterList: router[] = [
         component: lazy(() => import("@/pages/home/detail/App")),
       },
       {
+        path: "auto-animation",
+        name: "AutoAnimation",
+        title: "auto-animation",
+        component: lazy(() => import("@/pages/auto-animation/App")),
+      },
+      {
         path: "group",
         name: "group",
         title: "group",
