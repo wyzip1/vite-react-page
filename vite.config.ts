@@ -3,6 +3,7 @@ import { resolve } from "path";
 import react from "@vitejs/plugin-react";
 import packagesJSON from "./package.json";
 import buildFTL, { publicPath } from "build-ftl";
+import { viteMockServe } from "vite-plugin-mock";
 
 const dependenciesList = Object.keys(packagesJSON.dependencies);
 
@@ -14,6 +15,7 @@ export default defineConfig(({ mode }) => ({
       // babel: { babelrc: true },
     }),
     buildFTL({ ftlDir: "./dist2" }),
+    viteMockServe({ mockPath: "mock" }),
   ],
   optimizeDeps: {
     include: [...dependenciesList],

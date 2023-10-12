@@ -41,7 +41,7 @@ export default function App() {
         token: { colorPrimary: "#155bd4", borderRadius: 0 },
       }}
     >
-      <main style={{ width: "100%", height: "100vh" }} className="bg-slate-500">
+      <main style={{ width: "100%", height: "100vh" }}>
         <KeepAliveProvider includes={catchRouters}>
           <RenderRouter routerList={routerList} />
         </KeepAliveProvider>

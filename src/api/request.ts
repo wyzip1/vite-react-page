@@ -2,7 +2,8 @@ import axios, { InternalAxiosRequestConfig } from "axios";
 import { message } from "antd";
 import { downloadBlob } from "@/utils/index";
 
-import type { AxiosRequestConfig, AxiosError } from "axios";
+import type { AxiosRequestConfig, AxiosError, CancelToken } from "axios";
+const source = axios.CancelToken.source();
 
 export interface Response<T> {
   resultStatus: number;
@@ -26,6 +27,7 @@ const instance = axios.create({ baseURL });
 
 function unifiedParams(config: InternalAxiosRequestConfig) {
   if (config.method?.toLocaleUpperCase() === "GET") config.params = config.data;
+  config.cancelToken = source.token;
   return config;
 }
 
@@ -79,3 +81,12 @@ export async function downloadFile(config: AxiosRequestConfig): Promise<void> {
   message.success("导出成功");
   return downloadBlob(data.content, data.contentType, data.filename);
 }
+
+export const cancelRequest = () => {
+  source.cancel("Operation canceled by the user.");
+};
+
+export const createRequest = <R, T>(requestCallback: (params: T) => AxiosRequestConfig) => {
+  return (params: T, cancelToken?: CancelToken) =>
+    request<R>({ cancelToken, ...requestCallback(params) });
+};

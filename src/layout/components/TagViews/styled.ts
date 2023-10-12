@@ -3,7 +3,6 @@ import styled from "styled-components";
 export const TagViewsStyled = styled.div<{
   primary: string;
 }>`
-  width: 100%;
   margin: 10px 16px;
   box-sizing: border-box;
 
