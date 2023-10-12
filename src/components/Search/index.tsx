@@ -59,6 +59,7 @@ function Search(
   );
 
   const reset = () => {
+    if (loading) return;
     const initData = initFormData();
     setIsReset(true);
     setFormData(initData);
@@ -66,6 +67,7 @@ function Search(
   };
 
   const search = () => {
+    if (loading) return;
     onSearch(formData);
   };
 

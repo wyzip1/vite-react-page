@@ -1,4 +1,17 @@
+import { IncomingMessage } from "http";
 import type { MockMethod } from "vite-plugin-mock";
+
+const sleep = (ms: number) => new Promise(rev => setTimeout(rev, ms));
+
+const parseJsonBody = async (req: IncomingMessage) => {
+  return new Promise<Record<string, any>>(resolve => {
+    let body = "";
+    req.on("data", chunk => {
+      body += chunk;
+    });
+    req.on("end", () => resolve(JSON.parse(body)));
+  });
+};
 
 const mockList = [
   { id: 1, name: "Lark", sex: -1, desc: "是个奇怪的人" },
@@ -20,8 +33,11 @@ const mockMethods: MockMethod[] = [
   {
     url: "/developmentApi/api/list",
     method: "post",
-    response: ({ body }) => {
-      return {
+    async rawResponse(req, res) {
+      await sleep(1000);
+
+      const body = await parseJsonBody(req);
+      const result = {
         resultStatus: 200,
         resultCode: "",
         resultMessage: "ok",
@@ -33,6 +49,7 @@ const mockMethods: MockMethod[] = [
           total: mockList.length,
         },
       };
+      res.end(JSON.stringify(result));
     },
   },
 ];

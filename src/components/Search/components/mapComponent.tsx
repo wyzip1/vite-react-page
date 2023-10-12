@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import React from "react";
-import { Select } from "antd";
+import { Cascader, Select } from "antd";
 import createInput from "./items/Input";
 import createDatePicker from "./items/DatePicker";
 import { covertLength } from "../utils";
@@ -17,6 +17,10 @@ const mapComponent = (options: Options) => {
     case "select":
       return (onChange: ChangeState, value: unknown) => (
         <Select value={value} onChange={onChange} style={{ width }} {...options.props} />
+      );
+    case "cascader":
+      return (onChange: ChangeState, value: unknown) => (
+        <Cascader value={value as any} onChange={onChange} />
       );
     case "dateRange":
       return (onChange: ChangeState, value: RangeValue<string>) =>

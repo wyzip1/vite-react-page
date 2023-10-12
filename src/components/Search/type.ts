@@ -1,5 +1,5 @@
 import type React from "react";
-import type { InputProps, SelectProps, DatePickerProps } from "antd";
+import type { InputProps, SelectProps, DatePickerProps, CascaderProps } from "antd";
 import type { Dispatch, SetStateAction } from "react";
 import type { RangePickerProps } from "antd/es/date-picker/generatePicker";
 import type { Dayjs } from "dayjs";
@@ -22,8 +22,9 @@ export type inputOptions = ComOptions<"input", InputProps>;
 export type selectProps = ComOptions<"select", SelectProps>;
 export type dateProps = ComOptions<"date", DatePickerProps>;
 export type dateRangeProps = ComOptions<"dateRange", RangePickerProps<Dayjs>>;
+export type cascaderProps = ComOptions<"cascader", CascaderProps>;
 
-export type Options = inputOptions | selectProps | dateRangeProps | dateProps;
+export type Options = inputOptions | selectProps | dateRangeProps | dateProps | cascaderProps;
 export type Config = Options[][];
 
 export interface SearchProps {
