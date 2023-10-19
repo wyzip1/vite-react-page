@@ -7,16 +7,20 @@ import useRequest from "./useRequest";
 type ItemType<T> = T extends (...args: any[]) => Promise<Response<List<infer V>>> ? V : never;
 
 export default function useFetchList<
-  T extends (...args: any[]) => Promise<Response<List<any>>>
+  T extends (...args: any[]) => Promise<Response<List<any>>>,
+  PN extends string = "pageNum",
+  PS extends string = "pageSize"
 >(
   fetchApi: T,
-  searchParams: Omit<Parameters<T>[0], "pageNum" | "pageSize">,
+  searchParams: Omit<Parameters<T>[0], PN | PS>,
   defaultOptions: {
     pageSize?: number;
     initSearch?: boolean;
     propName?: {
-      pageNum?: string;
-      pageSize?: string;
+      pageNum?: PN;
+      pageSize?: PS;
+      total?: string;
+      list?: string;
     };
   } = { initSearch: true }
 ): [
@@ -54,7 +58,7 @@ export default function useFetchList<
 
   const updateList = (callback?: (list: Array<ItemType<T>>) => void) => {
     setData(data => {
-      callback?.(data?.data.list || []);
+      callback?.(data?.data[defaultOptions.propName?.list || "list"] || []);
       return data ? { ...data } : undefined;
     });
   };
@@ -76,7 +80,13 @@ export default function useFetchList<
 
   return [
     updateParams,
-    { pageNum, pageSize, total: data?.data.total || 0, loading, list: data?.data.list || [] },
+    {
+      pageNum,
+      pageSize,
+      total: data?.data[defaultOptions.propName?.total || "total"] || 0,
+      loading,
+      list: data?.data[defaultOptions.propName?.list || "list"] || [],
+    },
     { doSearch, updateList, refreshList },
   ];
 }

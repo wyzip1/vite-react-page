@@ -28,27 +28,16 @@ export default function LayoutPage(props: LayoutProps) {
           <MenuList routerList={LayoutRouterList} />
         </Sider>
         <Layout>
-          <Header
-            style={{
-              padding: 0,
-              background: colorBgContainer,
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
+          <Header className=" p-0 flex items-center" style={{ background: colorBgContainer }}>
             <Button
               type="text"
               icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
               onClick={() => setCollapsed(!collapsed)}
-              style={{
-                fontSize: "16px",
-                width: 64,
-                height: 64,
-              }}
+              className="text-base w-16 h-16"
             />
             <BreadcrumbMenuList />
           </Header>
-          <div style={{ height: "100%", overflow: "auto" }}>
+          <div className="h-full overflow-auto flex flex-col">
             <TagViews />
             <Content className="layout-content">
               <RouterView />

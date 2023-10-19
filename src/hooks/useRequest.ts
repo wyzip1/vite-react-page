@@ -6,12 +6,15 @@ type RequestResult<T> = T extends (...args: any[]) => Promise<infer V> ? V : nev
 export default function useRequest<
   T extends (params: any, cancelToken?: CancelToken) => Promise<any>
 >(
-  requestApi: T
+  requestApi: T,
+  initRequestParams?: Parameters<T>[0] | undefined,
+  initSearch = true
 ): [
   (params: Parameters<T>[0]) => Promise<RequestResult<T>>,
   RequestResult<T> | undefined,
   boolean,
-  React.Dispatch<React.SetStateAction<RequestResult<T> | undefined>>
+  React.Dispatch<React.SetStateAction<RequestResult<T> | undefined>>,
+  () => void
 ] {
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<RequestResult<T>>();
@@ -29,7 +32,17 @@ export default function useRequest<
     }
   }
 
-  useEffect(() => () => cancelTokenSourceRef.current.cancel(), []);
+  function cancelRequest() {
+    cancelTokenSourceRef.current.cancel();
+  }
 
-  return [request, data, loading, setData];
+  useEffect(() => {
+    if (!initSearch) return;
+    request(initRequestParams);
+
+    return cancelRequest;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return [request, data, loading, setData, cancelRequest];
 }
