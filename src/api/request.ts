@@ -80,7 +80,7 @@ export async function downloadFile(config: AxiosRequestConfig): Promise<void> {
   return downloadBlob(data.content, data.contentType, data.filename);
 }
 
-export const createRequest = <R, T>(requestCallback: (params: T) => AxiosRequestConfig) => {
+export const createRequest = <T, R>(requestCallback: (params: T) => AxiosRequestConfig) => {
   return (params: T, cancelToken?: CancelToken) =>
     request<R>({ cancelToken, ...requestCallback(params) });
 };

@@ -37,7 +37,7 @@ export default function useRequest<
   }
 
   useEffect(() => {
-    if (!initSearch) return;
+    if (!initSearch) return cancelRequest;
     request(initRequestParams);
 
     return cancelRequest;
