@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => ({
     react({
       // babel: { babelrc: true },
     }),
-    buildFTL({ ftlDir: "./dist2" }),
+    buildFTL({ entryDir: "./entranceHTML", ftlDir: "./dist2" }),
     viteMockServe({ mockPath: "mock" }),
   ],
   optimizeDeps: {
@@ -42,7 +42,13 @@ export default defineConfig(({ mode }) => ({
     // 启用manifest.json 文件
     manifest: true,
     rollupOptions: {
-      input: {},
+      onwarn(warning, warn) {
+        if (warning.code === "MODULE_LEVEL_DIRECTIVE") return;
+        warn(warning);
+      },
+      input: {
+        main: resolve(__dirname, "./entranceHTML/main.html"),
+      },
       output: {
         manualChunks: {
           react: ["react"],
