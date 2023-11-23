@@ -9,8 +9,7 @@ export const LayoutPageStyled = styled.div`
 
     & .layout-content {
       overflow: auto;
-      height: calc(100% - 66px);
-      /* height: calc(100% - 32px); */
+      height: 100%;
       margin: 16px;
       padding: 20px 16px;
       box-sizing: border-box;

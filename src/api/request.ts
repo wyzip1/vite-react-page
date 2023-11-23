@@ -1,6 +1,6 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
 import { message } from "antd";
-import { downloadBlob } from "@/utils/index";
+import { downloadBlob, parseJSON } from "@/utils/index";
 
 import type { AxiosRequestConfig, AxiosError, CancelToken } from "axios";
 
@@ -61,6 +61,14 @@ download.interceptors.response.use(
     const contentType = res.headers["content-type"];
     const propList = res.headers["content-disposition"]?.split(";");
     const filename = propList?.find(i => i.includes("filename"))?.split("=")[1];
+
+    const decoder = new TextDecoder("utf-8");
+    const text = decoder.decode(res.data);
+    const jsonValue = parseJSON(text);
+    if (typeof jsonValue === "object") {
+      message.error(jsonValue.resultMessage as string);
+      return Promise.reject(jsonValue);
+    }
 
     res.data = { contentType, filename, content: res.data } as DownLoadData;
     return res.data;

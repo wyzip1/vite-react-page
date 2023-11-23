@@ -1,9 +1,14 @@
+import { message } from "antd";
 import Path from "./path";
 
 export { default as events } from "./subscribe";
 
 export function guid(): string {
-  return crypto.randomUUID();
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0,
+      v = c == "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
 }
 
 export function transferDataToQuery(data: object, isStart = true): string {
@@ -15,7 +20,7 @@ export function transferDataToQuery(data: object, isStart = true): string {
   return result.substring(0, result.length - 1);
 }
 
-function parseJSON(value: string): Record<string, unknown> | string {
+export function parseJSON(value: string): Record<string, unknown> | string {
   try {
     return JSON.parse(value);
   } catch (_) {
@@ -131,3 +136,26 @@ export function rangeNum({ start = 0, end, format = true, afterValue = "" }: Ran
     format ? formatNum(start + v) + afterValue : start + v + afterValue
   );
 }
+
+export const copyInfo = async (data: string) => {
+  try {
+    // @ts-ignore
+    const permissions = await navigator.permissions.query({ name: "clipboard-write" });
+    if (permissions.state === "granted") {
+      await navigator.clipboard.writeText(data);
+    } else {
+      const input = document.createElement("input");
+      input.setAttribute("readonly", "readonly");
+      input.setAttribute("value", data);
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand("copy");
+      document.body.removeChild(input);
+    }
+    message.success("复制成功");
+  } catch (error) {
+    console.log("copy error:", error);
+
+    message.error("复制失败");
+  }
+};
