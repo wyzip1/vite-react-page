@@ -159,3 +159,13 @@ export const copyInfo = async (data: string) => {
     message.error("复制失败");
   }
 };
+
+export const formatMutipleNum = (num: number, mutiple = 100, forceNumer = true) => {
+  const value = (mutiple === 0 ? num : num / mutiple).toFixed(2);
+  return forceNumer ? Number(value) : value;
+};
+
+export const formatMoneyPreSubFix = (num: number, mutiple = 0) => {
+  const value = formatMutipleNum(num, mutiple, false).toString();
+  return value.split(".");
+};
