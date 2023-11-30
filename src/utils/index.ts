@@ -137,29 +137,6 @@ export function rangeNum({ start = 0, end, format = true, afterValue = "" }: Ran
   );
 }
 
-export const copyInfo = async (data: string) => {
-  try {
-    // @ts-ignore
-    const permissions = await navigator.permissions.query({ name: "clipboard-write" });
-    if (permissions.state === "granted") {
-      await navigator.clipboard.writeText(data);
-    } else {
-      const input = document.createElement("input");
-      input.setAttribute("readonly", "readonly");
-      input.setAttribute("value", data);
-      document.body.appendChild(input);
-      input.select();
-      document.execCommand("copy");
-      document.body.removeChild(input);
-    }
-    message.success("复制成功");
-  } catch (error) {
-    console.log("copy error:", error);
-
-    message.error("复制失败");
-  }
-};
-
 export const formatMutipleNum = (num: number, mutiple = 100, forceNumer = true) => {
   const value = (mutiple === 0 ? num : num / mutiple).toFixed(2);
   return forceNumer ? Number(value) : value;
@@ -168,4 +145,61 @@ export const formatMutipleNum = (num: number, mutiple = 100, forceNumer = true) 
 export const formatMoneyPreSubFix = (num: number, mutiple = 0) => {
   const value = formatMutipleNum(num, mutiple, false).toString();
   return value.split(".");
+};
+
+export const createImg = (url: string) => {
+  return new Promise<HTMLImageElement>((rev, rej) => {
+    const img = document.createElement("img");
+    img.src = url;
+    img.crossOrigin = "Anonymous"; //解决跨域图片问题
+
+    img.onload = () => rev(img);
+    img.onerror = e => rej(e);
+  });
+};
+
+export const copyInfo = async (data?: string | { type: "img"; url: string }) => {
+  try {
+    if (!data) return;
+    // @ts-ignore
+    const permissions = await navigator.permissions.query({ name: "clipboard-write" });
+    if (permissions.state === "granted") {
+      if (typeof data === "string") await navigator.clipboard.writeText(data);
+      else if (data.type === "img") {
+        const res = await fetch(data.url, { headers: { "Response-Type": "blob" } });
+        const blob = await res.blob();
+
+        await navigator.clipboard.write([
+          new ClipboardItem({
+            [blob.type]: blob,
+          }),
+        ]);
+      }
+    } else {
+      const createCopyDom = async () => {
+        if (typeof data === "string") {
+          const text = document.createElement("span");
+          text.innerText = data;
+          return text;
+        } else {
+          const img = await createImg(data.url);
+          return img;
+        }
+      };
+      const copyDom = await createCopyDom();
+      const selection = window.getSelection()!;
+      if (selection.rangeCount > 0) selection.removeAllRanges();
+      const range = document.createRange();
+      document.body.appendChild(copyDom);
+      range.selectNode(copyDom); //传入dom
+      selection.addRange(range);
+      document.execCommand("copy");
+      document.body.removeChild(copyDom);
+    }
+    message.success("复制成功");
+  } catch (error) {
+    console.log("copy error:", error);
+
+    message.error("复制失败");
+  }
 };
