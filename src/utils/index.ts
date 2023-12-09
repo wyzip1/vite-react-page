@@ -115,6 +115,54 @@ export function debounce(event: Function, delay = 300) {
   };
 }
 
+export function assembleTree<T = any>(
+  list: T[],
+  key: keyof T,
+  parentKey: keyof T,
+  children: keyof T
+) {
+  const result: T[] = [];
+  const catched: Array<T[keyof T]> = [];
+  for (const item of list) {
+    item[children] = list.filter(data => {
+      data[parentKey] === item[key] && catched.push(data[key]);
+      return data[parentKey] === item[key];
+    }) as T[keyof T];
+    result.push(item);
+  }
+  return result.filter(item => !catched.includes(item[key]));
+}
+
+export function eachTree<T = any>(
+  tree: T[],
+  callback: (item: T) => boolean | undefined | void,
+  key = "children"
+) {
+  const list = [tree];
+  for (let i = 0; i < list.length; i++) {
+    for (const node of list[i]) {
+      if (node[key]?.length) list.push(node[key]);
+      const value = callback(node);
+      if (value) return node;
+    }
+  }
+}
+
+export function formatTree<T, R>(
+  tree: T[],
+  callback: (item: T) => any,
+  key = "children"
+): R[] {
+  const result = [] as R[];
+  for (const node of tree) {
+    if (node[key]) {
+      node[key] = formatTree(node[key], callback, key);
+    }
+    result.push(callback(node));
+  }
+  return result;
+}
+
 export function throttle(fn: Function, delay = 300) {
   // eslint-disable-next-line no-undef
   let timer: NodeJS.Timer | undefined;
@@ -202,4 +250,22 @@ export const copyInfo = async (data?: string | { type: "img"; url: string }) => 
 
     message.error("复制失败");
   }
+};
+
+export const SelectFile = (type = "*") => {
+  return new Promise(resolve => {
+    const input = document.createElement("input");
+    window.addEventListener(
+      "focus",
+      () => {
+        setTimeout(() => {
+          resolve(input.files?.[0]);
+        }, 300);
+      },
+      { once: true }
+    );
+    input.type = "file";
+    input.accept = type;
+    input.click();
+  });
 };
