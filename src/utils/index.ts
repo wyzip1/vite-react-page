@@ -163,6 +163,33 @@ export function formatTree<T, R>(
   return result;
 }
 
+export function findTreePath<T = any>(
+  tree: T[],
+  callback: (item: T) => boolean | undefined | void,
+  key = "children",
+  path: T[] = []
+): T[] | undefined {
+  for (const node of tree) {
+    path.push(node);
+    const isFind = callback(node);
+    if (isFind) return path;
+
+    if (node[key]?.length) {
+      const findPath = findTreePath(node[key], callback, key, path);
+      if (findPath) return findPath;
+    }
+  }
+}
+
+export const toggleList = <T>(list: T[], item: T, customValidate?: (item: T) => boolean) => {
+  const index = list.findIndex(e =>
+    typeof customValidate === "function" ? customValidate(e) : e === item
+  );
+  if (index > -1) list.splice(index, 1);
+  else list.push(item);
+  return list;
+};
+
 export function throttle(fn: Function, delay = 300) {
   // eslint-disable-next-line no-undef
   let timer: NodeJS.Timer | undefined;
