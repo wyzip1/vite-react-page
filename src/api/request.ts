@@ -39,8 +39,11 @@ instance.interceptors.response.use(
     }
     return res.data;
   },
-  (res: AxiosError) => {
-    message.error(res.message);
+  (err: AxiosError) => {
+    if (err.code !== "ERR_CANCELED") {
+      message.error(err.message);
+    }
+    return Promise.reject(err);
   }
 );
 
