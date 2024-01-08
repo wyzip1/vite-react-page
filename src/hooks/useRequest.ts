@@ -34,6 +34,7 @@ export default function useRequest<
 
   function cancelRequest() {
     cancelTokenSourceRef.current.cancel();
+    cancelTokenSourceRef.current = axios.CancelToken.source();
   }
 
   useEffect(() => {

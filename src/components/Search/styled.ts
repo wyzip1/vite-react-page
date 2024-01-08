@@ -5,10 +5,11 @@ export const SearchStyled = styled.div<{
   inline?: boolean;
   autoWrap?: boolean;
 }>`
-  width: fit-content;
+  width: 100%;
   --default-label-width: ${props => props.defaultLabelWidth};
   font-size: var(--base-size, 14px);
   display: ${props => (props.inline ? "flex" : "block")};
+  justify-content: space-between;
 
   & > .input-content {
     & > .search-row {

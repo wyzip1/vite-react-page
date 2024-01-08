@@ -40,6 +40,9 @@ function Search(
 
   useImperativeHandle(ref, () => ({
     getFormData: () => formData,
+    resetFormData: () => {
+      setFormData(initFormData());
+    },
   }));
 
   useEffect(() => {

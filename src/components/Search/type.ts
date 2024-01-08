@@ -43,6 +43,7 @@ export interface SearchProps {
 
 export interface SearchInstance {
   getFormData(): State;
+  resetFormData: () => void;
 }
 
 interface RenderBaseProps {

@@ -35,7 +35,7 @@ export default function useFetchList<
   const [pageNum, setPageNum] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(defaultOptions?.pageSize || 10);
 
-  const [request, data, loading, setData] = useRequest(fetchApi);
+  const [request, data, loading, setData] = useRequest(fetchApi, undefined, false);
 
   const updateParams = (params: Pagination) => {
     setPageNum(params.pageNum || pageNum);
