@@ -15,6 +15,7 @@ export function transferDataToQuery(data: object, isStart = true): string {
   let result = isStart ? "?" : "";
   for (const key in data) {
     const value = typeof data[key] === "object" ? JSON.stringify(data[key]) : data[key];
+    if ([undefined, null].includes(undefined)) continue;
     result += `${key}=${value}&`;
   }
   return result.substring(0, result.length - 1);
