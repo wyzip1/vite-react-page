@@ -92,16 +92,6 @@ export function formatDate(
   return result;
 }
 
-export function downloadBlob(data: BlobPart, type: string, filename: string): void {
-  const blob = new Blob([data], { type });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.download = decodeURIComponent(filename);
-  link.href = url;
-  link.click();
-  URL.revokeObjectURL(url);
-}
-
 export function getValue<T>(data: T, path: Path<T>) {
   for (const key of path.split(".")) data = data[key];
   return data;
