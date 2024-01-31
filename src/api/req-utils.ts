@@ -49,15 +49,16 @@ export const uploadFile = async (file: File, options: UploadOptions) => {
 
     const sliceFile = file.slice(bytes[0], bytes[1]);
     const info = { index: i, bytes };
-    uploadQueue.push(
-      options.onUpload(sliceFile, info, event => {
-        uploadedDataQueue[i] = event.loaded;
-        const totalLoaded = uploadedDataQueue.reduce((a, b) => a + (b || 0), 0) / file.size;
-        const percent = formatMutipleNum(totalLoaded, 0.01) as number;
 
-        options.onTotalProgress?.(percent, totalLoaded);
-      })
-    );
+    const uploadTask = options.onUpload(sliceFile, info, event => {
+      uploadedDataQueue[i] = event.loaded;
+      const totalLoaded = uploadedDataQueue.reduce((a, b) => a + (b || 0), 0) / file.size;
+      const percent = formatMutipleNum(totalLoaded, 0.01) as number;
+
+      options.onTotalProgress?.(percent, totalLoaded);
+    });
+
+    uploadQueue.push(uploadTask);
   }
 
   const batchRes = await Promise.all(uploadQueue);
