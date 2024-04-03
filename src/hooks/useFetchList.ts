@@ -1,13 +1,15 @@
 import List from "@/api/model/List";
-import { Response } from "@/api/request";
+import { RequestResponse } from "@/api/request";
 import Pagination from "@/api/model/Pagination";
 import { useEffect, useRef, useState } from "react";
 import useRequest from "./useRequest";
 
-type ItemType<T> = T extends (...args: any[]) => Promise<Response<List<infer V>>> ? V : never;
+type ItemType<T> = T extends (...args: any[]) => Promise<RequestResponse<List<infer V>>>
+  ? V
+  : never;
 
 export default function useFetchList<
-  T extends (...args: any[]) => Promise<Response<List<any>>>,
+  T extends (...args: any[]) => Promise<RequestResponse<List<any>>>,
   PN extends string = "pageNum",
   PS extends string = "pageSize"
 >(
@@ -58,7 +60,7 @@ export default function useFetchList<
 
   const updateList = (callback?: (list: Array<ItemType<T>>) => void) => {
     setData(data => {
-      callback?.(data?.data[defaultOptions.propName?.list || "list"] || []);
+      callback?.(data?.data?.[defaultOptions.propName?.list || "list"] || []);
       return data ? { ...data } : undefined;
     });
   };
@@ -83,9 +85,9 @@ export default function useFetchList<
     {
       pageNum,
       pageSize,
-      total: data?.data[defaultOptions.propName?.total || "total"] || 0,
+      total: data?.data?.[defaultOptions.propName?.total || "total"] || 0,
       loading,
-      list: data?.data[defaultOptions.propName?.list || "list"] || [],
+      list: data?.data?.[defaultOptions.propName?.list || "list"] || [],
     },
     { doSearch, updateList, refreshList },
   ];
