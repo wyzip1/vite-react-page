@@ -21,7 +21,8 @@
   "globals": {
     "JSX": "readonly",
     "process": "readonly",
-    "BlobPart": "readonly"
+    "BlobPart": "readonly",
+    "NodeJS": "readonly"
   },
   "settings": {
     "react": {
