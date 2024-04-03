@@ -1,3 +1,4 @@
+import { message } from "antd";
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 export interface RequestResponse<T> {
@@ -36,7 +37,7 @@ instance.interceptors.response.use(
       res.data = result;
     }
     if (![0, 200].includes(res.data.code)) {
-      // message.error(res.data.resultMessage);
+      message.error(res.data.message);
       return Promise.reject(res);
     }
 
@@ -44,7 +45,7 @@ instance.interceptors.response.use(
   },
   (err: AxiosError) => {
     if (err.code !== "ERR_CANCELED") {
-      // message.error(err.message);
+      message.error((err.response?.data as RequestResponse<any>)?.message || err.message);
     }
     return Promise.reject(err);
   }
@@ -74,7 +75,7 @@ function handleArraybufferRequest(
   }
 }
 
-const request = <T>(config: AxiosRequestConfig): Promise<T> => {
+const request = <T>(config: AxiosRequestConfig): Promise<RequestResponse<T>> => {
   return instance(config);
 };
 

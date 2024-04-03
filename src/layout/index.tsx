@@ -6,8 +6,7 @@ import routerList from "@/router";
 import BreadcrumbMenuList from "./components/BreadcrumbMenuList";
 
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
-import RouterView from "@/components/KeepAlive/RouterView";
-import TagViews from "./components/TagViews";
+import { Outlet } from "react-router-dom";
 
 interface LayoutProps {}
 
@@ -38,9 +37,8 @@ export default function LayoutPage(props: LayoutProps) {
             <BreadcrumbMenuList />
           </Header>
           <div className="h-full overflow-auto flex flex-col">
-            <TagViews />
             <Content className="layout-content">
-              <RouterView />
+              <Outlet />
             </Content>
           </div>
         </Layout>
