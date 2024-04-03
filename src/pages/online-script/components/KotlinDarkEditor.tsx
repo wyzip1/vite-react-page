@@ -1,6 +1,18 @@
 import React, { forwardRef, ForwardedRef, useRef, useEffect } from "react";
 import Editor from "@monaco-editor/react";
-import type * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api.js";
+import { loader } from "@monaco-editor/react";
+
+loader.config({
+  paths: {
+    vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.46.0/min/vs",
+  },
+  "vs/nls": {
+    availableLanguages: {
+      "*": "de", // on the editor, press right click to see the German words
+    },
+  },
+});
 
 export type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 
