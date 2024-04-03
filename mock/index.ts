@@ -37,21 +37,26 @@ const mockMethods: MockMethod[] = [
     url: "/developmentApi/api/list",
     method: "post",
     async rawResponse(req, res) {
-      await sleep(1000);
+      await sleep(200);
 
       const body = await parseJsonBody(req);
       const query = parse(req.url!, true).query;
       const pageNum = Number(body.pageNum || query.pageNum);
       const pageSize = Number(body.pageSize || query.pageSize);
+      const name = body.name || query.name;
+      const filterList = name ? mockList.filter(item => item.name.includes(name)) : mockList;
 
       const result = {
         code: 200,
         message: "ok",
         data: {
-          list: mockList.slice((pageNum - 1) * pageSize, pageNum * pageSize),
-          total: mockList.length,
+          list: filterList.slice((pageNum - 1) * pageSize, pageNum * pageSize),
+          total: filterList.length,
         },
       };
+      res.writeHead(200, {
+        "Content-Type": "application/json; charset=utf-8",
+      });
       res.end(JSON.stringify(result));
     },
   },
