@@ -98,10 +98,9 @@ export function getValue<T>(data: T, path: Path<T>) {
 }
 
 export function debounce(event: Function, delay = 300) {
-  // eslint-disable-next-line no-undef
   let timer: NodeJS.Timer | undefined;
   return (...args: unknown[]) => {
-    timer && clearTimeout(timer);
+    timer && clearTimeout(timer as unknown as number);
     timer = setTimeout(() => event(...args), delay);
   };
 }
