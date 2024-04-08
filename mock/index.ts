@@ -1,5 +1,6 @@
 import { IncomingMessage } from "http";
 import type { MockMethod } from "vite-plugin-mock";
+import { parse } from "url";
 
 const sleep = (ms: number) => new Promise(rev => setTimeout(rev, ms));
 
@@ -9,7 +10,9 @@ const parseJsonBody = async (req: IncomingMessage) => {
     req.on("data", chunk => {
       body += chunk;
     });
-    req.on("end", () => resolve(JSON.parse(body)));
+    req.on("end", () => {
+      resolve(JSON.parse(body || "{}"));
+    });
   });
 };
 
@@ -34,21 +37,26 @@ const mockMethods: MockMethod[] = [
     url: "/developmentApi/api/list",
     method: "post",
     async rawResponse(req, res) {
-      await sleep(1000);
+      await sleep(200);
 
       const body = await parseJsonBody(req);
+      const query = parse(req.url!, true).query;
+      const pageNum = Number(body.pageNum || query.pageNum);
+      const pageSize = Number(body.pageSize || query.pageSize);
+      const name = body.name || query.name;
+      const filterList = name ? mockList.filter(item => item.name.includes(name)) : mockList;
+
       const result = {
-        resultStatus: 200,
-        resultCode: "",
-        resultMessage: "ok",
+        code: 200,
+        message: "ok",
         data: {
-          list: mockList.slice(
-            (body.pageNum - 1) * body.pageSize,
-            body.pageNum * body.pageSize
-          ),
-          total: mockList.length,
+          list: filterList.slice((pageNum - 1) * pageSize, pageNum * pageSize),
+          total: filterList.length,
         },
       };
+      res.writeHead(200, {
+        "Content-Type": "application/json; charset=utf-8",
+      });
       res.end(JSON.stringify(result));
     },
   },

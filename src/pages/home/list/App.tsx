@@ -1,57 +1,104 @@
-import React, { useState } from "react";
-import { Button } from "antd";
-import PageList, { PageOptions, SorterOption } from "@/components/PageList/index";
+import Search from "@/components/Search";
+import React from "react";
+import { useMemo, useState } from "react";
+import useFetchList from "@/hooks/useFetchList";
+import { Table, TableColumnProps } from "antd";
+import { Config } from "@/components/Search/type";
+import AsyncButton from "@/components/AsyncButton";
+import { fetchMockList } from "@/api/index";
 
-import SearchOptions, { FormData } from "./searchOptions";
-import { getTableList, TableData } from "./mock";
+interface SearchFormData {
+  date?: [string, string];
+  name?: string;
+}
 
-import type { ColumnsType } from "antd/es/table";
-
-const columns: ColumnsType<TableData> = [
-  { title: "序号", dataIndex: "id", sorter: { multiple: 1 } },
-  { title: "名称", dataIndex: "name" },
-  {
-    title: "性别",
-    dataIndex: "sex",
-    sorter: { multiple: 2 },
-    render(sex: -1 | 1 | 0) {
-      return ["女", "男"][sex] || "未知";
-    },
-  },
-  { title: "详情", dataIndex: "desc" },
+const searchOptions: Config = [
+  [
+    { label: "姓名", key: "name", props: { allowClear: true } },
+    { label: "时间", key: "date", type: "dateRange", props: { showTime: true } },
+  ],
 ];
 
-export default function List() {
-  const [dataList, setDataList] = useState<TableData[]>([]);
-  const [total, setTotal] = useState<number>(0);
+const App: React.FC = () => {
+  const [searchFormData, setSearchFormData] = useState<SearchFormData>({});
+  const searchParams = useMemo(() => formatSearchParams(searchFormData), [searchFormData]);
+  const [setPageInfo, state, api] = useFetchList(fetchMockList, searchParams);
 
-  const onSearch = async (
-    formData: FormData,
-    pageOptions: PageOptions,
-    sorterOption: SorterOption
-  ) => {
-    console.log(formData, pageOptions, sorterOption);
-    const res = await getTableList({ ...formData, ...pageOptions, sorterOption });
-    if (res.code !== 200) throw res.msg;
-    setDataList(res.data?.list || []);
-    setTotal(res.data?.total || 0);
-    return res.data!;
-  };
+  const columns: TableColumnProps<any>[] = [
+    {
+      title: "姓名",
+      align: "center",
+      dataIndex: "name",
+    },
+    {
+      title: "性别",
+      align: "center",
+      dataIndex: "sex",
+      render(v) {
+        return v === 0 ? "女" : v === 1 ? "男" : "未知";
+      },
+    },
+    {
+      title: "描述",
+      align: "center",
+      dataIndex: "desc",
+    },
+  ];
 
-  const batchAction = (data?: TableData[]) => {
-    console.log(data);
-  };
+  function formatSearchParams(data: SearchFormData) {
+    const { date, ...params } = data;
+    const [deliveryTimeBegin, deliveryTimeEnd] = date || [];
+    return {
+      ...params,
+      deliveryTimeBegin,
+      deliveryTimeEnd,
+    };
+  }
 
   return (
-    <PageList
-      searchOptions={SearchOptions}
-      rowKey="id"
-      doSearch={onSearch}
-      showSelection
-      columns={columns}
-      batchControl={getData => <Button onClick={() => batchAction(getData())}>TEST</Button>}
-      dataSource={dataList}
-      total={total}
-    />
+    <div>
+      <Search
+        defaultLabelWidth={100}
+        loading={state.loading}
+        config={searchOptions}
+        onChange={setSearchFormData}
+        onSearch={() => api.doSearch()}
+        onReset={state => {
+          Object.assign(searchParams, formatSearchParams(state));
+          api.doSearch();
+        }}
+      />
+
+      <div className="flex gap-4 mt-4">
+        <AsyncButton type="primary" ghost>
+          导出
+        </AsyncButton>
+      </div>
+
+      <Table
+        bordered
+        className="mt-4"
+        loading={state.loading}
+        dataSource={state.list}
+        columns={columns}
+        rowKey="id"
+        scroll={{ x: columns.reduce((c, i) => c + ((i.width as number) || 200), 0) }}
+        onChange={({ current, pageSize }) => {
+          setPageInfo({ pageNum: current!, pageSize: pageSize! });
+        }}
+        pagination={{
+          current: state.pageNum,
+          pageSize: state.pageSize,
+          total: state.total,
+          pageSizeOptions: ["10", "20", "30"],
+          showPrevNextJumpers: true,
+          showQuickJumper: true,
+          showSizeChanger: true,
+          showTotal: total => `共 ${total} 条`,
+        }}
+      />
+    </div>
   );
-}
+};
+
+export default App;
