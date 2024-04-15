@@ -4,7 +4,7 @@ import Pagination from "@/api/model/Pagination";
 import { useEffect, useRef, useState } from "react";
 import useRequest from "./useRequest";
 
-type ItemType<T> = T extends (...args: any[]) => Promise<RequestResponse<List<infer V>>>
+export type ItemType<T> = T extends (...args: any[]) => Promise<RequestResponse<List<infer V>>>
   ? V
   : never;
 
@@ -26,23 +26,30 @@ export default function useFetchList<
     };
   } = { initSearch: true }
 ): [
-  (pageOptions: Pagination) => void,
+  (pageOptions: Pagination) => ReturnType<T>,
   { pageNum: number; pageSize: number; total: number; loading: boolean; list: ItemType<T>[] },
   {
-    doSearch: () => void;
+    doSearch: () => ReturnType<T>;
     updateList: (callback?: ((list: Array<ItemType<T>>) => void) | undefined) => void;
-    refreshList: () => void;
+    refreshList: () => ReturnType<T>;
   }
 ] {
   const [pageNum, setPageNum] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(defaultOptions?.pageSize || 10);
 
   const [request, data, loading, setData] = useRequest(fetchApi, undefined, false);
-  console.log("data", data);
+
+  const pageChangeRequestRef = useRef<{
+    resolve: (v: any) => void;
+    reject: (reason: any) => void;
+  }>();
 
   const updateParams = (params: Pagination) => {
-    setPageNum(params.pageNum || pageNum);
-    setPageSize(params.pageSize || pageSize);
+    return new Promise((rev, rej) => {
+      pageChangeRequestRef.current = { resolve: rev, reject: rej };
+      setPageNum(params.pageNum || pageNum);
+      setPageSize(params.pageSize || pageSize);
+    }) as ReturnType<T>;
   };
 
   const onSearch = (pageNum: number, pageSize: number) => {
@@ -51,12 +58,12 @@ export default function useFetchList<
       [defaultOptions.propName?.pageSize || "pageSize"]: pageSize,
       ...searchParams,
     };
-    request(params);
+    return request(params) as ReturnType<T>;
   };
 
-  const doSearch = () => {
-    if (pageNum === 1) onSearch(1, pageSize);
-    else setPageNum(1);
+  const doSearch = (): ReturnType<T> => {
+    if (pageNum === 1) return onSearch(1, pageSize) as ReturnType<T>;
+    else return updateParams({ pageNum: 1, pageSize });
   };
 
   const updateList = (callback?: (list: Array<ItemType<T>>) => void) => {
@@ -67,7 +74,7 @@ export default function useFetchList<
   };
 
   const refreshList = () => {
-    onSearch(pageNum, pageSize);
+    return onSearch(pageNum, pageSize);
   };
 
   const initRef = useRef<boolean>(true);
@@ -77,7 +84,12 @@ export default function useFetchList<
       initRef.current = false;
       return;
     }
-    onSearch(pageNum, pageSize);
+    onSearch(pageNum, pageSize)
+      .then(pageChangeRequestRef.current?.resolve)
+      .catch(pageChangeRequestRef.current?.reject)
+      .finally(() => {
+        pageChangeRequestRef.current = undefined;
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNum, pageSize]);
 
