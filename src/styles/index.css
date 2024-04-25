@@ -25,3 +25,8 @@
   transform: scale(.6);
   transition: all 1000ms
 }
+
+
+.ant-upload-list-item-container {  
+  position: relative;  
+} 

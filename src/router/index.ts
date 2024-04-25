@@ -21,6 +21,12 @@ const baseRouterList: router[] = [
         title: "list",
         component: lazy(() => import("@/pages/list/App")),
       },
+      {
+        path: "sort-uploader",
+        name: "SortUploader",
+        title: "sort-uploader",
+        component: lazy(() => import("@/pages/sort-uploader/App")),
+      },
     ],
   },
 ];
