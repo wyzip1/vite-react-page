@@ -92,8 +92,28 @@ export function formatDate(
   return result;
 }
 
-export function getValue<T>(data: T, path: Path<T>) {
-  for (const key of path.split(".")) data = data[key];
+export function getValue<T>(data: T, path?: Path<T>) {
+  if (!path) return;
+  for (const key of path.split(".")) data = data?.[key];
+  return data;
+}
+
+export function setValue<T>(data: T, value: any, path?: Path<T>) {
+  if (!path) return data;
+
+  const props = path.split(".");
+  let current = data;
+
+  for (let i = 0; i < props.length - 1; i++) {
+    const prop = props[i];
+    current = current[prop];
+
+    if (current === undefined) {
+      return data; // 如果属性路径不存在，直接返回原始对象
+    }
+  }
+
+  current[props[props.length - 1]] = value;
   return data;
 }
 

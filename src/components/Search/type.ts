@@ -1,8 +1,7 @@
 import type React from "react";
 import type { InputProps, SelectProps, DatePickerProps, CascaderProps } from "antd";
 import type { Dispatch, SetStateAction } from "react";
-import type { RangePickerProps } from "antd/es/date-picker/generatePicker";
-import type { Dayjs } from "dayjs";
+import { type RangePickerProps } from "antd/es/date-picker";
 
 export interface ComOptions<T = "input", P = {}> {
   label: string;
@@ -21,7 +20,7 @@ export type ChangeState = (value: unknown) => void;
 export type inputOptions = ComOptions<"input", InputProps>;
 export type selectProps = ComOptions<"select", SelectProps>;
 export type dateProps = ComOptions<"date", DatePickerProps>;
-export type dateRangeProps = ComOptions<"dateRange", RangePickerProps<Dayjs>>;
+export type dateRangeProps = ComOptions<"dateRange", RangePickerProps>;
 export type cascaderProps = ComOptions<"cascader", CascaderProps>;
 
 export type Options = inputOptions | selectProps | dateRangeProps | dateProps | cascaderProps;
