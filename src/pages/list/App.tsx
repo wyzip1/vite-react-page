@@ -1,11 +1,13 @@
 import Search from "@/components/Search";
-import React from "react";
+import React, { useRef } from "react";
 import { useMemo, useState } from "react";
 import useFetchList from "@/hooks/useFetchList";
-import { Table, TableColumnProps } from "antd";
 import { Config } from "@/components/Search/type";
 import AsyncButton from "@/components/AsyncButton";
 import { fetchMockList } from "@/api/index";
+import EditTable, { EditTableColumn, EditTableInstance } from "@/components/EditTable";
+import { MockListItem } from "@/api/mock-model";
+import { Button } from "antd";
 
 interface SearchFormData {
   date?: [string, string];
@@ -24,24 +26,42 @@ const App: React.FC = () => {
   const searchParams = useMemo(() => formatSearchParams(searchFormData), [searchFormData]);
   const [setPageInfo, state, api] = useFetchList(fetchMockList, searchParams);
 
-  const columns: TableColumnProps<any>[] = [
+  const eidtTableRef = useRef<EditTableInstance>(null);
+
+  const columns: EditTableColumn<MockListItem>[] = [
     {
       title: "姓名",
       align: "center",
       dataIndex: "name",
+      valueType: "string",
     },
     {
       title: "性别",
       align: "center",
       dataIndex: "sex",
+      valueType: "boolean",
       render(v) {
         return v === 0 ? "女" : v === 1 ? "男" : "未知";
       },
     },
     {
+      title: "钱包",
+      align: "center",
+      valueType: "number",
+      dataIndex: "data.money",
+    },
+    {
       title: "描述",
       align: "center",
+      valueType: "string",
       dataIndex: "desc",
+    },
+    { title: "empty", empty: "-" },
+    { title: "defaultEmpty" },
+    {
+      title: "操作",
+      valueType: "action",
+      render: edit => edit,
     },
   ];
 
@@ -53,6 +73,13 @@ const App: React.FC = () => {
       deliveryTimeBegin,
       deliveryTimeEnd,
     };
+  }
+
+  function saveRecord(data: MockListItem) {
+    const idx = state.list.findIndex(i => i.id === data.id);
+    if (idx > -1) state.list[idx] = data;
+    else state.list.push(data);
+    api.updateList();
   }
 
   return (
@@ -73,19 +100,28 @@ const App: React.FC = () => {
         <AsyncButton type="primary" ghost>
           导出
         </AsyncButton>
+
+        <Button onClick={() => eidtTableRef.current?.addEditItem()}>添加数据</Button>
       </div>
 
-      <Table
+      <EditTable
+        ref={eidtTableRef}
         bordered
         className="mt-4"
         loading={state.loading}
         dataSource={state.list}
+        defaultEmptyColumn={<div>暂无数据</div>}
         columns={columns}
         rowKey="id"
         scroll={{ x: columns.reduce((c, i) => c + ((i.width as number) || 200), 0) }}
         onChange={({ current, pageSize }) => {
           setPageInfo({ pageNum: current!, pageSize: pageSize! });
         }}
+        onSaveRecord={saveRecord}
+        createEditRecord={() => ({
+          id: -1,
+          name: "test-add",
+        })}
         pagination={{
           current: state.pageNum,
           pageSize: state.pageSize,

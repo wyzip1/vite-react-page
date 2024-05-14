@@ -5,7 +5,9 @@ export interface MockListItem {
   name: string;
   sex: number;
   desc: string;
-  [key: string]: any;
+  data: {
+    money: number;
+  };
 }
 
 export interface MockListParams extends Pagination {
