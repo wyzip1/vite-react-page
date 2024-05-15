@@ -134,7 +134,6 @@ const EditTable = <T extends any>(
         .map(id => ({
           ...editRecords[id],
           [rowKey]: id,
-          _catchRowKeyValue: editRecords[id][rowKey],
         })),
     ],
     [dataSource, editRecords, rowKey]
