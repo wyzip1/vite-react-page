@@ -27,8 +27,6 @@ import React, {
 import { RangePickerProps } from "antd/es/date-picker";
 import AsyncButton from "../AsyncButton";
 
-// type EditRecordType<T> = T & { _catchRowKeyValue?: any };
-
 type EditOption<T, P> = {
   valueOption: { type: T; props: P };
   columnConfig: { valueType: T; valueProps: P };
@@ -191,7 +189,7 @@ const EditTable = <T extends any>(
   }
 
   async function saveEditItem(key: React.Key) {
-    const editRecord = editRecords[key as string];
+    const editRecord = { ...editRecords[key as string] };
     await onSaveRecord?.(editRecord as T);
 
     cancelEditItem(key);
