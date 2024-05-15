@@ -106,11 +106,9 @@ export function setValue<T>(data: T, value: any, path?: Path<T>) {
 
   for (let i = 0; i < props.length - 1; i++) {
     const prop = props[i];
-    current = current[prop];
+    if (!current[prop]) current[prop] = {};
 
-    if (current === undefined) {
-      return data; // 如果属性路径不存在，直接返回原始对象
-    }
+    current = current[prop];
   }
 
   current[props[props.length - 1]] = value;
