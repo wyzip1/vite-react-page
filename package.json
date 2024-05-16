@@ -21,14 +21,14 @@
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.13.0",
+    "react-sortable-hoc": "^2.0.0",
     "redux": "^4.2.0",
     "styled-components": "^5.3.6"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.1",
     "@types/node": "^18.11.9",
-    "@types/react": "^18.0.25",
-    "@types/react-dom": "^18.0.6",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
     "@types/styled-components": "^5.1.26",
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.45.0",

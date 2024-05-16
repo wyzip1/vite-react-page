@@ -11,9 +11,7 @@ const dependenciesList = Object.keys(packagesJSON.dependencies);
 /* eslint-env node */
 export default defineConfig(({ mode }) => ({
   plugins: [
-    react({
-      // babel: { babelrc: true },
-    }),
+    react(),
     buildFTL({ entryDir: "./entranceHTML", ftlDir: "./dist2" }),
     viteMockServe({ mockPath: "mock" }),
   ],

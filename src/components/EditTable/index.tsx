@@ -18,6 +18,7 @@ import type {
   EditValueOption,
 } from "./types";
 import type { ColumnsType } from "antd/es/table";
+import FormItem from "antd/es/form/FormItem";
 
 const EditTable = <T extends any>(
   {
@@ -74,16 +75,20 @@ const EditTable = <T extends any>(
   function renderEditModeRecord(column: EditTableColumn<T>, record: T) {
     if (column.valueType === "action") return renderEditAction(record);
 
-    return renderEditContent(
-      {
-        type: column.valueType,
-        props: column.valueProps || {},
-        value: getValue(editRecords[record[rowKey]], column.dataIndex as any),
-      } as EditValueOption,
-      v => {
-        setValue(editRecords[record[rowKey]], v, column.dataIndex as any);
-        setEditRecords({ ...editRecords });
-      }
+    return (
+      <FormItem style={{ marginBlock: -5 }}>
+        {renderEditContent(
+          {
+            type: column.valueType,
+            props: column.valueProps || {},
+            value: getValue(editRecords[record[rowKey]], column.dataIndex as any),
+          } as EditValueOption,
+          v => {
+            setValue(editRecords[record[rowKey]], v, column.dataIndex as any);
+            setEditRecords({ ...editRecords });
+          }
+        )}
+      </FormItem>
     );
   }
 
@@ -107,10 +112,11 @@ const EditTable = <T extends any>(
       );
     }
 
-    return (column.render?.(...renderArgs) ??
-      value ??
-      column.empty ??
-      defaultEmptyColumn) as JSX.Element;
+    return (
+      <FormItem style={{ marginBlock: -5 }}>
+        {column.render?.(...renderArgs) ?? value ?? column.empty ?? defaultEmptyColumn}
+      </FormItem>
+    );
   }
 
   async function saveEditItem(key: React.Key) {

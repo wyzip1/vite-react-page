@@ -5,9 +5,10 @@ import useFetchList from "@/hooks/useFetchList";
 import { Config } from "@/components/Search/type";
 import AsyncButton from "@/components/AsyncButton";
 import { fetchMockList } from "@/api/index";
-import EditTable, { EditTableColumn, EditTableInstance } from "@/components/EditTable";
+import EditTable from "@/components/EditTable";
 import { MockListItem } from "@/api/mock-model";
 import { Button } from "antd";
+import { EditTableColumn, EditTableInstance } from "@/components/EditTable/types";
 
 interface SearchFormData {
   date?: [string, string];
@@ -31,13 +32,11 @@ const App: React.FC = () => {
   const columns: EditTableColumn<MockListItem>[] = [
     {
       title: "姓名",
-      align: "center",
       dataIndex: "name",
       valueType: "string",
     },
     {
       title: "性别",
-      align: "center",
       dataIndex: "sex",
       valueType: "boolean",
       render(v) {
@@ -46,13 +45,11 @@ const App: React.FC = () => {
     },
     {
       title: "钱包",
-      align: "center",
       valueType: "number",
       dataIndex: "data.money",
     },
     {
       title: "描述",
-      align: "center",
       valueType: "string",
       dataIndex: "desc",
     },
@@ -105,6 +102,7 @@ const App: React.FC = () => {
       </div>
 
       <EditTable
+        tableLayout="fixed"
         ref={eidtTableRef}
         bordered
         className="mt-4"

@@ -92,7 +92,7 @@ export function formatDate(
   return result;
 }
 
-export function getValue<T>(data: T, path?: Path<T>) {
+export function getValue<T>(data: T, path?: Path<T>): any {
   if (!path) return;
   for (const key of path.split(".")) data = data?.[key];
   return data;
