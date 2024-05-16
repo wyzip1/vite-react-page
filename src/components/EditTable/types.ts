@@ -8,6 +8,7 @@ import {
   TableProps,
 } from "antd";
 import { DatePickerProps, RangePickerProps } from "antd/es/date-picker";
+import { TextAreaProps } from "antd/es/input";
 import React from "react";
 
 type EditOption<T, P> = {
@@ -21,7 +22,8 @@ type EditOptionMap =
   | EditOption<"boolean", SwitchProps>
   | EditOption<"date", DatePickerProps>
   | EditOption<"dateRange", RangePickerProps>
-  | EditOption<"select", SelectProps>;
+  | EditOption<"select", SelectProps>
+  | EditOption<"textarea", TextAreaProps>;
 
 export type EditValueOption = (EditOptionMap extends { valueOption: infer V } ? V : never) & {
   value: any;

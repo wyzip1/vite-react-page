@@ -4,12 +4,12 @@ import { DatePicker, Input, InputNumber, Select, Switch } from "antd";
 
 export default function renderEditContent(
   { type, props, value }: EditValueOption,
-  commonChange?: (value: any) => any
+  commonChange?: (value: any) => any,
 ) {
   const originPropsOnChange = props.onChange as ((...args: any) => any) | undefined;
   const onChange = async (...args: any[]) => {
     await originPropsOnChange?.(...args);
-    if (type === "string") await commonChange?.(args[0].target.value);
+    if (["string", "textarea"].includes(type)) await commonChange?.(args[0].target.value);
     else await commonChange?.(args[0]);
   };
   props.onChange = onChange;
@@ -19,6 +19,8 @@ export default function renderEditContent(
       return <Input {...props} value={value} />;
     case "number":
       return <InputNumber {...props} value={value} />;
+    case "textarea":
+      return <Input.TextArea {...props} value={value} />;
     case "boolean":
       return <Switch {...props} value={value} />;
     case "date":

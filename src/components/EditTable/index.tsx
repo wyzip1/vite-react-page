@@ -29,7 +29,7 @@ const EditTable = <T extends any>(
     onSaveRecord,
     ...props
   }: EditTableProps<T>,
-  ref: ForwardedRef<EditTableInstance<T>>
+  ref: ForwardedRef<EditTableInstance<T>>,
 ) => {
   const [editRecords, setEditRecords] = useState<Record<string, Partial<T>>>({});
 
@@ -50,13 +50,13 @@ const EditTable = <T extends any>(
     () => [
       ...(dataSource || []),
       ...Object.keys(editRecords)
-        .filter(id => !dataSource?.some(v => v[rowKey].toString() === id))
+        .filter(id => !dataSource?.some(v => v[rowKey]?.toString() === id))
         .map(id => ({
           ...editRecords[id],
           [rowKey]: id,
         })),
     ],
-    [dataSource, editRecords, rowKey]
+    [dataSource, editRecords, rowKey],
   );
 
   function renderEditAction(record: T) {
@@ -86,7 +86,7 @@ const EditTable = <T extends any>(
           v => {
             setValue(editRecords[record[rowKey]], v, column.dataIndex as any);
             setEditRecords({ ...editRecords });
-          }
+          },
         )}
       </FormItem>
     );
@@ -94,7 +94,7 @@ const EditTable = <T extends any>(
 
   function defaultColumnRender(
     column: EditTableColumn<T>,
-    renderArgs: [value: any, record: T, index: number]
+    renderArgs: [value: any, record: T, index: number],
   ) {
     const record = renderArgs[1];
     const value = getValue(record, column.dataIndex);
@@ -108,7 +108,7 @@ const EditTable = <T extends any>(
         <Button type="link" size="small" onClick={() => startEditItem(record[rowKey])}>
           编辑
         </Button>,
-        ...renderArgs
+        ...renderArgs,
       );
     }
 
@@ -151,7 +151,9 @@ const EditTable = <T extends any>(
 
   return (
     <Table
+      tableLayout="fixed"
       {...props}
+      rowKey={rowKey}
       dataSource={dataList}
       columns={EditColumns as ColumnsType}
       pagination={Object.keys(editRecords).length > 0 ? false : props.pagination}
@@ -160,5 +162,5 @@ const EditTable = <T extends any>(
 };
 
 export default forwardRef(EditTable) as unknown as <T = any>(
-  props: React.PropsWithChildren<EditTableProps<T>> & React.RefAttributes<EditTableInstance>
+  props: React.PropsWithChildren<EditTableProps<T>> & React.RefAttributes<EditTableInstance>,
 ) => React.ReactElement;
