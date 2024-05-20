@@ -1,10 +1,10 @@
 import React from "react";
 import { DatePicker, DatePickerProps } from "antd";
 
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 
 import type { ChangeState } from "../../type";
-import type { RangePickerProps } from "antd/es/date-picker/generatePicker";
+import { RangePickerProps } from "antd/es/date-picker";
 
 type EventValue<DataType> = DataType | null;
 export type RangeValue<DataType> = [EventValue<DataType>, EventValue<DataType>] | null;
@@ -12,14 +12,14 @@ export type RangeValue<DataType> = [EventValue<DataType>, EventValue<DataType>] 
 type GetDatePickerValue<T> = T extends "dateRange"
   ? RangeValue<string>
   : T extends "date"
-  ? string
-  : never;
+    ? string
+    : never;
 
 type GetDatePickerProps<T> = T extends "dateRange"
-  ? RangePickerProps<Dayjs>
+  ? RangePickerProps
   : T extends "date"
-  ? DatePickerProps
-  : never;
+    ? DatePickerProps
+    : never;
 
 interface CreateDatePickerProps<T extends "date" | "dateRange"> {
   width: string;
@@ -48,14 +48,14 @@ const RenderRangePicker = (props: CreateDatePickerProps<"dateRange">) => {
     <DatePicker.RangePicker
       value={[format(start), format(end)]}
       style={{ width: props.width }}
-      {...(props.props as RangePickerProps<Dayjs>)}
+      {...(props.props as RangePickerProps)}
       onChange={(_, date) => props.onChange(date)}
     />
   );
 };
 
 export default function createDatePicker<T extends "date" | "dateRange">(
-  config: CreateDatePickerProps<T>
+  config: CreateDatePickerProps<T>,
 ) {
   if (!config.type || config.type === "date")
     return <RenderDatePicker {...(config as CreateDatePickerProps<"date">)} />;

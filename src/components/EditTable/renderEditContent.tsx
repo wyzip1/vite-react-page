@@ -1,6 +1,6 @@
 import React from "react";
 import { EditValueOption } from "./types";
-import { DatePicker, Input, InputNumber, Select, Switch } from "antd";
+import { DatePicker, Input, InputNumber, InputProps, Select, Switch } from "antd";
 
 export default function renderEditContent(
   { type, props, value }: EditValueOption,
@@ -12,15 +12,21 @@ export default function renderEditContent(
     if (["string", "textarea"].includes(type)) await commonChange?.(args[0].target.value);
     else await commonChange?.(args[0]);
   };
-  props.onChange = onChange;
+
+  if (["string", "textarea"].includes(type)) {
+    delete props.onChange;
+    (props as InputProps).onBlur = onChange;
+  } else {
+    props.onChange = onChange;
+  }
 
   switch (type) {
     case "string":
-      return <Input {...props} value={value} />;
+      return <Input {...props} value={undefined} defaultValue={value} />;
     case "number":
       return <InputNumber {...props} value={value} />;
     case "textarea":
-      return <Input.TextArea {...props} value={value} />;
+      return <Input.TextArea {...props} value={undefined} defaultValue={value} />;
     case "boolean":
       return <Switch {...props} value={value} />;
     case "date":

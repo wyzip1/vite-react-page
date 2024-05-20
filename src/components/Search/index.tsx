@@ -26,7 +26,7 @@ function Search(
     actionStyle,
     autoWrap = true,
   }: SearchProps,
-  ref: ForwardedRef<SearchInstance>
+  ref: ForwardedRef<SearchInstance>,
 ) {
   const [formData, setFormData] = useState<State>(initFormData());
   const [isReset, setIsReset] = useState<boolean>(false);
@@ -58,7 +58,7 @@ function Search(
 
   const _defaultLabelWidth = useMemo<string>(
     () => covertLength(defaultLabelWidth)!,
-    [defaultLabelWidth]
+    [defaultLabelWidth],
   );
 
   const reset = () => {

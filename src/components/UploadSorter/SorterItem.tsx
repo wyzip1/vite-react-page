@@ -66,7 +66,7 @@ const SortableItem = SortableElement<SortableItemProps>(
         )}
       </SortItemStyled>
     );
-  }
+  },
 );
 
 export default SortableItem;

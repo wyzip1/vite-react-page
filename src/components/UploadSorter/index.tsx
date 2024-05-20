@@ -16,7 +16,7 @@ const UploadSorter: React.FC<
     onChange?: (
       value: UploadFile<any>[],
       file?: UploadFile<any>,
-      events?: { percent: number }
+      events?: { percent: number },
     ) => void;
   }
 > = ({ value, onChange, disabledSorter, disabled, multiple, ...uploadProps }) => {

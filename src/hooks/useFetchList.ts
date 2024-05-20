@@ -11,7 +11,7 @@ export type ItemType<T> = T extends (...args: any[]) => Promise<RequestResponse<
 export default function useFetchList<
   T extends (...args: any[]) => Promise<RequestResponse<List<any>>>,
   PN extends string = "pageNum",
-  PS extends string = "pageSize"
+  PS extends string = "pageSize",
 >(
   fetchApi: T,
   searchParams: Omit<Parameters<T>[0], PN | PS>,
@@ -24,7 +24,7 @@ export default function useFetchList<
       total?: string;
       list?: string;
     };
-  } = { initSearch: true }
+  } = { initSearch: true },
 ): [
   (pageOptions: Pagination) => ReturnType<T>,
   { pageNum: number; pageSize: number; total: number; loading: boolean; list: ItemType<T>[] },
@@ -32,7 +32,7 @@ export default function useFetchList<
     doSearch: () => ReturnType<T>;
     updateList: (callback?: ((list: Array<ItemType<T>>) => void) | undefined) => void;
     refreshList: () => ReturnType<T>;
-  }
+  },
 ] {
   const [pageNum, setPageNum] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(defaultOptions?.pageSize || 10);

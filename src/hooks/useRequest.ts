@@ -4,17 +4,17 @@ import React, { useEffect, useRef, useState } from "react";
 type RequestResult<T> = T extends (...args: any[]) => Promise<infer V> ? V : never;
 
 export default function useRequest<
-  T extends (params: any, cancelToken?: CancelToken) => Promise<any>
+  T extends (params: any, cancelToken?: CancelToken) => Promise<any>,
 >(
   requestApi: T,
   initRequestParams?: Parameters<T>[0] | undefined,
-  initSearch = true
+  initSearch = true,
 ): [
   (params: Parameters<T>[0]) => Promise<RequestResult<T>>,
   RequestResult<T> | undefined,
   boolean,
   React.Dispatch<React.SetStateAction<RequestResult<T> | undefined>>,
-  () => void
+  () => void,
 ] {
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<RequestResult<T>>();
