@@ -72,7 +72,7 @@ export function parseDateFormatSetting(setting: string): DateFormatSetting[] {
 
 export function formatDate(
   value: number | string | Date,
-  formatSetting = "YYYY-MM-DD HH:mm:ss"
+  formatSetting = "YYYY-MM-DD HH:mm:ss",
 ): string {
   const date = value instanceof Date ? value : new Date(value);
   const year = date.getFullYear().toString();
@@ -127,7 +127,7 @@ export function assembleTree<T = any>(
   list: T[],
   key: keyof T,
   parentKey: keyof T,
-  children: keyof T
+  children: keyof T,
 ) {
   const result: T[] = [];
   const catched: Array<T[keyof T]> = [];
@@ -144,7 +144,7 @@ export function assembleTree<T = any>(
 export function eachTree<T = any>(
   tree: T[],
   callback: (item: T) => boolean | undefined | void,
-  key = "children"
+  key = "children",
 ) {
   const list = [tree];
   for (let i = 0; i < list.length; i++) {
@@ -159,7 +159,7 @@ export function eachTree<T = any>(
 export function formatTree<T, R>(
   tree: T[],
   callback: (item: T) => any,
-  key = "children"
+  key = "children",
 ): R[] {
   const result = [] as R[];
   for (const node of tree) {
@@ -175,7 +175,7 @@ export function findTreePath<T = any>(
   tree: T[],
   callback: (item: T) => boolean | undefined | void,
   key = "children",
-  path: T[] = []
+  path: T[] = [],
 ): T[] | undefined {
   for (const node of tree) {
     const currentPath = [...path];
@@ -192,7 +192,7 @@ export function findTreePath<T = any>(
 
 export const toggleList = <T>(list: T[], item: T, customValidate?: (item: T) => boolean) => {
   const index = list.findIndex(e =>
-    typeof customValidate === "function" ? customValidate(e) : e === item
+    typeof customValidate === "function" ? customValidate(e) : e === item,
   );
   if (index > -1) list.splice(index, 1);
   else list.push(item);
@@ -217,7 +217,7 @@ interface RangeNumProps {
 }
 export function rangeNum({ start = 0, end, format = true, afterValue = "" }: RangeNumProps) {
   return Array.from({ length: end - start + 1 }, (_, v) =>
-    format ? formatNum(start + v) + afterValue : start + v + afterValue
+    format ? formatNum(start + v) + afterValue : start + v + afterValue,
   );
 }
 
@@ -298,7 +298,7 @@ export const SelectFile = (type = "*") => {
           resolve(input.files?.[0]);
         }, 300);
       },
-      { once: true }
+      { once: true },
     );
     input.type = "file";
     input.accept = type;

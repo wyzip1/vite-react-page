@@ -16,9 +16,11 @@ import type {
   EditTableInstance,
   EditTableProps,
   EditValueOption,
+  EventRange,
 } from "./types";
 import type { ColumnsType } from "antd/es/table";
 import FormItem from "antd/es/form/FormItem";
+import { Dayjs } from "dayjs";
 
 const EditTable = <T extends any>(
   {
@@ -72,6 +74,19 @@ const EditTable = <T extends any>(
     );
   }
 
+  function formatDayJSValue(
+    v: EventRange<Dayjs> | [EventRange<Dayjs>, EventRange<Dayjs>],
+    column: EditTableColumn<T>,
+  ) {
+    if (column.valueType === "action") return v;
+    if (!["date", "dateRange"].includes(column.valueType || "")) return v;
+
+    const formatSetting = (column.valueProps as any)?.format || "YYYY-MM-DD";
+
+    if (Array.isArray(v)) return [v[0]?.format(formatSetting), v[1]?.format(formatSetting)];
+    return v?.format(formatSetting);
+  }
+
   function renderEditModeRecord(column: EditTableColumn<T>, record: T) {
     if (column.valueType === "action") return renderEditAction(record);
 
@@ -84,7 +99,8 @@ const EditTable = <T extends any>(
             value: getValue(editRecords[record[rowKey]], column.dataIndex as any),
           } as EditValueOption,
           v => {
-            setValue(editRecords[record[rowKey]], v, column.dataIndex as any);
+            const value = formatDayJSValue(v, column);
+            setValue(editRecords[record[rowKey]], value, column.dataIndex as any);
             setEditRecords({ ...editRecords });
           },
         )}
@@ -92,12 +108,24 @@ const EditTable = <T extends any>(
     );
   }
 
+  function formatValue(value: any, column: EditTableColumn<T>) {
+    switch (column.valueType) {
+      case "select":
+        return column.valueProps?.options?.find(v => v.value === value)?.label || value;
+
+      default:
+        return value;
+    }
+  }
+
   function defaultColumnRender(
     column: EditTableColumn<T>,
     renderArgs: [value: any, record: T, index: number],
   ) {
     const record = renderArgs[1];
-    const value = getValue(record, column.dataIndex);
+    const value = column.renderIndex
+      ? getValue(record, column.renderIndex)
+      : formatValue(getValue(record, column.dataIndex), column);
 
     const isEditRecord =
       editRecords[record[rowKey]] !== undefined && column.valueType !== undefined;

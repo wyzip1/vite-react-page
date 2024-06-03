@@ -44,6 +44,38 @@ const App: React.FC = () => {
       },
     },
     {
+      title: "test",
+      dataIndex: "test",
+      valueType: "select",
+      valueProps: {
+        options: [
+          { label: "name1", value: 1 },
+          { label: "name2", value: 2 },
+        ],
+      },
+    },
+    {
+      title: "日期",
+      width: 240,
+      dataIndex: "date",
+      valueType: "date",
+      valueProps: {
+        format: "YYYY-MM-DD HH:mm:ss",
+        showTime: true,
+      },
+    },
+    {
+      title: "日期范围",
+      width: 480,
+      dataIndex: "dateRange",
+      valueType: "dateRange",
+      valueProps: {
+        format: "YYYY-MM-DD HH:mm:ss",
+        showTime: true,
+      },
+      render: v => v?.join(" - "),
+    },
+    {
       title: "钱包",
       valueType: "number",
       dataIndex: "data.money",

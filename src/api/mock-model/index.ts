@@ -8,6 +8,9 @@ export interface MockListItem {
   data: {
     money: number;
   };
+  test?: any;
+  date?: string;
+  dateRange?: [string, string];
 }
 
 export interface MockListParams extends Pagination {

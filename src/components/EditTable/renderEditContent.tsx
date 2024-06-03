@@ -1,6 +1,13 @@
 import React from "react";
 import { EditValueOption } from "./types";
 import { DatePicker, Input, InputNumber, InputProps, Select, Switch } from "antd";
+import dayjs from "dayjs";
+
+export function formatToDayjs(v: any) {
+  if (["", null, undefined].includes(v)) return v;
+  if (dayjs.isDayjs(v)) return v;
+  return dayjs(v);
+}
 
 export default function renderEditContent(
   { type, props, value }: EditValueOption,
@@ -30,9 +37,14 @@ export default function renderEditContent(
     case "boolean":
       return <Switch {...props} value={value} />;
     case "date":
-      return <DatePicker {...props} value={value} />;
+      return <DatePicker {...props} value={formatToDayjs(value)} />;
     case "dateRange":
-      return <DatePicker.RangePicker {...props} value={value} />;
+      return (
+        <DatePicker.RangePicker
+          {...props}
+          value={value ? [formatToDayjs(value[0]), formatToDayjs(value[1])] : value}
+        />
+      );
     case "select":
       return <Select {...props} value={value} />;
   }

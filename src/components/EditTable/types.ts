@@ -21,7 +21,7 @@ type EditOptionMap =
   | EditOption<"number", InputNumberProps>
   | EditOption<"boolean", SwitchProps>
   | EditOption<"date", DatePickerProps>
-  | EditOption<"dateRange", RangePickerProps>
+  | EditOption<"dateRange", Omit<RangePickerProps, "format"> & { format?: string }>
   | EditOption<"select", SelectProps>
   | EditOption<"textarea", TextAreaProps>;
 
@@ -29,8 +29,9 @@ export type EditValueOption = (EditOptionMap extends { valueOption: infer V } ? 
   value: any;
 };
 
-export type EditTableColumn<T> = Omit<TableColumnProps<T>, "dataIndex" | "render"> &
-  (
+export type EditTableColumn<T> = Omit<TableColumnProps<T>, "dataIndex" | "render"> & {
+  renderIndex?: Path<T>;
+} & (
     | ({
         empty?: React.ReactNode;
         dataIndex?: Path<T>;
@@ -56,3 +57,5 @@ export interface EditTableProps<T = unknown> extends Omit<TableProps<T>, "column
   createEditRecord?: () => Partial<T>;
   onSaveRecord?: (record: T) => any;
 }
+
+export type EventRange<T> = T | undefined | null;
