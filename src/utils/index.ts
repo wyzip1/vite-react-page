@@ -178,13 +178,11 @@ export function findTreePath<T = any>(
   path: T[] = [],
 ): T[] | undefined {
   for (const node of tree) {
-    const currentPath = [...path];
-    currentPath.push(node);
     const isFind = callback(node);
-    if (isFind) return currentPath;
+    if (isFind) return [...path, node];
 
     if (node[key]?.length) {
-      const findPath = findTreePath(node[key], callback, key, currentPath);
+      const findPath = findTreePath(node[key], callback, key, [...path, node]);
       if (findPath) return findPath;
     }
   }
