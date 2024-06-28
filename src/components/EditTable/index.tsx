@@ -64,12 +64,12 @@ const EditTable = <T extends any>(
   function renderEditAction(record: T) {
     return (
       <>
-        <Button type="link" size="small" onClick={() => cancelEditItem(record[rowKey])}>
-          取消
-        </Button>
         <AsyncButton type="link" size="small" onClick={() => saveEditItem(record[rowKey])}>
           保存
         </AsyncButton>
+        <Button type="link" size="small" onClick={() => cancelEditItem(record[rowKey])}>
+          取消
+        </Button>
       </>
     );
   }

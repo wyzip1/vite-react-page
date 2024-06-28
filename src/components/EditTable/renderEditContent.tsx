@@ -1,6 +1,6 @@
 import React from "react";
 import { EditValueOption } from "./types";
-import { DatePicker, Input, InputNumber, InputProps, Select, Switch } from "antd";
+import { DatePicker, Input, InputNumber, Select, Switch } from "antd";
 import dayjs from "dayjs";
 
 export function formatToDayjs(v: any) {
@@ -13,39 +13,35 @@ export default function renderEditContent(
   { type, props, value }: EditValueOption,
   commonChange?: (value: any) => any,
 ) {
-  const originPropsOnChange = props.onChange as ((...args: any) => any) | undefined;
   const onChange = async (...args: any[]) => {
-    await originPropsOnChange?.(...args);
+    // @ts-ignore
+    props.onChange?.(...args);
     if (["string", "textarea"].includes(type)) await commonChange?.(args[0].target.value);
     else await commonChange?.(args[0]);
   };
 
-  if (["string", "textarea"].includes(type)) {
-    delete props.onChange;
-    (props as InputProps).onBlur = onChange;
-  } else {
-    props.onChange = onChange;
-  }
-
   switch (type) {
     case "string":
-      return <Input {...props} value={undefined} defaultValue={value} />;
+      return <Input {...props} value={undefined} defaultValue={value} onBlur={onChange} />;
     case "number":
-      return <InputNumber {...props} value={value} />;
+      return <InputNumber {...props} value={value} onChange={onChange} />;
     case "textarea":
-      return <Input.TextArea {...props} value={undefined} defaultValue={value} />;
+      return (
+        <Input.TextArea {...props} value={undefined} defaultValue={value} onBlur={onChange} />
+      );
     case "boolean":
-      return <Switch {...props} value={value} />;
+      return <Switch {...props} value={value} onChange={onChange} />;
     case "date":
-      return <DatePicker {...props} value={formatToDayjs(value)} />;
+      return <DatePicker {...props} value={formatToDayjs(value)} onChange={onChange} />;
     case "dateRange":
       return (
         <DatePicker.RangePicker
           {...props}
           value={value ? [formatToDayjs(value[0]), formatToDayjs(value[1])] : value}
+          onChange={onChange}
         />
       );
     case "select":
-      return <Select {...props} value={value} />;
+      return <Select {...props} value={value} onChange={onChange} />;
   }
 }
