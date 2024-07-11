@@ -1,9 +1,9 @@
 import React from "react";
-import RenderRouter from "@/components/RenderRouter";
-import routerList from "@/router/index";
+import router from "@/router/index";
 import { ConfigProvider } from "antd";
 import zhCN from "antd/es/locale/zh_CN";
 import "dayjs/locale/zh-cn";
+import { RouterProvider } from "react-router-dom";
 
 export default function App() {
   return (
@@ -14,7 +14,7 @@ export default function App() {
       }}
     >
       <main style={{ width: "100%", height: "100vh" }}>
-        <RenderRouter routerList={routerList} />
+        <RouterProvider router={router} />
       </main>
     </ConfigProvider>
   );

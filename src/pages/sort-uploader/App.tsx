@@ -18,7 +18,7 @@ const App: React.FC = () => {
         name="file"
         onChange={list =>
           setValue(
-            list.map(v => ({ ...v, url: v.status === "done" ? v.response?.url : undefined }))
+            list.map(v => ({ ...v, url: v.status === "done" ? v.response?.url : undefined })),
           )
         }
       />

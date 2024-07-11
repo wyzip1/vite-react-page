@@ -1,17 +1,14 @@
-import { RouterComponentProps } from "@/components/RenderRouter";
 import { SorterResult } from "antd/es/table/interface";
-import type { LazyExoticComponent, FC } from "react";
-
-export interface router {
-  hidden?: boolean;
-  title?: string;
-  name?: string;
-  role?: string[];
-  redirect?: string;
-  path: string;
-  component?: LazyExoticComponent<FC<RouterComponentProps>>;
-  children?: router[];
-  activePath?: string;
-}
+import { RouteObject } from "react-router-dom";
 
 export type SortType<T> = SorterResult<T> | SorterResult<T>[];
+
+export type CRouteObject = Omit<RouteObject, "children"> & {
+  title?: string;
+  hidden?: boolean;
+  children?: CRouteObject[];
+  redirect?: string;
+  fullPath?: string;
+  activePath?: string;
+  roles?: string[];
+};

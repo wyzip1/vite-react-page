@@ -1,86 +1,58 @@
-import React, { memo, useMemo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { getRouter, matchRoute } from "@/router/utils";
+import React, { useMemo } from "react";
+import { matchRoutes, useLocation, useNavigate } from "react-router-dom";
+import { Menu, MenuProps } from "antd";
+import router from "@/router";
+import { CRouteObject } from "@/types";
 
-import { Menu } from "antd";
-
-import type { MenuProps } from "antd";
-import type { router } from "@/types";
-import { ItemType, SubMenuType } from "antd/es/menu/hooks/useItems";
-
-interface MenuListProps {
-  routerList: router[];
-}
-
-const basePath = "/layout/*";
-
-const getItems = (routers?: router[], parentList: router[] = []): MenuProps["items"] => {
-  if (!routers) return;
-  const mapMenu = (router: router) => {
-    const parentPath = parentList.map(item => item.path).join("/");
-    const formatParentPath = parentPath ? "/" + parentPath : "";
-    const fullPath = router.path.startsWith("/")
-      ? router.path
-      : `${basePath}${formatParentPath}/${router.path}`;
-    const key = fullPath.replace(/\/\*/g, "");
-    const children = getItems(router.children, [...parentList, router]);
-
-    return { label: router.title, key, children };
+const getItems = (routes?: CRouteObject[]): MenuProps["items"] => {
+  if (!routes) return;
+  const mapMenu = (route: CRouteObject) => {
+    const children = getItems(route.children);
+    return { label: route.title, key: route.fullPath, children };
   };
 
-  const itemList = routers.filter(item => item.name && !item.hidden);
+  const itemList = routes.filter(item => !item.hidden);
+  if (!itemList.length) return [];
 
-  if (!itemList.length) return;
-
-  return itemList.map(item => mapMenu(item));
+  return itemList.map(item => mapMenu(item)) as any;
 };
 
-function MenuList({ routerList }: MenuListProps) {
+const MenuList: React.FC = () => {
   const Location = useLocation();
   const navigate = useNavigate();
 
   const items = useMemo<MenuProps["items"]>(() => {
-    return getItems(routerList);
-  }, [routerList]);
+    return getItems(router.routes[1].children);
+  }, []);
 
   const expandAll = useMemo(() => {
     return items?.filter(item => item?.key).map(item => item!.key!.toString());
   }, [items]);
 
-  const activePath = useMemo(() => {
-    const router = getRouter(Location.pathname);
-    return router?.activePath;
+  const activePaths = useMemo(() => {
+    const routes = matchRoutes(router.routes, Location.pathname);
+    return routes?.map(v => (v.route as CRouteObject).activePath).filter(v => !!v) as string[];
   }, [Location.pathname]);
-
-  const eachItems = (callback: (data: ItemType) => void, list: MenuProps["items"] = items) => {
-    for (const item of list || []) {
-      callback(item);
-      Array.isArray((item as SubMenuType).children) &&
-        eachItems(callback, (item as SubMenuType).children);
-    }
-  };
 
   const selectKeys = useMemo(() => {
-    const result: string[] = [];
-    eachItems(data => {
-      if (!matchRoute(data!.key as string, Location.pathname, Location.pathname === "/layout"))
-        return;
-      result.push(data!.key as string);
-    });
-    return result;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const routes = matchRoutes(router.routes, Location.pathname);
+    return routes?.map(v => v.pathname);
   }, [Location.pathname]);
+  console.log(items, selectKeys);
 
   return (
     <Menu
       items={items}
+      itemProp=""
       mode="inline"
       theme="dark"
       defaultOpenKeys={expandAll}
-      selectedKeys={activePath ? [activePath] : selectKeys}
-      onSelect={({ selectedKeys }) => navigate(selectedKeys[0])}
+      selectedKeys={activePaths?.length ? activePaths : selectKeys}
+      onSelect={({ selectedKeys }) => {
+        navigate(selectedKeys[0]);
+      }}
     />
   );
-}
+};
 
-export default memo(MenuList);
+export default MenuList;

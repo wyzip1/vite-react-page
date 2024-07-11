@@ -158,31 +158,37 @@ export function eachTree<T = any>(
 
 export function formatTree<T, R>(
   tree: T[],
-  callback: (item: T) => any,
-  key = "children",
+  callback: (item: T, children: R[], parent?: any) => R,
+  key = "children" as keyof T,
+  parent?: R,
 ): R[] {
   const result = [] as R[];
   for (const node of tree) {
-    if (node[key]) {
-      node[key] = formatTree(node[key], callback, key);
+    const data = { ...node };
+    const value = callback(data, data[key] as R[], parent);
+    if (data[key]) {
+      value[key as any] = formatTree(data[key] as T[], callback, key, value) as any;
     }
-    result.push(callback(node));
+    result.push(value);
   }
   return result;
 }
 
 export function findTreePath<T = any>(
   tree: T[],
-  callback: (item: T) => boolean | undefined | void,
+  callback: (item: T) => boolean | undefined,
   key = "children",
   path: T[] = [],
 ): T[] | undefined {
   for (const node of tree) {
+    const currentPath = [...path];
+    currentPath.push(node);
     const isFind = callback(node);
-    if (isFind) return [...path, node];
 
-    if (node[key]?.length) {
-      const findPath = findTreePath(node[key], callback, key, [...path, node]);
+    if (isFind) return currentPath;
+
+    if ((node as any)[key]?.length) {
+      const findPath = findTreePath((node as any)[key], callback, key, currentPath);
       if (findPath) return findPath;
     }
   }

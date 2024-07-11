@@ -1,19 +1,15 @@
 import React, { useState } from "react";
 import { Button, Layout, theme } from "antd";
 import { LayoutPageStyled } from "./styled";
-import MenuList from "./components/MenuList";
-import routerList from "@/router";
-import BreadcrumbMenuList from "./components/BreadcrumbMenuList";
 
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Outlet } from "react-router-dom";
+import MenuList from "./components/MenuList";
+import BreadcrumbMenuList from "./components/BreadcrumbMenuList";
 
-interface LayoutProps {}
-
-const LayoutRouterList = routerList.find(router => router.name === "Layout")?.children || [];
 const { Header, Sider, Content } = Layout;
 
-export default function LayoutPage(props: LayoutProps) {
+export default function LayoutPage() {
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const {
     token: { colorBgContainer },
@@ -24,7 +20,7 @@ export default function LayoutPage(props: LayoutProps) {
       <Layout className="layout">
         <Sider theme="dark" className="sider-bar" collapsed={collapsed}>
           <div className="logo"></div>
-          <MenuList routerList={LayoutRouterList} />
+          <MenuList />
         </Sider>
         <Layout>
           <Header className=" p-0 flex items-center" style={{ background: colorBgContainer }}>
