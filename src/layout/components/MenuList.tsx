@@ -38,7 +38,6 @@ const MenuList: React.FC = () => {
     const routes = matchRoutes(router.routes, Location.pathname);
     return routes?.map(v => v.pathname);
   }, [Location.pathname]);
-  console.log(items, selectKeys);
 
   return (
     <Menu
