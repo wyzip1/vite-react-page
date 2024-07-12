@@ -10,6 +10,7 @@ import { MockListItem } from "@/api/mock-model";
 import { Button } from "antd";
 import { EditTableColumn, EditTableInstance } from "@/components/EditTable/types";
 import { Outlet } from "react-router-dom";
+import AppStyled from "@/store/AppStyled";
 
 interface SearchFormData {
   date?: [string, string];
@@ -113,7 +114,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <div>
+    <AppStyled>
       <Search
         defaultLabelWidth={100}
         loading={state.loading}
@@ -166,7 +167,7 @@ const App: React.FC = () => {
       />
 
       <Outlet />
-    </div>
+    </AppStyled>
   );
 };
 

@@ -1,4 +1,5 @@
 import UploadSorter from "@/components/UploadSorter";
+import AppStyled from "@/store/AppStyled";
 import { UploadFile } from "antd";
 import React, { useEffect, useState } from "react";
 
@@ -10,7 +11,7 @@ const App: React.FC = () => {
   }, [value]);
 
   return (
-    <div style={{ width: 800 }} className="overflow-auto">
+    <AppStyled style={{ width: 800 }} className="overflow-auto">
       <UploadSorter
         value={value}
         multiple
@@ -22,7 +23,7 @@ const App: React.FC = () => {
           )
         }
       />
-    </div>
+    </AppStyled>
   );
 };
 

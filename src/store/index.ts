@@ -1,10 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import global from "./global";
+import themeReducer from "./theme";
 
 export const store = configureStore({
   reducer: {
-    global,
+    theme: themeReducer,
   },
 });
-
-export type RootState = ReturnType<typeof store.getState>;

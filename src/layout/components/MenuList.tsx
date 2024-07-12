@@ -3,6 +3,7 @@ import { matchRoutes, useLocation, useNavigate } from "react-router-dom";
 import { Menu, MenuProps } from "antd";
 import router from "@/router";
 import { CRouteObject } from "@/types";
+import { useThemeMode } from "@/store/theme";
 
 const getItems = (routes?: CRouteObject[]): MenuProps["items"] => {
   if (!routes) return;
@@ -20,6 +21,7 @@ const getItems = (routes?: CRouteObject[]): MenuProps["items"] => {
 const MenuList: React.FC = () => {
   const Location = useLocation();
   const navigate = useNavigate();
+  const theme = useThemeMode();
 
   const items = useMemo<MenuProps["items"]>(() => {
     return getItems(router.routes[1].children);
@@ -42,9 +44,9 @@ const MenuList: React.FC = () => {
   return (
     <Menu
       items={items}
-      itemProp=""
-      mode="inline"
       theme="dark"
+      mode="inline"
+      style={{ backgroundColor: theme === "dark" ? "transparent" : "" }}
       defaultOpenKeys={expandAll}
       selectedKeys={activePaths?.length ? activePaths : selectKeys}
       onSelect={({ selectedKeys }) => {

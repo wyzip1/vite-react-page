@@ -1,31 +1,45 @@
+import { ThemeStyledProps } from "@/store/MainStyled";
 import styled from "styled-components";
 
-export const LayoutPageStyled = styled.div`
+export const LayoutPageStyled = styled.div<ThemeStyledProps>`
   height: 100vh;
   max-height: 100vh;
+  background-image: linear-gradient(
+    ${v => v.antToken?.colorBgContainer},
+    ${v => v.antToken?.colorBgBase} 28%
+  );
+
+  & * {
+    scrollbar-color: ${v => v.antToken?.colorTextPlaceholder} ${v => v.antToken?.colorSplit};
+  }
+
+  & .layout-header {
+    background-color: ${v => v.token?.headerBg};
+    border-block-end: 1px solid ${v => v.antToken?.colorSplit};
+  }
+
+  & .layout-sider-bar {
+    height: 100%;
+    overflow: auto;
+    background-color: ${v => (v.mode === "dark" ? v.token?.headerBg : "")};
+    border-right: 1px solid ${v => v.antToken?.colorSplit};
+
+    & .logo {
+      height: 32px;
+      margin: 16px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+    }
+  }
 
   & > .layout {
     height: 100%;
 
     & .layout-content {
-      overflow: auto;
-      height: 100%;
       margin: 16px;
       padding: 20px 16px;
       box-sizing: border-box;
-      background-color: #fff;
-    }
-
-    & .sider-bar {
-      height: 100%;
-      overflow: auto;
-
-      & .logo {
-        height: 32px;
-        margin: 16px;
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 6px;
-      }
+      background-color: ${v => v.antToken?.colorBgContainer};
     }
   }
 `;
