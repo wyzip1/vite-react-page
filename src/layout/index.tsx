@@ -21,7 +21,7 @@ export default function LayoutPage() {
     <LayoutPageStyled antToken={antToken} token={themeToken} mode={themeMode}>
       <Layout className="layout">
         <Sider className="layout-sider-bar" collapsed={collapsed}>
-          <div className="logo">Vite - React</div>
+          <div className="logo whitespace-nowrap">{collapsed ? "V" : "Vite - React"}</div>
           <MenuList />
         </Sider>
 

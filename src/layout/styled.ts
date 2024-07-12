@@ -41,9 +41,6 @@ export const LayoutPageStyled = styled.div<ThemeStyledProps>`
 
     & .layout-content {
       margin: 16px;
-      padding: 20px 16px;
-      box-sizing: border-box;
-      background-color: ${v => v.antToken?.colorBgContainer};
     }
   }
 `;

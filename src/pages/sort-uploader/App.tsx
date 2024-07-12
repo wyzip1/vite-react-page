@@ -11,18 +11,23 @@ const App: React.FC = () => {
   }, [value]);
 
   return (
-    <AppStyled style={{ width: 800 }} className="overflow-auto">
-      <UploadSorter
-        value={value}
-        multiple
-        action={"http://localhost:5050/upload/profile"}
-        name="file"
-        onChange={list =>
-          setValue(
-            list.map(v => ({ ...v, url: v.status === "done" ? v.response?.url : undefined })),
-          )
-        }
-      />
+    <AppStyled>
+      <div style={{ width: 800 }} className="overflow-auto">
+        <UploadSorter
+          value={value}
+          multiple
+          action={"http://localhost:5050/upload/profile"}
+          name="file"
+          onChange={list =>
+            setValue(
+              list.map(v => ({
+                ...v,
+                url: v.status === "done" ? v.response?.url : undefined,
+              })),
+            )
+          }
+        />
+      </div>
     </AppStyled>
   );
 };

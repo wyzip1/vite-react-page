@@ -30,6 +30,15 @@ export const formatRoutes = (routes: CRouteObject[]) => {
   });
 };
 
+const createRoute = (pageData: Record<string, any>, path: string): CRouteObject => ({
+  path,
+  title: pageData.title || path,
+  hidden: pageData.hidden,
+  roles: pageData.roles,
+  activePath: pageData.activePath,
+  element: <Template />,
+});
+
 function getAutoBaseRoutes() {
   const list = import.meta.glob("@/pages/**/App.tsx", { eager: true });
 
@@ -44,21 +53,12 @@ function getAutoBaseRoutes() {
   const createToPath = (filePath: string) => {
     const pathList = filePath.match(/\/src\/pages\/(.+)\/App.tsx/)?.[1].split("/") || [];
     let value = baseRoutes[0];
-
+    const pageData = list[filePath] as Record<string, any>;
     for (const path of pathList) {
       if (!value.children) value.children = [];
       let nextValue = value.children!.find(v => v.path === path);
 
-      if (!nextValue) {
-        nextValue = {
-          path,
-          title: (list[filePath] as any).title || path,
-          hidden: (list[filePath] as any).hidden,
-          roles: (list[filePath] as any).roles,
-          activePath: (list[filePath] as any).activePath,
-          element: <Template />,
-        };
-      }
+      if (!nextValue) nextValue = createRoute(pageData, path);
 
       if (!value.redirect) {
         value.redirect = path;
