@@ -19,14 +19,6 @@ const baseRoutes: CRouteObject[] = [
         path: "list",
         title: "mock列表",
         element: createLazyLoad(lazy(() => import("@/pages/list/App"))),
-        redirect: "/layout/list/detail",
-        children: [
-          {
-            path: "detail",
-            title: "详情",
-            element: createLazyLoad(lazy(() => import("@/pages/list/detail"))),
-          },
-        ],
       },
 
       {

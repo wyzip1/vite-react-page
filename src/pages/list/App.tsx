@@ -9,7 +9,6 @@ import EditTable from "@/components/EditTable";
 import { MockListItem } from "@/api/mock-model";
 import { Button } from "antd";
 import { EditTableColumn, EditTableInstance } from "@/components/EditTable/types";
-import { Outlet } from "react-router-dom";
 import AppStyled from "@/store/AppStyled";
 
 interface SearchFormData {
@@ -165,8 +164,6 @@ const App: React.FC = () => {
           showTotal: total => `共 ${total} 条`,
         }}
       />
-
-      <Outlet />
     </AppStyled>
   );
 };
