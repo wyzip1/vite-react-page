@@ -31,7 +31,7 @@ export interface UploadOptions {
   onUpload: (
     slice: Blob,
     info: { index: number; bytes: [number, number] },
-    onProgress?: (progressEvent: AxiosProgressEvent) => any
+    onProgress?: (progressEvent: AxiosProgressEvent) => any,
   ) => any | Promise<any>;
   onTotalProgress?: (percent: number, loaded: number) => any;
   onEnd?: () => any | Promise<any>;

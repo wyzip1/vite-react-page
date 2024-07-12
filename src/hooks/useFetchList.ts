@@ -1,5 +1,5 @@
 import List from "@/api/model/List";
-import { RequestResponse } from "@/api/request";
+import { RequestResponse } from "@/api/utils/request";
 import Pagination from "@/api/model/Pagination";
 import { useEffect, useRef, useState } from "react";
 import useRequest from "./useRequest";

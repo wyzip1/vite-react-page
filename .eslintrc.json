@@ -22,7 +22,8 @@
     "JSX": "readonly",
     "process": "readonly",
     "BlobPart": "readonly",
-    "NodeJS": "readonly"
+    "NodeJS": "readonly",
+    "WindowEventMap": "readonly"
   },
   "settings": {
     "react": {
