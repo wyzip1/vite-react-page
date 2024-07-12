@@ -29,6 +29,10 @@ export const LayoutPageStyled = styled.div<ThemeStyledProps>`
       margin: 16px;
       background: rgba(255, 255, 255, 0.2);
       border-radius: 6px;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 
