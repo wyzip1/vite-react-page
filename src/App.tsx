@@ -5,13 +5,12 @@ import zhCN from "antd/es/locale/zh_CN";
 import "dayjs/locale/zh-cn";
 import { RouterProvider } from "react-router-dom";
 import { store } from "./store";
-import { setTheme, useThemeMode } from "./store/theme";
+import { setTheme, useThemeMode, useToken } from "./store/theme";
 import MainStyled from "./store/MainStyled";
-import { useTheme } from "styled-components";
 
 export default function App() {
   const themeMode = useThemeMode();
-  const themeToken = useTheme();
+  const themeToken = useToken();
   const { token: antToken } = theme.useToken();
 
   useEffect(() => {

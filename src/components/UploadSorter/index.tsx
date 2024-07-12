@@ -72,10 +72,10 @@ const UploadSorter: React.FC<
             {...uploadProps}
           >
             {!disabled && (uploadProps.maxCount || -Infinity) < fileList.length && (
-              <button style={{ border: 0, background: "none" }} type="button">
+              <div>
                 <PlusOutlined />
-                <div style={{ marginTop: 8 }}>Upload</div>
-              </button>
+                <div style={{ marginTop: 8 }}>上传图片</div>
+              </div>
             )}
           </Upload>
         </div>

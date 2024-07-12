@@ -8,6 +8,10 @@ export interface ThemeStyledProps {
   antToken?: GlobalToken;
 }
 
-const MainStyled = styled.div<ThemeStyledProps>``;
+const MainStyled = styled.div<ThemeStyledProps>`
+  .ant-upload button {
+    color: ${v => v.antToken?.colorText};
+  }
+`;
 
 export default MainStyled;
