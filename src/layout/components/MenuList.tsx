@@ -1,9 +1,9 @@
 import React, { useMemo } from "react";
-import { matchRoutes, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Menu, MenuProps } from "antd";
-import router from "@/router";
 import { CRouteObject } from "@/types";
 import { useThemeMode } from "@/store/theme";
+import { useMatchRoutes, useMenuRoutes } from "@/router/components/PermissionRouter";
 
 const getItems = (routes?: CRouteObject[]): MenuProps["items"] => {
   if (!routes) return;
@@ -19,27 +19,27 @@ const getItems = (routes?: CRouteObject[]): MenuProps["items"] => {
 };
 
 const MenuList: React.FC = () => {
-  const Location = useLocation();
   const navigate = useNavigate();
   const theme = useThemeMode();
 
+  const menuRoutes = useMenuRoutes();
+  const matchRoutes = useMatchRoutes();
+
   const items = useMemo<MenuProps["items"]>(() => {
-    return getItems(router.routes[1].children);
-  }, []);
+    return getItems(menuRoutes);
+  }, [menuRoutes]);
 
   const expandAll = useMemo(() => {
     return items?.filter(item => item?.key).map(item => item!.key!.toString());
   }, [items]);
 
   const activePaths = useMemo(() => {
-    const routes = matchRoutes(router.routes, Location.pathname);
-    return routes?.map(v => (v.route as CRouteObject).activePath).filter(v => !!v) as string[];
-  }, [Location.pathname]);
+    return matchRoutes?.map(v => v.route.activePath).filter(v => !!v) as string[];
+  }, [matchRoutes]);
 
   const selectKeys = useMemo(() => {
-    const routes = matchRoutes(router.routes, Location.pathname);
-    return routes?.map(v => v.pathname);
-  }, [Location.pathname]);
+    return matchRoutes?.map(v => v.pathname);
+  }, [matchRoutes]);
 
   return (
     <Menu

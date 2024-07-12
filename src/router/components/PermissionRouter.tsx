@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { matchRoutes, useLocation } from "react-router-dom";
 import router from "../index";
 import { CRouteObject } from "@/types";
+import { eachTree } from "@/utils";
 
 interface PermissionRouterProps {
   children: React.ReactNode;
@@ -23,6 +24,24 @@ const PermissionRouter: React.FC<PermissionRouterProps> = ({ children }) => {
   };
 
   return authValidator() ? children : null;
+};
+
+export const useMenuRoutes = () => {
+  const routes = useMemo(
+    () => eachTree(router.routes, (route: CRouteObject) => route.isMenuRoot)?.children || [],
+    [],
+  );
+
+  return routes;
+};
+
+export const useMatchRoutes = () => {
+  const Location = useLocation();
+  const routes = useMemo(
+    () => matchRoutes(router.routes, Location.pathname) || [],
+    [Location.pathname],
+  );
+  return routes as (Omit<(typeof routes)[number], "route"> & { route: CRouteObject })[];
 };
 
 export default PermissionRouter;

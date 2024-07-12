@@ -1,18 +1,14 @@
 import React, { lazy } from "react";
 import { CRouteObject } from "@/types";
 import { formatRoutes } from "./autoRoutes";
-import { redirect } from "react-router-dom";
 import LayoutPage from "@/layout";
 import { createLazyLoad } from "@/components/LazyLoad";
 
 const baseRoutes: CRouteObject[] = [
   {
     path: "/",
-    loader: () => redirect("/layout"),
-  },
-  {
-    path: "/layout",
-    redirect: "/layout/list",
+    redirect: "/list",
+    isMenuRoot: true,
     element: <LayoutPage />,
     children: [
       {

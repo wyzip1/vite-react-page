@@ -1,10 +1,9 @@
 import { CRouteObject } from "@/types";
 import React from "react";
-import { redirect } from "react-router-dom";
 import LayoutPage from "@/layout/index";
 import Template from "@/components/Template";
 import WrapRedirect from "./components/WrapRedirect";
-import Permission from "./components/Permission";
+import PermissionRouter from "./components/PermissionRouter";
 import { formatTree } from "@/utils";
 
 const createElement = (route: CRouteObject) => {
@@ -13,7 +12,7 @@ const createElement = (route: CRouteObject) => {
     element = <WrapRedirect>{element}</WrapRedirect>;
   }
   if (route.roles?.length) {
-    element = <Permission>{element}</Permission>;
+    element = <PermissionRouter>{element}</PermissionRouter>;
   }
 
   return element;
@@ -37,17 +36,14 @@ function getAutoBaseRoutes() {
   const baseRoutes: CRouteObject[] = [
     {
       path: "/",
-      loader: () => redirect("/layout"),
-    },
-    {
-      path: "/layout",
       element: <LayoutPage />,
       children: [],
+      isMenuRoot: true,
     },
   ];
   const createToPath = (filePath: string) => {
     const pathList = filePath.match(/\/src\/pages\/(.+)\/App.tsx/)?.[1].split("/") || [];
-    let value = baseRoutes[1];
+    let value = baseRoutes[0];
 
     for (const path of pathList) {
       if (!value.children) value.children = [];
