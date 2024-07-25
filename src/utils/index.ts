@@ -158,18 +158,18 @@ export function eachTree<T = any>(
 
 export function formatTree<T, R>(
   tree: T[],
-  callback: (item: T, children: R[], parent?: any) => R,
-  key = "children" as keyof T,
-  parent?: R,
+  callback: (item: T, children: T[], parent?: R) => R,
+  key = "children",
+  parent?: any,
 ): R[] {
   const result = [] as R[];
   for (const node of tree) {
     const data = { ...node };
-    const value = callback(data, data[key] as R[], parent);
-    if (data[key]) {
-      value[key as any] = formatTree(data[key] as T[], callback, key, value) as any;
-    }
+    const value = callback(data, data[key] as T[], parent);
     result.push(value);
+    if (value[key]) {
+      value[key] = formatTree(value[key] as T[], callback, key, value) as any;
+    }
   }
   return result;
 }
