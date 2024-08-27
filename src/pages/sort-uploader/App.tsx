@@ -1,5 +1,5 @@
 import UploadSorter from "@/components/UploadSorter";
-import AppStyled from "@/store/AppStyled";
+import AppStyled from "@/styles/AppStyled";
 import { UploadFile } from "antd";
 import React, { useEffect, useState } from "react";
 

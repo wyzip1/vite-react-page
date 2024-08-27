@@ -31,6 +31,11 @@
   position: relative;  
 } 
 
+.drag-none {
+  user-drag: none;
+  -webkit-user-drag: none;
+}
+
 @keyframes fadeIn {
   0% {
     opacity: 0;

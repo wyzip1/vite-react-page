@@ -1,5 +1,5 @@
 import Search from "@/components/Search";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useMemo, useState } from "react";
 import useFetchList from "@/hooks/useFetchList";
 import { Config } from "@/components/Search/type";
@@ -9,7 +9,10 @@ import EditTable from "@/components/EditTable";
 import { MockListItem } from "@/api/mock-model";
 import { Button } from "antd";
 import { EditTableColumn, EditTableInstance } from "@/components/EditTable/types";
-import AppStyled from "@/store/AppStyled";
+import AppStyled from "@/styles/AppStyled";
+import useModal from "@/hooks/useModal";
+import CustomModal, { CustomModalProps } from "@/components/CustomModal";
+import { useThemeMode } from "@/store/theme";
 
 interface SearchFormData {
   date?: [string, string];
@@ -23,10 +26,22 @@ const searchOptions: Config = [
   ],
 ];
 
+const TestModal: React.FC<CustomModalProps<any>> = props => {
+  const themeMode = useThemeMode();
+
+  useEffect(() => {
+    console.log("themeMode", themeMode);
+  }, [themeMode]);
+
+  return <CustomModal {...props} />;
+};
+
 const App: React.FC = () => {
   const [searchFormData, setSearchFormData] = useState<SearchFormData>({});
   const searchParams = useMemo(() => formatSearchParams(searchFormData), [searchFormData]);
   const [setPageInfo, state, api] = useFetchList(fetchMockList, searchParams);
+
+  const { openModal } = useModal(TestModal);
 
   const eidtTableRef = useRef<EditTableInstance>(null);
 
@@ -132,6 +147,16 @@ const App: React.FC = () => {
         </AsyncButton>
 
         <Button onClick={() => eidtTableRef.current?.addEditItem()}>添加数据</Button>
+        <Button
+          onClick={() =>
+            openModal({
+              title: "哈哈哈",
+              onConfirm: () => new Promise(rev => setTimeout(rev, 1000)),
+            })
+          }
+        >
+          Test
+        </Button>
       </div>
 
       <EditTable

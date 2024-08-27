@@ -6,7 +6,23 @@ import "dayjs/locale/zh-cn";
 import { RouterProvider } from "react-router-dom";
 import { store } from "./store";
 import { setTheme, useThemeMode, useToken } from "./store/theme";
-import MainStyled from "./store/MainStyled";
+import MainStyled from "./styles/MainStyled";
+
+export const AntConfigProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
+  const themeMode = useThemeMode();
+
+  return (
+    <ConfigProvider
+      locale={zhCN}
+      theme={{
+        algorithm: themeMode === "dark" ? [theme.darkAlgorithm] : [theme.defaultAlgorithm],
+        token: { colorPrimary: "#155bd4", borderRadius: 0 },
+      }}
+    >
+      {children}
+    </ConfigProvider>
+  );
+};
 
 export default function App() {
   const themeMode = useThemeMode();
@@ -24,13 +40,7 @@ export default function App() {
   }, []);
 
   return (
-    <ConfigProvider
-      locale={zhCN}
-      theme={{
-        algorithm: themeMode === "dark" ? [theme.darkAlgorithm] : [theme.defaultAlgorithm],
-        token: { colorPrimary: "#155bd4", borderRadius: 0 },
-      }}
-    >
+    <AntConfigProvider>
       <MainStyled
         mode={themeMode}
         token={themeToken}
@@ -39,6 +49,6 @@ export default function App() {
       >
         <RouterProvider router={router} />
       </MainStyled>
-    </ConfigProvider>
+    </AntConfigProvider>
   );
 }
