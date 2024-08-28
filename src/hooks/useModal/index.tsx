@@ -7,7 +7,7 @@ import ModalWrapper, { ModalWrapperInstance } from "./ModalWrapper";
 export default function useModal<T>(
   Modal: (props: CustomModalProps<T>) => React.ReactNode,
   options?: {
-    props?: T;
+    props?: CustomModalProps<T>;
     getContainer?: () => HTMLElement;
   },
 ) {
@@ -20,8 +20,22 @@ export default function useModal<T>(
     [Modal],
   );
 
-  function openModal(cProps?: T) {
-    modalRef.current?.open({ ...options?.props, ...cProps });
+  function openModal(cProps?: CustomModalProps<T>) {
+    return new Promise((rev, rej) => {
+      const modalProps = { ...options?.props, ...cProps };
+      modalRef.current?.open({
+        ...modalProps,
+        onConfirm: async data => {
+          const res = await modalProps.onConfirm?.(data);
+          rev(res);
+          return res;
+        },
+        onCancel(e) {
+          rej(e);
+          return modalProps.onCancel?.(e);
+        },
+      });
+    });
   }
 
   useEffect(() => {

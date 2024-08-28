@@ -147,7 +147,7 @@ const App: React.FC = () => {
         </AsyncButton>
 
         <Button onClick={() => eidtTableRef.current?.addEditItem()}>添加数据</Button>
-        <Button
+        <AsyncButton
           onClick={() =>
             openModal({
               title: "哈哈哈",
@@ -156,7 +156,7 @@ const App: React.FC = () => {
           }
         >
           Test
-        </Button>
+        </AsyncButton>
       </div>
 
       <EditTable

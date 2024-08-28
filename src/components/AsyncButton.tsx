@@ -2,7 +2,7 @@ import { Button, ButtonProps } from "antd";
 import React, { useState } from "react";
 
 interface AsyncButtonProps extends Omit<ButtonProps, "onClick"> {
-  onClick?(): Promise<void>;
+  onClick?(): Promise<any>;
 }
 
 const AsyncButton: React.FC<AsyncButtonProps> = ({ children, onClick, ...props }) => {
