@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
-import router from "@/router/index";
 import { ConfigProvider, theme } from "antd";
 import zhCN from "antd/es/locale/zh_CN";
 import "dayjs/locale/zh-cn";
-import { RouterProvider } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { store } from "./store";
 import { setTheme, useThemeMode, useToken } from "./store/theme";
 import MainStyled from "./styles/MainStyled";
@@ -37,18 +36,20 @@ export default function App() {
     // 获取系统主题 是否为暗色，当然也可以匹配亮色：prefers-color-scheme: light
     const prefers = window.matchMedia?.("(prefers-color-scheme: dark)");
     prefers.addEventListener("change", changeTheme);
+
+    return () => {
+      prefers.removeEventListener("change", changeTheme);
+    };
   }, []);
 
   return (
-    <AntConfigProvider>
-      <MainStyled
-        mode={themeMode}
-        token={themeToken}
-        antToken={antToken}
-        style={{ width: "100%", height: "100vh" }}
-      >
-        <RouterProvider router={router} />
-      </MainStyled>
-    </AntConfigProvider>
+    <MainStyled
+      mode={themeMode}
+      token={themeToken}
+      antToken={antToken}
+      style={{ width: "100%", height: "10vh" }}
+    >
+      <Outlet />
+    </MainStyled>
   );
 }

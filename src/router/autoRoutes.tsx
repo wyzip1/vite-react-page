@@ -1,6 +1,7 @@
 import { CRouteObject } from "@/types";
 import React from "react";
 import LayoutPage from "@/layout/index";
+import AppMain from "@/App";
 import Template from "@/components/Template";
 import WrapRedirect from "./components/WrapRedirect";
 import PermissionRouter from "./components/PermissionRouter";
@@ -22,7 +23,9 @@ export const formatRoutes = (routes: CRouteObject[]) => {
   return formatTree(routes, (route, _, parent) => {
     const data: CRouteObject = {
       ...route,
-      fullPath: `${parent?.fullPath || parent?.path || ""}/${route.path}`.replace("//", "/"),
+      fullPath: route.path?.startsWith("/")
+        ? route.path
+        : `${parent?.fullPath || parent?.path || ""}/${route.path}`.replace("//", "/"),
     };
     data.element = createElement(route);
 
@@ -45,14 +48,24 @@ function getAutoBaseRoutes() {
   const baseRoutes: CRouteObject[] = [
     {
       path: "/",
-      element: <LayoutPage />,
-      children: [],
-      isMenuRoot: true,
+      element: <AppMain />,
+      children: [
+        {
+          path: "/",
+          element: <LayoutPage />,
+          children: [],
+          isMenuRoot: true,
+        },
+      ],
+    },
+    {
+      path: "*",
+      redirect: "/",
     },
   ];
   const createToPath = (filePath: string) => {
     const pathList = filePath.match(/\/src\/pages\/(.+)\/App.tsx/)?.[1].split("/") || [];
-    let value = baseRoutes[0];
+    let value = baseRoutes[0].children![0];
     const pageData = list[filePath] as Record<string, any>;
     for (const path of pathList) {
       if (!value.children) value.children = [];
