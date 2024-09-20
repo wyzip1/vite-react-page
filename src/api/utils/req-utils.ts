@@ -1,11 +1,22 @@
 import { AxiosProgressEvent, AxiosRequestConfig, CancelToken } from "axios";
-import request, { RequestArraybufferResponse } from "./request";
+import request, { RequestArraybufferResponse, RequestResponse } from "./request";
 import { message } from "antd";
 import { formatMutipleNum } from "@/utils";
 
-export const createRequest = <T, R>(requestCallback: (params: T) => AxiosRequestConfig) => {
-  return (params: T, cancelToken?: CancelToken) =>
-    request<R>({ cancelToken, ...requestCallback(params) });
+interface CreateRequest {
+  <T, R>(
+    getReqConfig: (params: T) => AxiosRequestConfig,
+  ): (params: T, cancelToken?: CancelToken) => Promise<RequestResponse<R>>;
+
+  <R>(
+    getReqConfig: () => AxiosRequestConfig,
+  ): (params?: unknown, cancelToken?: CancelToken) => Promise<RequestResponse<R>>;
+}
+export const createRequest: CreateRequest = (
+  getReqConfig: (params: unknown) => AxiosRequestConfig,
+) => {
+  return (params: unknown, cancelToken?: CancelToken) =>
+    request({ cancelToken, ...getReqConfig(params) });
 };
 
 export const downloadFile = async (config: AxiosRequestConfig): Promise<void> => {
@@ -27,17 +38,17 @@ export const downloadFile = async (config: AxiosRequestConfig): Promise<void> =>
 
 export interface UploadOptions {
   sliceSize: number;
-  onInit?: () => any | Promise<any>;
+  onInit?: () => unknown | Promise<unknown>;
   onUpload: (
     slice: Blob,
     info: { index: number; bytes: [number, number] },
-    onProgress?: (progressEvent: AxiosProgressEvent) => any,
-  ) => any | Promise<any>;
-  onTotalProgress?: (percent: number, loaded: number) => any;
-  onEnd?: () => any | Promise<any>;
+    onProgress?: (progressEvent: AxiosProgressEvent) => unknown,
+  ) => unknown | Promise<unknown>;
+  onTotalProgress?: (percent: number, loaded: number) => unknown;
+  onEnd?: () => unknown | Promise<unknown>;
 }
 
-const uploadQueue: Promise<any>[] = [];
+const uploadQueue: (unknown | Promise<unknown>)[] = [];
 const uploadedDataQueue: number[] = [];
 
 export const uploadFile = async (file: File, options: UploadOptions) => {
