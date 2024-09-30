@@ -47,7 +47,7 @@ export default function App() {
       mode={themeMode}
       token={themeToken}
       antToken={antToken}
-      style={{ width: "100%", height: "10vh" }}
+      style={{ width: "100%", height: "100vh" }}
     >
       <Outlet />
     </MainStyled>
