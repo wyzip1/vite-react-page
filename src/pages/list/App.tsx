@@ -50,6 +50,9 @@ const App: React.FC = () => {
       title: "姓名",
       dataIndex: "name",
       valueType: "string",
+      formItemProps: {
+        rules: [{ required: true, message: "请输入姓名" }],
+      },
     },
     {
       title: "性别",

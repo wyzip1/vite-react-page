@@ -6,42 +6,25 @@ import dayjs from "dayjs";
 export function formatToDayjs(v: any) {
   if (["", null, undefined].includes(v)) return v;
   if (dayjs.isDayjs(v)) return v;
+
   return dayjs(v);
 }
 
-export default function renderEditContent(
-  { type, props, value }: EditValueOption,
-  commonChange?: (value: any) => any,
-) {
-  const onChange = async (...args: any[]) => {
-    // @ts-ignore
-    props.onChange?.(...args);
-    if (["string", "textarea"].includes(type)) await commonChange?.(args[0].target.value);
-    else await commonChange?.(args[0]);
-  };
-
+export default function renderEditContent({ type, props }: EditValueOption) {
   switch (type) {
     case "string":
-      return <Input {...props} value={undefined} defaultValue={value} onBlur={onChange} />;
+      return <Input {...props} />;
     case "number":
-      return <InputNumber {...props} value={value} onChange={onChange} />;
+      return <InputNumber {...props} />;
     case "textarea":
-      return (
-        <Input.TextArea {...props} value={undefined} defaultValue={value} onBlur={onChange} />
-      );
+      return <Input.TextArea {...props} />;
     case "boolean":
-      return <Switch {...props} value={value} onChange={onChange} />;
+      return <Switch {...props} />;
     case "date":
-      return <DatePicker {...props} value={formatToDayjs(value)} onChange={onChange} />;
+      return <DatePicker {...props} />;
     case "dateRange":
-      return (
-        <DatePicker.RangePicker
-          {...props}
-          value={value ? [formatToDayjs(value[0]), formatToDayjs(value[1])] : value}
-          onChange={onChange}
-        />
-      );
+      return <DatePicker.RangePicker {...props} />;
     case "select":
-      return <Select {...props} value={value} onChange={onChange} />;
+      return <Select {...props} />;
   }
 }

@@ -1,5 +1,6 @@
 import Path from "@/utils/path";
 import {
+  FormItemProps,
   InputNumberProps,
   InputProps,
   SelectProps,
@@ -31,6 +32,7 @@ export type EditValueOption = (EditOptionMap extends { valueOption: infer V } ? 
 
 export type EditTableColumn<T> = Omit<TableColumnProps<T>, "dataIndex" | "render"> & {
   renderIndex?: Path<T>;
+  formItemProps?: FormItemProps;
 } & (
     | ({
         empty?: React.ReactNode;

@@ -1,14 +1,16 @@
 import React, {
   ForwardedRef,
   forwardRef,
+  useEffect,
   useImperativeHandle,
   useMemo,
+  useRef,
   useState,
 } from "react";
-import { Button, Table, TableColumnProps } from "antd";
+import { Button, Form, Table, TableColumnProps } from "antd";
 import AsyncButton from "../AsyncButton";
 
-import renderEditContent from "./renderEditContent";
+import renderEditContent, { formatToDayjs } from "./renderEditContent";
 import { getValue, guid, setValue } from "@/utils";
 
 import type {
@@ -19,8 +21,24 @@ import type {
   EventRange,
 } from "./types";
 import type { ColumnsType } from "antd/es/table";
-import FormItem from "antd/es/form/FormItem";
 import { Dayjs } from "dayjs";
+
+const ProxyNode = <T extends JSX.Element>({
+  children,
+  proxy,
+  ...props
+}: {
+  children?: T;
+  proxy?: (props: any) => T["props"];
+  [key: string]: any;
+}) => {
+  const proxyNode = React.isValidElement(children) ? (
+    React.cloneElement(children, { ...props, ...proxy?.(props) })
+  ) : (
+    <>{children}</>
+  );
+  return <>{proxyNode}</>;
+};
 
 const EditTable = <T extends any>(
   {
@@ -34,8 +52,10 @@ const EditTable = <T extends any>(
   ref: ForwardedRef<EditTableInstance<T>>,
 ) => {
   const [editRecords, setEditRecords] = useState<Record<string, Partial<T>>>({});
-
   const rowKey = useMemo(() => (props.rowKey as string) || "id", [props.rowKey]);
+  const formInstance = Form.useFormInstance();
+  const [_form] = Form.useForm();
+  const form = formInstance || _form;
 
   const EditColumns = useMemo<
     (Omit<EditTableColumn<T>, "render"> & { render: TableColumnProps<T>["render"] })[]
@@ -64,7 +84,11 @@ const EditTable = <T extends any>(
   function renderEditAction(record: T) {
     return (
       <>
-        <AsyncButton type="link" size="small" onClick={() => saveEditItem(record[rowKey])}>
+        <AsyncButton
+          type="link"
+          size="small"
+          onClick={() => form.validateFields().then(() => saveEditItem(record[rowKey]))}
+        >
           保存
         </AsyncButton>
         <Button type="link" size="small" onClick={() => cancelEditItem(record[rowKey])}>
@@ -91,20 +115,27 @@ const EditTable = <T extends any>(
     if (column.valueType === "action") return renderEditAction(record);
 
     return (
-      <FormItem style={{ marginBlock: -5 }}>
-        {renderEditContent(
-          {
+      <Form.Item
+        style={{ marginBlock: -5 }}
+        name={record[rowKey] + "-" + column.dataIndex || ""}
+        {...column.formItemProps}
+      >
+        <ProxyNode
+          proxy={props => ({
+            onChange: v => {
+              props.onChange?.(v);
+              const value = v?.target ? v.target.value : formatDayJSValue(v, column);
+              setValue(editRecords[record[rowKey]], value, column.dataIndex as any);
+              setEditRecords({ ...editRecords });
+            },
+          })}
+        >
+          {renderEditContent({
             type: column.valueType,
             props: column.valueProps || {},
-            value: getValue(editRecords[record[rowKey]], column.dataIndex as any),
-          } as EditValueOption,
-          v => {
-            const value = formatDayJSValue(v, column);
-            setValue(editRecords[record[rowKey]], value, column.dataIndex as any);
-            setEditRecords({ ...editRecords });
-          },
-        )}
-      </FormItem>
+          } as EditValueOption)}
+        </ProxyNode>
+      </Form.Item>
     );
   }
 
@@ -140,11 +171,7 @@ const EditTable = <T extends any>(
       );
     }
 
-    return (
-      <FormItem style={{ marginBlock: -5 }}>
-        {column.render?.(...renderArgs) ?? value ?? column.empty ?? defaultEmptyColumn}
-      </FormItem>
-    );
+    return column.render?.(...renderArgs) ?? value ?? column.empty ?? defaultEmptyColumn;
   }
 
   async function saveEditItem(key: React.Key) {
@@ -159,10 +186,13 @@ const EditTable = <T extends any>(
     setEditRecords({ ...editRecords, [guid()]: createEditRecord() });
   }
 
+  const isStartEditRef = useRef(false);
+
   function startEditItem(key: React.Key) {
     const record = dataList.find(v => v[rowKey] === key);
     if (!record) return;
     setEditRecords({ ...editRecords, [key as string]: JSON.parse(JSON.stringify(record)) });
+    isStartEditRef.current = true;
   }
 
   function cancelEditItem(key: React.Key) {
@@ -177,15 +207,43 @@ const EditTable = <T extends any>(
     cancelEditItem,
   }));
 
-  return (
+  useEffect(() => {
+    if (!isStartEditRef.current) return;
+    isStartEditRef.current = false;
+    const data = Object.keys(form.getFieldsValue()).reduce<Record<string, any>>((map, v) => {
+      const [id, k] = v.split("-");
+      let value: any = getValue(editRecords[id], k as any);
+      const valueType = columns.find(v => v.dataIndex === k)?.valueType;
+      if (valueType === "date") {
+        value = formatToDayjs(value);
+      } else if (valueType === "dateRange") {
+        value = value ? [formatToDayjs(value[0]), formatToDayjs(value[1])] : value;
+      }
+      return { ...map, [id + "-" + k]: value };
+    }, {});
+    form.resetFields();
+
+    form.setFieldsValue(data);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editRecords]);
+
+  const TableNode = (
     <Table
       tableLayout="fixed"
       {...props}
       rowKey={rowKey}
-      dataSource={dataList}
-      columns={EditColumns as ColumnsType}
+      dataSource={dataList as T[]}
+      columns={EditColumns as ColumnsType<T>}
       pagination={Object.keys(editRecords).length > 0 ? false : props.pagination}
     />
+  );
+
+  return formInstance ? (
+    TableNode
+  ) : (
+    <Form form={_form} component={false}>
+      {TableNode}
+    </Form>
   );
 };
 
