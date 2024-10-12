@@ -1,3 +1,6 @@
+## 使用示例
+
+```typescript
 import UploadSorter from "@/components/UploadSorter";
 import AppStyled from "@/styles/AppStyled";
 import { UploadFile } from "antd";
@@ -33,3 +36,5 @@ const App: React.FC = () => {
 };
 
 export default App;
+
+```
