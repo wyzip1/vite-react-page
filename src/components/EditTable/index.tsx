@@ -70,13 +70,13 @@ const EditTable = <T extends any>(
 
   const dataList = useMemo(
     () => [
-      ...(dataSource || []),
       ...Object.keys(editRecords)
         .filter(id => !dataSource?.some(v => v[rowKey]?.toString() === id))
         .map(id => ({
           ...editRecords[id],
           [rowKey]: id,
         })),
+      ...(dataSource || []),
     ],
     [dataSource, editRecords, rowKey],
   );
@@ -183,7 +183,7 @@ const EditTable = <T extends any>(
 
   function addEditItem() {
     if (typeof createEditRecord !== "function") return;
-    setEditRecords({ ...editRecords, [guid()]: createEditRecord() });
+    setEditRecords({ [guid()]: createEditRecord(), ...editRecords });
   }
 
   const isStartEditRef = useRef(false);
