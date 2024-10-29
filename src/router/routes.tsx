@@ -21,12 +21,6 @@ const baseRoutes: CRouteObject[] = [
             title: "mock列表",
             element: createLazyLoad(lazy(() => import("@/pages/list/App"))),
           },
-
-          {
-            path: "sort-uploader",
-            title: "拖拽排序上传",
-            element: createLazyLoad(lazy(() => import("@/pages/sort-uploader/App"))),
-          },
         ],
       },
     ],
