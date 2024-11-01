@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, FormInstance, FormProps, Modal, ModalProps } from "antd";
 
 export type CustomModalProps<T> = Omit<ModalProps, "onOk"> & {
@@ -24,6 +24,11 @@ export default function CustomModal<T = any>({
       setActionLoading(false);
     }
   }
+
+  useEffect(() => {
+    if (props.open) return;
+    form?.resetFields();
+  }, [form, props.open]);
 
   return (
     <Modal

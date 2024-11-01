@@ -44,9 +44,6 @@ export default defineConfig(({ mode }) => ({
         if (warning.code === "MODULE_LEVEL_DIRECTIVE") return;
         warn(warning);
       },
-      input: {
-        main: resolve(__dirname, "./entranceHTML/main.html"),
-      },
       output: {
         manualChunks: {
           react: ["react"],
