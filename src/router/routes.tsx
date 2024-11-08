@@ -1,9 +1,9 @@
 import React, { lazy } from "react";
 import { CRouteObject } from "@/types";
-import { formatRoutes } from "./autoRoutes";
 import LayoutPage from "@/layout";
 import { createLazyLoad } from "@/components/LazyLoad";
 import AppMain from "@/App";
+import { formatRoutes } from "./utils";
 
 const baseRoutes: CRouteObject[] = [
   {
