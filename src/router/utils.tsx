@@ -3,9 +3,13 @@ import { CRouteObject } from "@/types";
 import WrapRedirect from "./components/WrapRedirect";
 import PermissionRouter from "./components/PermissionRouter";
 import { formatTree } from "@/utils";
+import KeepAlive from "react-activation";
 
 const createElement = (route: CRouteObject) => {
   let element = route.element;
+  if (route.keepAlive) {
+    element = <KeepAlive>{element}</KeepAlive>;
+  }
   if (route.redirect) {
     element = <WrapRedirect>{element}</WrapRedirect>;
   }

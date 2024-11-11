@@ -12,4 +12,5 @@ export type CRouteObject = Omit<RouteObject, "children"> & {
   activePath?: string;
   roles?: string[];
   isMenuRoot?: boolean;
+  keepAlive?: boolean;
 };
