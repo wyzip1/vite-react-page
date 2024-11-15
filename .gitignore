@@ -2,3 +2,5 @@ node_modules
 .vscode
 dist
 dist2
+
+auto-imports.d.ts

@@ -4,6 +4,7 @@ import react from "@vitejs/plugin-react";
 import packagesJSON from "./package.json";
 import buildFTL, { publicPath } from "build-ftl";
 import { viteMockServe } from "vite-plugin-mock";
+import AutoImport from "unplugin-auto-import/vite";
 
 const dependenciesList = Object.keys(packagesJSON.dependencies);
 
@@ -13,6 +14,10 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react({
       babel: { babelrc: true },
+    }),
+    AutoImport({
+      imports: ["react", "react-router-dom"],
+      include: [/\.ts$/, /\.tsx$/, /\.md$/],
     }),
     buildFTL({ entryDir: "./entranceHTML", ftlDir: "./dist2" }),
     viteMockServe({ mockPath: "mock" }),

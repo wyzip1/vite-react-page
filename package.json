@@ -18,9 +18,9 @@
     "axios": "^1.2.1",
     "dayjs": "^1.11.8",
     "jsencrypt": "^3.3.2",
-    "react": "=18.2.0",
+    "react": "^18.3.1",
     "react-activation": "^0.12.4",
-    "react-dom": "=18.2.0",
+    "react-dom": "^18.3.1",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.13.0",
     "redux": "^4.2.0",
@@ -45,6 +45,7 @@
     "sass": "^1.77.1",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.5",
+    "unplugin-auto-import": "^0.18.3",
     "vite": "^5.2.11",
     "vite-plugin-mock": "^3.0.2"
   }
