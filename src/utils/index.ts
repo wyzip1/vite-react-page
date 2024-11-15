@@ -312,3 +312,11 @@ export const SelectFile = (type = "*") => {
     input.click();
   });
 };
+
+// 过滤对象空值属性
+export const filterObjEmpty = (obj: any) => {
+  if (!obj) return obj;
+  return Object.fromEntries(
+    Object.entries(obj).filter(([_, value]) => !["", null, undefined].includes(value as any)),
+  );
+};

@@ -1,3 +1,4 @@
+import { filterObjEmpty } from "@/utils";
 import { message } from "antd";
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
@@ -26,6 +27,8 @@ export const baseURL =
 const instance = axios.create({ baseURL });
 
 instance.interceptors.request.use(config => {
+  config.data = filterObjEmpty(config.data);
+  config.params = filterObjEmpty(config.params);
   config.headers["Authorization"] = undefined;
   return config;
 });
