@@ -1,5 +1,3 @@
-import { useRef } from "react";
-
 export function useWindowEvent<T extends keyof WindowEventMap>(
   name: T,
   callback: Parameters<typeof window.addEventListener<T>>[1],

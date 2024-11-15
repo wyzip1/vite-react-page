@@ -1,8 +1,7 @@
-import { lazy } from "react";
-import { createHashRouter } from "react-router-dom";
 import { CRouteObject } from "@/types";
 import { createLazyLoad } from "@/components/LazyLoad";
 import { formatRoutes } from "@/router/utils";
+import { createHashRouter } from "react-router-dom";
 
 const baseRoutes: CRouteObject[] = [
   {

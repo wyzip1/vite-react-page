@@ -1,8 +1,6 @@
-import React from "react";
 import { Button, Popconfirm } from "antd";
 import { ActionStyled } from "./styled";
 
-import type { ReactNode } from "react";
 import type { ButtonProps, PopconfirmProps } from "antd";
 
 interface ActionProps {

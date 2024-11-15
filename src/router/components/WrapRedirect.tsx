@@ -1,7 +1,6 @@
 import { useRouter } from "@/store/RouterProvider";
 import { CRouteObject } from "@/types";
-import React, { useEffect } from "react";
-import { matchRoutes, useLocation, useNavigate } from "react-router-dom";
+import { matchRoutes } from "react-router-dom";
 
 interface WrapRedirectProps {
   children?: React.ReactNode;

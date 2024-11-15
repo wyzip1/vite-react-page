@@ -1,5 +1,4 @@
 import { Button, ButtonProps } from "antd";
-import React, { useState } from "react";
 
 interface AsyncButtonProps extends Omit<ButtonProps, "onClick"> {
   onClick?(): Promise<any>;

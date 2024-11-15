@@ -1,4 +1,3 @@
-import React from "react";
 import type { RenderItemProps } from "../type";
 
 export default function RenderItem({ options, state, setState, search }: RenderItemProps) {

@@ -1,4 +1,3 @@
-import React from "react";
 import { Input, InputProps } from "antd";
 
 import type { ChangeState } from "../../type";

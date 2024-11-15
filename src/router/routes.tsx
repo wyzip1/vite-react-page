@@ -1,4 +1,3 @@
-import React, { lazy } from "react";
 import { CRouteObject } from "@/types";
 import LayoutPage from "@/layout";
 import { createLazyLoad } from "@/components/LazyLoad";

@@ -1,6 +1,4 @@
 import Search from "@/components/Search";
-import React, { useEffect, useRef } from "react";
-import { useMemo, useState } from "react";
 import useFetchList from "@/hooks/useFetchList";
 import { Config } from "@/components/Search/type";
 import AsyncButton from "@/components/AsyncButton";

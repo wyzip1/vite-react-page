@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 import Loading from "../Loading";
 
 const LazyLoad: React.FC<{ ImportValue: any }> = ({ ImportValue }) => {

@@ -1,4 +1,3 @@
-import React from "react";
 import { GlobalToken, Tooltip, UploadFile } from "antd";
 import { SortableElement, SortableHandle } from "react-sortable-hoc";
 import { SortItemStyled } from "./styled";

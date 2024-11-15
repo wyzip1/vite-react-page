@@ -1,5 +1,4 @@
 import axios, { CancelToken, CancelTokenSource } from "axios";
-import React, { useEffect, useRef, useState } from "react";
 
 type RequestResult<T> = T extends (...args: any[]) => Promise<infer V> ? V : never;
 

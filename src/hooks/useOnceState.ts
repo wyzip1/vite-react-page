@@ -1,6 +1,3 @@
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-
 export function useOnceState(callback: (v: any) => any) {
   const Location = useLocation();
   useEffect(() => {

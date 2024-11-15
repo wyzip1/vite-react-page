@@ -1,4 +1,3 @@
-import React from "react";
 import { EditValueOption } from "./types";
 import { DatePicker, Input, InputNumber, Select, Switch } from "antd";
 import dayjs from "dayjs";

@@ -1,4 +1,3 @@
-import React from "react";
 import RenderItem from "./RenderItem";
 import type { RenderRowProps } from "../type";
 

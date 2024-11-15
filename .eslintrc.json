@@ -18,13 +18,6 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "globals": {
-    "JSX": "readonly",
-    "process": "readonly",
-    "BlobPart": "readonly",
-    "NodeJS": "readonly",
-    "WindowEventMap": "readonly"
-  },
   "settings": {
     "react": {
       "pragma": "React", // Pragma to use, default to "React"
@@ -37,6 +30,9 @@
   "rules": {
     "prettier/prettier": ["error", { "usePrettierrc": true }],
     "no-unused-vars": [2, { "vars": "all", "args": "none" }],
+    "no-undef": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-no-undef": "off",
     "react/prop-types": "off"
   }
 }

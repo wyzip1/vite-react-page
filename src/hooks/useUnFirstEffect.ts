@@ -1,5 +1,3 @@
-import { useEffect, useRef } from "react";
-
 export default function useUnFirstEffect(
   cb: Parameters<typeof useEffect>[0],
   deps: Parameters<typeof useEffect>[1],

@@ -1,6 +1,4 @@
-import type React from "react";
 import type { InputProps, SelectProps, DatePickerProps, CascaderProps } from "antd";
-import type { Dispatch, SetStateAction } from "react";
 import { type RangePickerProps } from "antd/es/date-picker";
 
 export interface ComOptions<T = "input", P = {}> {
@@ -48,7 +46,7 @@ export interface SearchInstance {
 interface RenderBaseProps {
   state: State;
   search(): void;
-  setState: Dispatch<SetStateAction<State>>;
+  setState: React.Dispatch<React.SetStateAction<State>>;
 }
 
 export interface RenderItemProps extends RenderBaseProps {

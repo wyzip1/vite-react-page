@@ -1,4 +1,3 @@
-import React, { useContext } from "react";
 import type { Router } from "@remix-run/router";
 import RouterProviderContext from "./context";
 import { RouterProvider, RouterProviderProps } from "react-router-dom";
@@ -23,7 +22,7 @@ export const useRouter = () => {
 const CRouterProvider: React.FC<RouterProviderProps> = ({ router, ...props }) => {
   return (
     <RouterStore router={router}>
-      <RouterProvider router={router} {...props} />
+      <RouterProvider future={{ v7_startTransition: true }} router={router} {...props} />
     </RouterStore>
   );
 };

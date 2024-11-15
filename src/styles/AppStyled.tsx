@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import { useToken } from "@/store/theme";
 import { theme } from "antd";

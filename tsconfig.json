@@ -17,6 +17,7 @@
     "useDefineForClassFields": true,
     // 指定项目中用到的库
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "noUnusedLocals": true,
     // 移除注释
     "removeComments": true,
     // 不允许隐式any
@@ -24,6 +25,6 @@
     // 指定ts被编译的es版本
     "target": "ES2016",
     // "jsx": "preserve"  // vue
-    "jsx": "react",     // react，
+    "jsx": "react-jsx",     // react，
   },
 }

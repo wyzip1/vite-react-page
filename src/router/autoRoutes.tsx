@@ -1,5 +1,4 @@
 import { CRouteObject } from "@/types";
-import React from "react";
 import LayoutPage from "@/layout/index";
 import AppMain from "@/App";
 import Template from "@/components/Template";

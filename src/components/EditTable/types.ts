@@ -10,7 +10,6 @@ import {
 } from "antd";
 import { DatePickerProps, RangePickerProps } from "antd/es/date-picker";
 import { TextAreaProps } from "antd/es/input";
-import React from "react";
 
 type EditOption<T, P> = {
   valueOption: { type: T; props: P };

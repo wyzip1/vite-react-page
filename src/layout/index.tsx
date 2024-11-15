@@ -1,9 +1,7 @@
-import React, { useState } from "react";
 import { Button, Layout, Radio, theme } from "antd";
 import { LayoutPageStyled } from "./styled";
 
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
-import { Outlet } from "react-router-dom";
 import MenuList from "./components/MenuList";
 import Breadcrumb from "./components/Breadcrumb";
 import { setTheme, useThemeMode, useToken } from "@/store/theme";

@@ -1,4 +1,3 @@
-import React from "react";
 import { DatePicker, DatePickerProps } from "antd";
 
 import dayjs from "dayjs";

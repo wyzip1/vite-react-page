@@ -1,8 +1,6 @@
-import React, { useEffect } from "react";
 import { ConfigProvider, theme } from "antd";
 import zhCN from "antd/es/locale/zh_CN";
 import "dayjs/locale/zh-cn";
-import { Outlet } from "react-router-dom";
 import { store } from "./store";
 import { setTheme, useThemeMode, useToken } from "./store/theme";
 import MainStyled from "./styles/MainStyled";

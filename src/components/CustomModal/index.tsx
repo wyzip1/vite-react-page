@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import { Form, FormInstance, FormProps, Modal, ModalProps } from "antd";
 
 export type CustomModalProps<T> = Omit<ModalProps, "onOk"> & {

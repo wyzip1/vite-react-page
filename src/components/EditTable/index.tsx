@@ -1,12 +1,4 @@
-import React, {
-  ForwardedRef,
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { cloneElement, isValidElement } from "react";
 import { Button, Form, Table, TableColumnProps } from "antd";
 import AsyncButton from "../AsyncButton";
 
@@ -32,8 +24,8 @@ const ProxyNode = <T extends JSX.Element>({
   proxy?: (props: any) => T["props"];
   [key: string]: any;
 }) => {
-  const proxyNode = React.isValidElement(children) ? (
-    React.cloneElement(children, { ...props, ...proxy?.(props) })
+  const proxyNode = isValidElement(children) ? (
+    cloneElement(children, { ...props, ...proxy?.(props) })
   ) : (
     <>{children}</>
   );
@@ -49,7 +41,7 @@ const EditTable = <T extends any>(
     onSaveRecord,
     ...props
   }: EditTableProps<T>,
-  ref: ForwardedRef<EditTableInstance<T>>,
+  ref: React.ForwardedRef<EditTableInstance<T>>,
 ) => {
   const [editRecords, setEditRecords] = useState<Record<string, Partial<T>>>({});
   const rowKey = useMemo(() => (props.rowKey as string) || "id", [props.rowKey]);

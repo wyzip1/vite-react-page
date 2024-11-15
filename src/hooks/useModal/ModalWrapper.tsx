@@ -2,7 +2,6 @@ import { AntConfigProvider } from "@/App";
 import { CustomModalProps } from "@/components/CustomModal";
 import { Provider } from "react-redux";
 import { store } from "@/store";
-import React, { forwardRef, useImperativeHandle, useState } from "react";
 
 export interface ModalWrapperInstance {
   open: (props: CustomModalProps<any>) => void;

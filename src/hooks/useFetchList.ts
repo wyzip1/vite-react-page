@@ -1,7 +1,6 @@
 import List from "@/api/model/List";
 import { RequestResponse } from "@/api/utils/request";
 import Pagination from "@/api/model/Pagination";
-import { useEffect, useRef, useState } from "react";
 import useRequest from "./useRequest";
 
 export type ItemType<T> = T extends (...args: any[]) => Promise<RequestResponse<List<infer V>>>

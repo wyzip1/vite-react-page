@@ -1,5 +1,4 @@
-import React, { useMemo } from "react";
-import { matchRoutes, useLocation } from "react-router-dom";
+import { matchRoutes } from "react-router-dom";
 import { CRouteObject } from "@/types";
 import { eachTree } from "@/utils";
 import { useRouter } from "@/store/RouterProvider";

@@ -1,4 +1,3 @@
-import React from "react";
 import { CRouteObject } from "@/types";
 import WrapRedirect from "./components/WrapRedirect";
 import PermissionRouter from "./components/PermissionRouter";

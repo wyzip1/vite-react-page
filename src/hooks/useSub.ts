@@ -1,5 +1,4 @@
 import { guid } from "@/utils";
-import { useEffect, useRef } from "react";
 
 interface EventItem {
   name: string;

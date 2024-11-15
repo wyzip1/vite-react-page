@@ -1,6 +1,5 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Image, Upload, UploadFile, UploadProps, theme } from "antd";
-import React, { useEffect, useState } from "react";
 import { SortableContainer } from "react-sortable-hoc";
 import { arrayMoveImmutable } from "array-move";
 import SortableItem from "./SorterItem";

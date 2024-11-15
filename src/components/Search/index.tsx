@@ -1,11 +1,3 @@
-import React, {
-  ForwardedRef,
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useState,
-} from "react";
 import { Button } from "antd";
 import { SearchStyled } from "./styled";
 import { covertLength, initComponentList } from "./utils";
@@ -26,7 +18,7 @@ function Search(
     actionStyle,
     autoWrap = true,
   }: SearchProps,
-  ref: ForwardedRef<SearchInstance>,
+  ref: React.ForwardedRef<SearchInstance>,
 ) {
   const [formData, setFormData] = useState<State>(initFormData());
   const [isReset, setIsReset] = useState<boolean>(false);

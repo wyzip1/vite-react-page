@@ -1,5 +1,3 @@
-import React, { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import { Menu, MenuProps } from "antd";
 import { CRouteObject } from "@/types";
 import { useThemeMode } from "@/store/theme";

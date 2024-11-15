@@ -1,5 +1,4 @@
 /* eslint-disable react/display-name */
-import React from "react";
 import { Cascader, Select } from "antd";
 import createInput from "./items/Input";
 import createDatePicker from "./items/DatePicker";
