@@ -1,7 +1,8 @@
+import useUnFirstEffect from "@/hooks/useUnFirstEffect";
 import { Form, FormInstance, FormProps, Modal, ModalProps } from "antd";
 
 export type CustomModalProps<T> = Omit<ModalProps, "onOk"> & {
-  onConfirm?: (data?: T) => any | Promise<any>;
+  onConfirm?: (data: T) => any | Promise<any>;
   form?: FormInstance;
   formProps?: FormProps;
 };
@@ -15,7 +16,7 @@ export default function CustomModal<T = any>({
 }: CustomModalProps<T>) {
   const [actionLoading, setActionLoading] = useState(false);
   const isForm = form !== undefined;
-  async function confirm(data?: T) {
+  async function confirm(data: T) {
     setActionLoading(true);
     try {
       await onConfirm?.(data);
@@ -24,7 +25,7 @@ export default function CustomModal<T = any>({
     }
   }
 
-  useEffect(() => {
+  useUnFirstEffect(() => {
     if (props.open) return;
     form?.resetFields();
   }, [form, props.open]);
@@ -33,7 +34,7 @@ export default function CustomModal<T = any>({
     <Modal
       confirmLoading={actionLoading}
       {...props}
-      onOk={() => (isForm ? form.submit() : confirm())}
+      onOk={() => (isForm ? form.submit() : confirm(undefined as T))}
     >
       {isForm ? (
         <Form form={form} {...formProps} onFinish={confirm}>

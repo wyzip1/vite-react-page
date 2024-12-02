@@ -4,7 +4,10 @@ interface AsyncButtonProps extends Omit<ButtonProps, "onClick"> {
   onClick?(): Promise<any>;
 }
 
-const AsyncButton: React.FC<AsyncButtonProps> = ({ children, onClick, ...props }) => {
+const AsyncButton = (
+  { children, onClick, ...props }: AsyncButtonProps,
+  ref: React.LegacyRef<HTMLButtonElement | HTMLAnchorElement>,
+) => {
   const [actionLoading, setActionLoading] = useState<boolean>(false);
   const click: ButtonProps["onClick"] = async () => {
     setActionLoading(true);
@@ -16,10 +19,10 @@ const AsyncButton: React.FC<AsyncButtonProps> = ({ children, onClick, ...props }
   };
 
   return (
-    <Button loading={actionLoading} onClick={click} {...props}>
+    <Button ref={ref} loading={actionLoading} onClick={click} {...props}>
       {children}
     </Button>
   );
 };
 
-export default AsyncButton;
+export default forwardRef(AsyncButton);
