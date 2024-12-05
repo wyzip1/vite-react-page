@@ -6,6 +6,14 @@ import "@/styles/tailwind.css";
 import "@/styles/index.css";
 import { AntConfigProvider } from "@/App";
 import CRouterProvider from "@/store/RouterProvider";
+import { scan } from "react-scan";
+
+if (typeof window !== "undefined" && import.meta.env.MODE === "scan") {
+  scan({
+    enabled: true,
+    log: true, // logs render info to console (default: false)
+  });
+}
 
 const root = createRoot(document.getElementById("root")!);
 root.render(

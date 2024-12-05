@@ -62,7 +62,7 @@ export default defineConfig(({ mode }) => ({
       },
     },
   },
-  base: mode === "development" ? "/" : publicPath,
+  base: ["development", "scan"].includes(mode) ? "/" : publicPath,
   css: {
     preprocessorOptions: {
       less: {
