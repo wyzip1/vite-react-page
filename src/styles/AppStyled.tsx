@@ -9,6 +9,7 @@ export const AppStyledComponent = styled.div<ThemeStyledProps>`
   box-sizing: border-box;
   background-color: ${v => v.antToken?.colorBgContainer};
   color: ${v => v.antToken?.colorText};
+  overflow: auto;
 
   animation: fadeIn 0.3s ease-in-out forwards;
 `;
