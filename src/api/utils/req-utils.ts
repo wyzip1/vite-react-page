@@ -20,22 +20,20 @@ export const createRequest: CreateRequest = (
 };
 
 export const downloadFile = async (config: AxiosRequestConfig): Promise<void> => {
-  const res = (await request({
+  const res = await request<RequestArraybufferResponse>({
     responseType: "arraybuffer",
     ...config,
-  })) as unknown as RequestArraybufferResponse;
+  });
 
-  const blob = new Blob([res.value], { type: res.type });
+  const blob = new Blob([res.data!.value], { type: res.data!.type });
   const url = URL.createObjectURL(blob);
-  // window.open(url); ??
   const link = document.createElement("a");
-  link.download = decodeURIComponent(res.filename);
+  link.download = decodeURIComponent(res.data!.filename);
   link.href = url;
   link.click();
   URL.revokeObjectURL(url);
   message.success("导出成功");
 };
-
 export interface UploadOptions {
   sliceSize: number;
   onInit?: () => unknown | Promise<unknown>;
