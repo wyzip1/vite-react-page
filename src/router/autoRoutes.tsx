@@ -9,6 +9,7 @@ const createRoute = (pageData: Record<string, any>, path: string): CRouteObject 
   title: pageData.title || path,
   hidden: pageData.hidden,
   roles: pageData.roles,
+  keepAlive: true,
   activePath: pageData.activePath,
   element: <Template />,
 });

@@ -18,6 +18,7 @@ const baseRoutes: CRouteObject[] = [
           {
             path: "/list",
             title: "mock列表",
+            keepAlive: true,
             element: createLazyLoad(lazy(() => import("@/pages/list/App"))),
           },
         ],

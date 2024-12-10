@@ -6,6 +6,7 @@ import MenuList from "./components/MenuList";
 import Breadcrumb from "./components/Breadcrumb";
 import { setTheme, useThemeMode, useToken } from "@/store/theme";
 import { store } from "@/store";
+import KeepAliveView from "@/router/components/KeepAlive";
 
 const { Header, Sider, Content } = Layout;
 
@@ -51,7 +52,7 @@ export default function LayoutPage() {
 
           <Layout className="h-full overflow-auto flex flex-col layout-content">
             <Content>
-              <Outlet />
+              <KeepAliveView />
             </Content>
           </Layout>
         </Layout>

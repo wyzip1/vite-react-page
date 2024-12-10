@@ -12,9 +12,7 @@ const dependenciesList = Object.keys(packagesJSON.dependencies);
 /* eslint-env node */
 export default defineConfig(({ mode }) => ({
   plugins: [
-    react({
-      babel: { babelrc: true },
-    }),
+    react(),
     AutoImport({
       imports: ["react", "react-router-dom"],
       include: [/\.ts$/, /\.tsx$/, /\.md$/],

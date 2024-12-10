@@ -6,12 +6,15 @@ import "@/styles/tailwind.css";
 import "@/styles/index.css";
 import { AntConfigProvider } from "@/App";
 import CRouterProvider from "@/store/RouterProvider";
+import KeepAliveProvider from "@/router/components/KeepAlive/context";
 
 const root = createRoot(document.getElementById("root")!);
 root.render(
   <Provider store={store}>
     <AntConfigProvider>
-      <CRouterProvider router={router} />
+      <KeepAliveProvider>
+        <CRouterProvider router={router} />
+      </KeepAliveProvider>
     </AntConfigProvider>
   </Provider>,
 );
