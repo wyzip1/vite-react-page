@@ -16,14 +16,14 @@ export default function useFetchList<
   searchParams: Omit<Parameters<T>[0], PN | PS>,
   defaultOptions: {
     pageSize?: number;
-    initSearch?: boolean;
+    manual?: boolean;
     propName?: {
       pageNum?: PN;
       pageSize?: PS;
       total?: string;
       list?: string;
     };
-  } = { initSearch: true },
+  } = { manual: false },
 ): [
   (pageOptions: Pagination) => ReturnType<T>,
   { pageNum: number; pageSize: number; total: number; loading: boolean; list: ItemType<T>[] },
@@ -36,7 +36,7 @@ export default function useFetchList<
   const [pageNum, setPageNum] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(defaultOptions?.pageSize || 10);
 
-  const [request, data, loading, setData] = useRequest(fetchApi, undefined, false);
+  const [request, data, loading, setData] = useRequest(fetchApi, { manual: true });
 
   const pageChangeRequestRef = useRef<{
     resolve: (v: any) => void;
@@ -79,7 +79,7 @@ export default function useFetchList<
   const initRef = useRef<boolean>(true);
 
   useEffect(() => {
-    if (initRef.current && !defaultOptions.initSearch) {
+    if (initRef.current && defaultOptions.manual) {
       initRef.current = false;
       return;
     }

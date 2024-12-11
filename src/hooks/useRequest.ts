@@ -6,8 +6,10 @@ export default function useRequest<
   T extends (params: any, cancelToken?: CancelToken) => Promise<any>,
 >(
   requestApi: T,
-  initRequestParams?: Parameters<T>[0] | undefined,
-  initSearch = true,
+  options?: {
+    params?: Parameters<T>[0] | undefined;
+    manual?: boolean;
+  },
 ): [
   (params: Parameters<T>[0]) => Promise<RequestResult<T>>,
   RequestResult<T> | undefined,
@@ -37,8 +39,8 @@ export default function useRequest<
   }
 
   useEffect(() => {
-    if (!initSearch) return cancelRequest;
-    request(initRequestParams);
+    if (options?.manual) return cancelRequest;
+    request(options?.params);
 
     return cancelRequest;
     // eslint-disable-next-line react-hooks/exhaustive-deps

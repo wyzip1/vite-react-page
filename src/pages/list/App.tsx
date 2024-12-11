@@ -170,7 +170,7 @@ const App: React.FC = () => {
         defaultEmptyColumn={<div>暂无数据</div>}
         columns={columns}
         rowKey="id"
-        scroll={{ x: columns.reduce((c, i) => c + ((i.width as number) || 200), 0) }}
+        scroll={{ x: columns.reduce((c, i) => c + ((i.width as number) || 125), 0) }}
         onChange={({ current, pageSize }) => {
           setPageInfo({ pageNum: current!, pageSize: pageSize! });
         }}
