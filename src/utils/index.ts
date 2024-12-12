@@ -320,3 +320,5 @@ export const filterObjEmpty = (obj: any) => {
     Object.entries(obj).filter(([_, value]) => !["", null, undefined].includes(value as any)),
   );
 };
+
+export const sleep = (ms: number) => new Promise(rev => setTimeout(rev, ms));
