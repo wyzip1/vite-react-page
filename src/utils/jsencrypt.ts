@@ -1,6 +1,7 @@
 import JSEncrypt from "jsencrypt/bin/jsencrypt.min";
 
 // 密钥对生成 http://web.chacuo.net/netrsakeypair
+const SPLIT_KEY = ":::__:::";
 
 //  在JsEncrypt原型上写了分段加密方法 encryptLong 使用时替换encrypt方法即可
 JSEncrypt.prototype.encryptLong2 = function (string: string) {
@@ -9,11 +10,11 @@ JSEncrypt.prototype.encryptLong2 = function (string: string) {
     const value = string.substring(i, i + 12);
     keys.push(this.encrypt(value));
   }
-  return keys.join(":::__:::");
+  return keys.join(SPLIT_KEY);
 };
 
 JSEncrypt.prototype.decryptLong2 = function (string: string) {
-  const keys: string[] = string.split(":::__:::");
+  const keys: string[] = string.split(SPLIT_KEY);
   let value = "";
   for (let i = 0; i < keys.length; i++) {
     value += this.decrypt(keys[i]);
