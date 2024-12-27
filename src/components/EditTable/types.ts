@@ -1,4 +1,4 @@
-import Path from "@/utils/path";
+import Path from "@/utils/module/path";
 import {
   FormItemProps,
   InputNumberProps,
