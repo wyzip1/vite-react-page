@@ -38,7 +38,7 @@ export default function useModal<T>(
   }
 
   useEffect(() => {
-    const container = options?.getContainer?.() || document.getElementById("root")!;
+    const container = options?.getContainer?.() || document.getElementById("app")!;
     const modelNode = document.createElement("div");
     modelNode.id = guid();
     container.appendChild(modelNode);

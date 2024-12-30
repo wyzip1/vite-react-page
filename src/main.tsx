@@ -16,7 +16,7 @@ if (typeof window !== "undefined" && import.meta.env.MODE === "scan") {
   });
 }
 
-const root = createRoot(document.getElementById("root")!);
+const root = createRoot(document.getElementById("app")!);
 root.render(
   <Provider store={store}>
     <AntConfigProvider>

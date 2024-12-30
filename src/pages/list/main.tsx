@@ -8,7 +8,7 @@ import { AntConfigProvider } from "@/App";
 import CRouterProvider from "@/store/RouterProvider";
 import KeepAliveProvider from "@/router/components/KeepAlive/context";
 
-const root = createRoot(document.getElementById("root")!);
+const root = createRoot(document.getElementById("app")!);
 root.render(
   <Provider store={store}>
     <AntConfigProvider>
