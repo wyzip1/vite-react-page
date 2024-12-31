@@ -49,6 +49,6 @@
     "unplugin-auto-import": "^0.18.3",
     "vite": "^5.2.11",
     "vite-plugin-mock": "^3.0.2",
-    "vite-plugin-multipage-auto": "^1.0.3"
+    "vite-plugin-multipage-auto": "^1.0.5"
   }
 }
