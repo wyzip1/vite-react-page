@@ -1,9 +1,9 @@
 import { ConfigProvider, theme } from "antd";
 import zhCN from "antd/es/locale/zh_CN";
 import "dayjs/locale/zh-cn";
-import { store } from "./store";
-import { setTheme, useThemeMode, useToken } from "./store/theme";
-import MainStyled from "./styles/MainStyled";
+import { store } from "@/store";
+import { setTheme, useThemeMode, useToken } from "@/store/theme";
+import MainStyled from "@/styles/MainStyled";
 
 export const AntConfigProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const themeMode = useThemeMode();

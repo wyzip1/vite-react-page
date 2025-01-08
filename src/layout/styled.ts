@@ -1,4 +1,4 @@
-import { ThemeStyledProps } from "@/store/MainStyled";
+import { ThemeStyledProps } from "@/styles/MainStyled";
 import styled from "styled-components";
 
 export const LayoutPageStyled = styled.div<ThemeStyledProps>`

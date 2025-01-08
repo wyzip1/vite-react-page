@@ -7,7 +7,7 @@ import "@/styles/index.css";
 import { AntConfigProvider } from "@/App";
 import CRouterProvider from "@/store/RouterProvider";
 import { scan } from "react-scan";
-import KeepAliveProvider from "./router/components/KeepAlive/context";
+import KeepAliveProvider from "@/router/components/KeepAlive/context";
 
 if (typeof window !== "undefined" && import.meta.env.MODE === "scan") {
   scan({
