@@ -106,27 +106,32 @@ const EditTable = <T extends any>(
   function renderEditModeRecord(column: EditTableColumn<T>, record: T) {
     if (column.valueType === "action") return renderEditAction(record);
 
+    const onChange = (v: any) => {
+      // @ts-ignore
+      column.valueProps?.onChange?.(v);
+      const value = v?.target ? v.target.value : formatDayJSValue(v, column);
+      setValue(editRecords[record[rowKey]], value, column.dataIndex as any);
+      setEditRecords({ ...editRecords });
+    };
+
     return (
       <Form.Item
         style={{ marginBlock: -5 }}
         name={record[rowKey] + "-" + column.dataIndex || ""}
         {...column.formItemProps}
       >
-        <ProxyNode
-          proxy={props => ({
-            onChange: v => {
-              props.onChange?.(v);
-              const value = v?.target ? v.target.value : formatDayJSValue(v, column);
-              setValue(editRecords[record[rowKey]], value, column.dataIndex as any);
-              setEditRecords({ ...editRecords });
-            },
-          })}
-        >
-          {renderEditContent({
-            type: column.valueType,
-            props: column.valueProps || {},
-          } as EditValueOption)}
-        </ProxyNode>
+        {
+          <ProxyNode proxy={() => ({ onChange })}>
+            {column.customEdit !== undefined ? (
+              <column.customEdit />
+            ) : (
+              renderEditContent({
+                type: column.valueType,
+                props: column.valueProps || {},
+              } as EditValueOption)
+            )}
+          </ProxyNode>
+        }
       </Form.Item>
     );
   }

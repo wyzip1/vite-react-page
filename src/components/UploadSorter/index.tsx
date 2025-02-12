@@ -19,7 +19,7 @@ const UploadSorter: React.FC<
     ) => void;
   }
 > = ({ value, onChange, disabledSorter, disabled, multiple, ...uploadProps }) => {
-  const [fileList, setFileList] = React.useState<UploadFile<any>[]>([]);
+  const [fileList, setFileList] = useState<UploadFile<any>[]>([]);
 
   const { token } = theme.useToken();
 

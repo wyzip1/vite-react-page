@@ -37,7 +37,9 @@ export type EditTableColumn<T> = Omit<TableColumnProps<T>, "dataIndex" | "render
         empty?: React.ReactNode;
         dataIndex?: Path<T>;
         render?: TableColumnProps<T>["render"];
-      } & Partial<EditOptionMap extends { columnConfig: infer V } ? V : never>)
+      } & Partial<EditOptionMap extends { columnConfig: infer V } ? V : never> & {
+          customEdit?: (props: { value?: any; onChange?: (v: any) => void }) => JSX.Element;
+        })
     | {
         dataIndex?: undefined;
         valueType: "action";
