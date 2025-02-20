@@ -31,6 +31,7 @@ export default function useFetchList<
     doSearch: () => ReturnType<T>;
     updateList: (callback?: ((list: Array<ItemType<T>>) => void) | undefined) => void;
     refreshList: () => ReturnType<T>;
+    resetState: () => void;
   },
 ] {
   const [pageNum, setPageNum] = useState<number>(1);
@@ -75,10 +76,21 @@ export default function useFetchList<
   const refreshList = () => {
     return onSearch(pageNum, pageSize);
   };
+  const isResetRef = useRef(false);
+  const resetState = () => {
+    setPageNum(1);
+    setPageSize(defaultOptions?.pageSize || 10);
+    setData(undefined);
+    isResetRef.current = true;
+  };
 
   const initRef = useRef<boolean>(true);
 
   useEffect(() => {
+    if (isResetRef.current) {
+      isResetRef.current = false;
+      return;
+    }
     if (initRef.current && defaultOptions.manual) {
       initRef.current = false;
       return;
@@ -101,6 +113,6 @@ export default function useFetchList<
       loading,
       list: data?.data?.[defaultOptions.propName?.list || "list"] || [],
     },
-    { doSearch, updateList, refreshList },
+    { doSearch, updateList, refreshList, resetState },
   ];
 }
