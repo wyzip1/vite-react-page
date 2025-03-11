@@ -96,6 +96,9 @@ const App: React.FC = () => {
       title: "钱包",
       valueType: "number",
       dataIndex: "data.money",
+      valueProps: {
+        precision: 2,
+      },
     },
     {
       title: "描述",

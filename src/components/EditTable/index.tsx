@@ -1,4 +1,3 @@
-import { cloneElement, isValidElement } from "react";
 import { Button, Form, Table, TableColumnProps } from "antd";
 import AsyncButton from "../AsyncButton";
 
@@ -14,23 +13,6 @@ import type {
 } from "./types";
 import type { ColumnsType } from "antd/es/table";
 import { Dayjs } from "dayjs";
-
-const ProxyNode = <T extends JSX.Element>({
-  children,
-  proxy,
-  ...props
-}: {
-  children?: T;
-  proxy?: (props: any) => T["props"];
-  [key: string]: any;
-}) => {
-  const proxyNode = isValidElement(children) ? (
-    cloneElement(children, { ...props, ...proxy?.(props) })
-  ) : (
-    <>{children}</>
-  );
-  return <>{proxyNode}</>;
-};
 
 const EditTable = <T extends any>(
   {
@@ -120,18 +102,17 @@ const EditTable = <T extends any>(
         name={record[rowKey] + "-" + column.dataIndex || ""}
         {...column.formItemProps}
       >
-        {
-          <ProxyNode proxy={() => ({ onChange })}>
-            {column.customEdit !== undefined ? (
-              <column.customEdit />
-            ) : (
-              renderEditContent({
-                type: column.valueType,
-                props: column.valueProps || {},
-              } as EditValueOption)
-            )}
-          </ProxyNode>
-        }
+        {column.customEdit !== undefined ? (
+          <column.customEdit />
+        ) : (
+          renderEditContent(
+            {
+              type: column.valueType,
+              props: column.valueProps || {},
+            } as EditValueOption,
+            onChange,
+          )
+        )}
       </Form.Item>
     );
   }
