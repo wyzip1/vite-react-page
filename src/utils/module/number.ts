@@ -5,14 +5,20 @@ export function formatNum(num: number, fixed = 2): string {
   return preload + value;
 }
 
-export const formatMutipleNum = (num: number, mutiple = 100, forceNumer = true) => {
-  const value = (mutiple === 0 ? num : num / mutiple).toFixed(2);
+export const formatMutipleNum = (
+  num: number | undefined | null,
+  mutiple = 100,
+  forceNumer = true,
+  fixed = 2,
+) => {
+  if (typeof num !== "number") return num;
+  const value = (mutiple === 0 ? num : num / mutiple).toFixed(fixed);
   return forceNumer ? Number(value) : value;
 };
 
 export const formatMoneyPreSubFix = (num: number, mutiple = 0) => {
-  const value = formatMutipleNum(num, mutiple, false).toString();
-  return value.split(".");
+  const value = formatMutipleNum(num, mutiple, false)?.toString();
+  return value?.split(".") || [];
 };
 
 interface RangeNumProps {
