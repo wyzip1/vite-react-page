@@ -4,7 +4,7 @@ import { ActionStyled } from "./styled";
 import type { ButtonProps, PopconfirmProps } from "antd";
 
 interface ActionProps {
-  children: ReactNode;
+  children: React.ReactNode;
   btnProps?: ButtonProps | true;
   confirmProps?: PopconfirmProps;
 }
@@ -12,7 +12,7 @@ interface ActionProps {
 type TypeMap = "button" | "confirm";
 type GetProps<T extends TypeMap> = T extends "button" ? ButtonProps : PopconfirmProps;
 
-function getNode<T extends TypeMap>(type: T, node: ReactNode, props?: GetProps<T>) {
+function getNode<T extends TypeMap>(type: T, node: React.ReactNode, props?: GetProps<T>) {
   if (!props) return <>{node}</>;
   switch (type) {
     // eslint-disable-next-line prettier/prettier

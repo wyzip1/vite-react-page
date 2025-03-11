@@ -1,7 +1,7 @@
 import { Button, ButtonProps } from "antd";
 
 interface AsyncButtonProps extends Omit<ButtonProps, "onClick"> {
-  onClick?(): Promise<any>;
+  onClick?(): any | Promise<any>;
 }
 
 const AsyncButton = (
