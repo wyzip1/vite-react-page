@@ -81,7 +81,9 @@ export default function useFetchList<
     setPageNum(1);
     setPageSize(defaultOptions?.pageSize || 10);
     setData(undefined);
-    isResetRef.current = true;
+    if (pageNum !== 1 || pageSize !== (defaultOptions?.pageSize || 10)) {
+      isResetRef.current = true;
+    }
   };
 
   const initRef = useRef<boolean>(true);
