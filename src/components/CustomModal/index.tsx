@@ -1,7 +1,7 @@
 import useUnFirstEffect from "@/hooks/useUnFirstEffect";
 import { Form, FormInstance, FormProps, Modal, ModalProps } from "antd";
 
-export type CustomModalProps<T> = Omit<ModalProps, "onOk"> & {
+export type CustomModalProps<T = any> = Omit<ModalProps, "onOk"> & {
   onConfirm?: (data: T) => any | Promise<any>;
   form?: FormInstance;
   formProps?: FormProps;

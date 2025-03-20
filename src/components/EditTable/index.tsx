@@ -108,7 +108,7 @@ const EditTable = <T extends any>(
           renderEditContent(
             {
               type: column.valueType,
-              props: column.valueProps || {},
+              props: { ...column.valueProps },
             } as EditValueOption,
             onChange,
           )
