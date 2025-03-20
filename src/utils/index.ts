@@ -47,19 +47,20 @@ export const toggleList = <T>(list: T[], item: T, customValidate?: (item: T) => 
   return list;
 };
 
-export const SelectFile = (type = "*") => {
-  return new Promise(resolve => {
+export const SelectFile = (type = "*", mutiple = false) => {
+  return new Promise<File[] | undefined>(resolve => {
     const input = document.createElement("input");
     window.addEventListener(
       "focus",
       () => {
         setTimeout(() => {
-          resolve(input.files?.[0]);
+          resolve(input.files ? [...input.files] : undefined);
         }, 300);
       },
       { once: true },
     );
     input.type = "file";
+    input.multiple = mutiple;
     input.accept = type;
     input.click();
   });
