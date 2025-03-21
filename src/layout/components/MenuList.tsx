@@ -7,7 +7,11 @@ const getItems = (routes?: CRouteObject[]): MenuProps["items"] => {
   if (!routes) return;
   const mapMenu = (route: CRouteObject) => {
     const children = getItems(route.children);
-    return { label: route.title, key: route.fullPath, children };
+    return {
+      label: route.title,
+      key: route.fullPath,
+      children: children?.length ? children : undefined,
+    };
   };
 
   const itemList = routes.filter(item => !item.hidden);
