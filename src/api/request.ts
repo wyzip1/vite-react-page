@@ -47,11 +47,11 @@ instance.interceptors.response.use(
       // message.error(err.message);
     }
     return Promise.reject(err);
-  }
+  },
 );
 
 function handleArraybufferRequest(
-  res: AxiosResponse<ArrayBuffer>
+  res: AxiosResponse<ArrayBuffer>,
 ): RequestResponse<RequestArraybufferResponse> {
   const contentType: string = res.headers["content-type"];
   if (contentType.includes("application/json")) {
