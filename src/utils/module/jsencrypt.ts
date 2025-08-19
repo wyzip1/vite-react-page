@@ -1,26 +1,7 @@
-import JSEncrypt from "jsencrypt/bin/jsencrypt.min";
+import { JSEncrypt } from "jsencrypt";
 
 // 密钥对生成 http://web.chacuo.net/netrsakeypair
 const SPLIT_KEY = ":::__:::";
-
-//  在JsEncrypt原型上写了分段加密方法 encryptLong 使用时替换encrypt方法即可
-JSEncrypt.prototype.encryptLong2 = function (string: string) {
-  const keys: string[] = [];
-  for (let i = 0; i < string.length; i += 12) {
-    const value = string.substring(i, i + 12);
-    keys.push(this.encrypt(value));
-  }
-  return keys.join(SPLIT_KEY);
-};
-
-JSEncrypt.prototype.decryptLong2 = function (string: string) {
-  const keys: string[] = string.split(SPLIT_KEY);
-  let value = "";
-  for (let i = 0; i < keys.length; i++) {
-    value += this.decrypt(keys[i]);
-  }
-  return value;
-};
 
 const publicKey =
   "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKoR8mX0rGKLqzcWmOzbfj64K8ZIgOdH\n" +
@@ -37,7 +18,7 @@ const privateKey =
   "UP8iWi1Qw0Y=";
 
 // 加密
-export function encrypt(txt: any): string {
+export function encrypt(txt: any): string | false {
   const encryptor = new JSEncrypt();
   encryptor.setPublicKey(publicKey); // 设置公钥
   return encryptor.encrypt(txt); // 对数据进行加密
@@ -50,17 +31,25 @@ export function decrypt(txt: string): any {
   return encryptor.decrypt(txt); // 对数据进行解密
 }
 
-export const encryptLong = (Encstr: string) => {
+export const encryptLong = (str: string) => {
   const encrypt = new JSEncrypt();
   encrypt.setPublicKey(publicKey); // 你的公钥
 
-  const data = encrypt.encryptLong2(Encstr);
-  return data;
+  const keys: string[] = [];
+  for (let i = 0; i < str.length; i += 12) {
+    const value = str.substring(i, i + 12);
+    keys.push(encrypt.encrypt(value) as string);
+  }
+  return keys.join(SPLIT_KEY);
 };
 
-export const decryptLong = (Encstr: string) => {
+export const decryptLong = (str: string) => {
   const decrypt = new JSEncrypt();
   decrypt.setPrivateKey(privateKey); // 你的私钥
-  const data = decrypt.decryptLong2(Encstr);
-  return data;
+  const keys: string[] = str.split(SPLIT_KEY);
+  let value = "";
+  for (let i = 0; i < keys.length; i++) {
+    value += decrypt.decrypt(keys[i]);
+  }
+  return value;
 };
