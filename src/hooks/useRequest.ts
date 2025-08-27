@@ -11,7 +11,9 @@ export default function useRequest<
     manual?: boolean;
   },
 ): [
-  (params: Parameters<T>[0]) => Promise<RequestResult<T>>,
+  undefined extends Parameters<T>[0]
+    ? (params?: Parameters<T>[0]) => Promise<RequestResult<T>>
+    : (params: Parameters<T>[0]) => Promise<RequestResult<T>>,
   RequestResult<T> | undefined,
   boolean,
   React.Dispatch<React.SetStateAction<RequestResult<T> | undefined>>,
