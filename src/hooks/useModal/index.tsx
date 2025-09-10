@@ -3,10 +3,9 @@ import { guid } from "@/utils";
 import { createRoot } from "react-dom/client";
 import ModalWrapper, { ModalWrapperInstance } from "./ModalWrapper";
 
-export default function useModal<T>(
-  Modal: (props: CustomModalProps<T>) => React.ReactNode,
+export default function useModal<T extends CustomModalProps<any>>(
+  Modal: (props: T) => React.ReactNode,
   options?: {
-    props?: CustomModalProps<T>;
     getContainer?: () => HTMLElement;
   },
 ) {
@@ -19,19 +18,17 @@ export default function useModal<T>(
     [Modal],
   );
 
-  function openModal(cProps?: CustomModalProps<T>) {
-    return new Promise((rev, rej) => {
-      const modalProps = { ...options?.props, ...cProps };
+  function openModal(modalProps?: T) {
+    return new Promise<Parameters<NonNullable<T["onConfirm"]>>[0]>((rev, rej) => {
       modalRef.current?.open({
         ...modalProps,
         onConfirm: async data => {
-          const res = await modalProps.onConfirm?.(data);
-          rev(res);
-          return res;
+          await modalProps?.onConfirm?.(data);
+          rev(data);
         },
         onCancel(e) {
           rej(e);
-          return modalProps.onCancel?.(e);
+          return modalProps?.onCancel?.(e);
         },
       });
     });
@@ -52,5 +49,5 @@ export default function useModal<T>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return { openModal };
+  return openModal;
 }

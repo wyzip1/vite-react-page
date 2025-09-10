@@ -10,7 +10,7 @@ export interface ModalWrapperInstance {
 
 interface ModalWrapperProps {
   getContainer?: () => HTMLElement;
-  modal: React.FC<CustomModalProps<any>>;
+  modal: React.FC<any>;
 }
 
 const ModalWrapper = (
