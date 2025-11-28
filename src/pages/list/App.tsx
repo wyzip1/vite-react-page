@@ -39,7 +39,7 @@ const App: React.FC = () => {
   const searchParams = useMemo(() => formatSearchParams(searchFormData), [searchFormData]);
   const [setPageInfo, state, api] = useFetchList(fetchMockList, searchParams);
 
-  const { openModal } = useModal(TestModal);
+  const openModal = useModal(TestModal);
 
   const eidtTableRef = useRef<EditTableInstance>(null);
 
