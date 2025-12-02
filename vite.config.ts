@@ -6,6 +6,7 @@ import buildFTL, { publicPath } from "build-ftl";
 import { viteMockServe } from "vite-plugin-mock";
 import AutoImport from "unplugin-auto-import/vite";
 import MultiPageAutoPlugin from "vite-plugin-multipage-auto";
+import https from "node:https";
 
 const dependenciesList = Object.keys(packagesJSON.dependencies);
 
@@ -38,6 +39,7 @@ export default defineConfig(({ mode }) => ({
       "/developmentApi": {
         target: "",
         changeOrigin: true,
+        agent: new https.Agent({ family: 4 }),
         rewrite: (path: string) => path.replace(/^\/developmentApi/, ""),
       },
     },
