@@ -1,5 +1,5 @@
 import { matchRoutes } from "react-router-dom";
-import { CRouteObject } from "@/types";
+import type { CRouteObject } from "@/types";
 import { eachTree } from "@/utils";
 import { useRouter } from "@/store/RouterProvider";
 

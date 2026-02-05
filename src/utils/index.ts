@@ -47,23 +47,32 @@ export const toggleList = <T>(list: T[], item: T, customValidate?: (item: T) => 
   return list;
 };
 
-export const SelectFile = (type = "*", mutiple = false) => {
-  return new Promise<File[] | undefined>(resolve => {
+export const selectFile = (type = "*", mutiple = false) => {
+  return new Promise<FileList | null>(resolve => {
     const input = document.createElement("input");
-    window.addEventListener(
-      "focus",
-      () => {
-        setTimeout(() => {
-          resolve(input.files ? [...input.files] : undefined);
-        }, 300);
-      },
-      { once: true },
-    );
+
     input.type = "file";
     input.multiple = mutiple;
     input.accept = type;
+    input.addEventListener("change", () => {
+      resolve(input.files);
+    });
     input.click();
   });
+};
+
+export const downloadArraybufferFile = (
+  arraybuffer: ArrayBuffer,
+  type: string,
+  filename: string,
+) => {
+  const blob = new Blob([arraybuffer], { type: type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
 };
 
 export const sleep = (ms: number) => new Promise(rev => setTimeout(rev, ms));

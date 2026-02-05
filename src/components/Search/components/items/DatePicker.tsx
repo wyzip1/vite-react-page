@@ -1,9 +1,10 @@
-import { DatePicker, DatePickerProps } from "antd";
+import type { DatePickerProps } from "antd";
+import { DatePicker } from "antd";
 
 import dayjs from "dayjs";
 
 import type { ChangeState } from "../../type";
-import { RangePickerProps } from "antd/es/date-picker";
+import type { RangePickerProps } from "antd/es/date-picker";
 
 type EventValue<DataType> = DataType | null;
 export type RangeValue<DataType> = [EventValue<DataType>, EventValue<DataType>] | null;

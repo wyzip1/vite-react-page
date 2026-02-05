@@ -1,6 +1,7 @@
-import { Breadcrumb, BreadcrumbProps } from "antd";
+import type { BreadcrumbProps } from "antd";
+import { Breadcrumb } from "antd";
 import router from "@/router";
-import { CRouteObject } from "@/types";
+import type { CRouteObject } from "@/types";
 import { matchRoutes } from "react-router-dom";
 
 interface BreadcrumbMenuListProps {}

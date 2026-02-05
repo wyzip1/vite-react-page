@@ -1,4 +1,5 @@
-import { GlobalToken, Tooltip, UploadFile } from "antd";
+import type { GlobalToken, UploadFile } from "antd";
+import { Tooltip } from "antd";
 import { SortItemStyled } from "./styled";
 import { DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 

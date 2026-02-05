@@ -1,5 +1,6 @@
 import { LoadingOutlined, SmallDashOutlined } from "@ant-design/icons";
-import { Popover, PopoverProps } from "antd";
+import type { PopoverProps } from "antd";
+import { Popover } from "antd";
 import React, { useState } from "react";
 
 interface AutoActionsProps {

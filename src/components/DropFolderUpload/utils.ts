@@ -1,6 +1,6 @@
-import { RequestResponse } from "@/api/utils/request";
-import { UploadProps } from "antd";
-import { AxiosRequestConfig } from "axios";
+import type { RequestResponse } from "@/api/config";
+import type { UploadProps } from "antd";
+import type { AxiosRequestConfig } from "axios";
 
 export async function dropImageFileHandle(dataList: any) {
   const result: File[] = [];

@@ -1,6 +1,7 @@
 import { sleep } from "@/utils";
-import { EditValueOption } from "./types";
-import { DatePicker, Input, InputNumber, InputProps, Select, Switch } from "antd";
+import type { EditValueOption } from "./types";
+import type { InputProps } from "antd";
+import { DatePicker, Input, InputNumber, Select, Switch } from "antd";
 import dayjs from "dayjs";
 
 export function formatToDayjs(v: any) {

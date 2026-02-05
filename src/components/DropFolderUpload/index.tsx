@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { InboxOutlined } from "@ant-design/icons";
-import { Image, Upload, UploadFile, UploadProps } from "antd";
-import { customRequest, dropImageFileHandle, UploadRequestApi } from "./utils";
+import type { UploadFile, UploadProps } from "antd";
+import { Image, Upload } from "antd";
+import type { UploadRequestApi } from "./utils";
+import { customRequest, dropImageFileHandle } from "./utils";
 import { guid } from "@/utils";
 
 const DropFolderUpload: React.FC<

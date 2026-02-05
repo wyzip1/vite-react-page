@@ -1,4 +1,4 @@
-import { CRouteObject } from "@/types";
+import type { CRouteObject } from "@/types";
 import LayoutPage from "@/layout/index";
 import AppMain from "@/App";
 import Template from "@/components/Template";

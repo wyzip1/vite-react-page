@@ -1,4 +1,4 @@
-import { CRouteObject } from "@/types";
+import type { CRouteObject } from "@/types";
 import WrapRedirect from "./components/WrapRedirect";
 import PermissionRouter from "./components/PermissionRouter";
 import { formatTree } from "@/utils";

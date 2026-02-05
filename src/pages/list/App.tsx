@@ -1,16 +1,16 @@
 import Search from "@/components/Search";
 import useFetchList from "@/hooks/useFetchList";
-import { Config } from "@/components/Search/type";
+import type { Config } from "@/components/Search/type";
 import AsyncButton from "@/components/AsyncButton";
-import { fetchMockList } from "@/api/index";
 import EditTable from "@/components/EditTable";
-import { MockListItem } from "@/api/mock-model";
 import { Button } from "antd";
-import { EditTableColumn, EditTableInstance } from "@/components/EditTable/types";
+import type { EditTableColumn, EditTableInstance } from "@/components/EditTable/types";
 import AppStyled from "@/styles/AppStyled";
 import useModal from "@/hooks/useModal";
-import CustomModal, { CustomModalProps } from "@/components/CustomModal";
+import type { CustomModalProps } from "@/components/CustomModal";
+import CustomModal from "@/components/CustomModal";
 import { useThemeMode } from "@/store/theme";
+import { testApi } from "@/api/test";
 
 interface SearchFormData {
   date?: [string, string];
@@ -37,13 +37,14 @@ const TestModal: React.FC<CustomModalProps<any>> = props => {
 const App: React.FC = () => {
   const [searchFormData, setSearchFormData] = useState<SearchFormData>({});
   const searchParams = useMemo(() => formatSearchParams(searchFormData), [searchFormData]);
-  const [setPageInfo, state, api] = useFetchList(fetchMockList, searchParams);
+
+  const [setPageInfo, state, api] = useFetchList(testApi, searchParams);
 
   const openModal = useModal(TestModal);
 
   const eidtTableRef = useRef<EditTableInstance>(null);
 
-  const columns: EditTableColumn<MockListItem>[] = [
+  const columns: EditTableColumn<any>[] = [
     {
       title: "姓名",
       dataIndex: "name",
@@ -124,7 +125,7 @@ const App: React.FC = () => {
     };
   }
 
-  function saveRecord(data: MockListItem) {
+  function saveRecord(data: any) {
     const idx = state.list.findIndex(i => i.id === data.id);
     if (idx > -1) state.list[idx] = data;
     else state.list.push(data);

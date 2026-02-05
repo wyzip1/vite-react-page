@@ -1,4 +1,5 @@
-import { Button, ButtonProps } from "antd";
+import type { ButtonProps } from "antd";
+import { Button } from "antd";
 
 interface AsyncButtonProps extends Omit<ButtonProps, "onClick"> {
   onClick?(): any | Promise<any>;

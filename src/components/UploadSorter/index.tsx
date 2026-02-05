@@ -1,4 +1,5 @@
-import { Image, theme, Upload, UploadFile, UploadProps } from "antd";
+import type { UploadFile, UploadProps } from "antd";
+import { Image, theme, Upload } from "antd";
 import { SortableList } from "./SortableList";
 import { PlusOutlined } from "@ant-design/icons";
 import SortableItem from "./SortableItem";

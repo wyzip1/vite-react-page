@@ -1,4 +1,4 @@
-import { GlobalToken } from "antd";
+import type { GlobalToken } from "antd";
 import styled from "styled-components";
 
 export const SortItemStyled = styled.div<{

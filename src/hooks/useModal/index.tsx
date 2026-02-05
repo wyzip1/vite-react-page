@@ -1,7 +1,8 @@
-import { CustomModalProps } from "@/components/CustomModal";
+import type { CustomModalProps } from "@/components/CustomModal";
 import { guid } from "@/utils";
 import { createRoot } from "react-dom/client";
-import ModalWrapper, { ModalWrapperInstance } from "./ModalWrapper";
+import type { ModalWrapperInstance } from "./ModalWrapper";
+import ModalWrapper from "./ModalWrapper";
 
 export default function useModal<T extends CustomModalProps<any>>(
   Modal: (props: T) => React.ReactNode,

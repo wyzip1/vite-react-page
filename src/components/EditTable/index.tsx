@@ -1,4 +1,5 @@
-import { Button, Form, Table, TableColumnProps } from "antd";
+import type { TableColumnProps } from "antd";
+import { Button, Form, Table } from "antd";
 import AsyncButton from "../AsyncButton";
 
 import renderEditContent, { formatToDayjs } from "./renderEditContent";
@@ -12,7 +13,7 @@ import type {
   EventRange,
 } from "./types";
 import type { ColumnsType } from "antd/es/table";
-import { Dayjs } from "dayjs";
+import type { Dayjs } from "dayjs";
 
 const EditTable = <T extends any>(
   {

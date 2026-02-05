@@ -1,4 +1,4 @@
-import Path from "./path";
+import type Path from "./path";
 
 export function getValue<T>(data: T, path?: Path<T>): any {
   if (!path) return;

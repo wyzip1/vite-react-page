@@ -1,11 +1,13 @@
+import type { CreateClientConfig } from "./generated/client.gen";
+import type { AxiosError, AxiosResponse } from "axios";
+import axios from "axios";
 import { filterObjEmpty } from "@/utils";
 import { message } from "antd";
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 export interface RequestResponse<T> {
   code: number;
   message: string;
-  data?: T;
+  data: T;
 }
 
 export interface RequestArraybufferResponse {
@@ -14,31 +16,39 @@ export interface RequestArraybufferResponse {
   value: ArrayBuffer;
 }
 
-if (process.env.NODE_ENV === "development") {
-  // document.cookie = "kdt_id=119528100";
-  document.cookie = "mobile=15697103925";
-  document.cookie = "user_nickname=1V";
-  document.cookie = "user_id=8987212890";
-}
-
 export const baseURL =
   process.env.NODE_ENV === "development" ? "/developmentApi" : window.location.origin;
 
-const instance = axios.create({ baseURL });
+// 创建配置好的 axios instance，包含拦截器
+const axiosInstance = axios.create({ baseURL });
 
-instance.interceptors.request.use(config => {
-  config.data = filterObjEmpty(config.data);
+// 请求拦截器：数据处理
+axiosInstance.interceptors.request.use(config => {
+  // 跳过FormData、URLSearchParams和字符串的处理（字符串可能是已序列化的body，如urlSearchParamsBodySerializer的结果）
+  // 只对普通对象进行过滤处理
+  if (
+    !(config.data instanceof FormData) &&
+    !(config.data instanceof URLSearchParams) &&
+    !Array.isArray(config.data) &&
+    config.data !== null &&
+    typeof config.data === "object"
+  ) {
+    // 只处理对象类型的数据
+    config.data = filterObjEmpty(config.data);
+  }
   config.params = filterObjEmpty(config.params);
-  config.headers["Authorization"] = undefined;
+
   return config;
 });
 
-instance.interceptors.response.use(
-  (res: AxiosResponse<RequestResponse<any> | ArrayBuffer>) => {
+// 响应拦截器：处理错误
+axiosInstance.interceptors.response.use(
+  res => {
     if (res.data instanceof ArrayBuffer) {
       const result = handleArraybufferRequest(res as AxiosResponse<ArrayBuffer>);
       res.data = result;
     }
+
     if (![0, 200].includes(res.data.code)) {
       message.error(res.data.message);
       return Promise.reject(res);
@@ -54,10 +64,23 @@ instance.interceptors.response.use(
   },
 );
 
+export const createClientConfig: CreateClientConfig = config => ({
+  ...config,
+  // 使用配置好的 axios instance（包含拦截器）
+  axios: axiosInstance,
+  async responseValidator(data) {
+    console.log("1231", data);
+    return data;
+  },
+  throwOnError: true,
+  baseURL,
+});
+
 function handleArraybufferRequest(
   res: AxiosResponse<ArrayBuffer>,
 ): RequestResponse<RequestArraybufferResponse> {
   const contentType: string = res.headers["content-type"];
+
   if (contentType.includes("application/json")) {
     const text = new TextDecoder("utf-8");
     const info = text.decode(res.data);
@@ -77,9 +100,3 @@ function handleArraybufferRequest(
     };
   }
 }
-
-const request = <T>(config: AxiosRequestConfig): Promise<RequestResponse<T>> => {
-  return instance(config);
-};
-
-export default request;

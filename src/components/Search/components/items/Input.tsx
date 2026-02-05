@@ -1,4 +1,5 @@
-import { Input, InputProps } from "antd";
+import type { InputProps } from "antd";
+import { Input } from "antd";
 
 import type { ChangeState } from "../../type";
 

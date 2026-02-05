@@ -1,5 +1,5 @@
 import { useRouter } from "@/store/RouterProvider";
-import { CRouteObject } from "@/types";
+import type { CRouteObject } from "@/types";
 import { matchRoutes } from "react-router-dom";
 
 interface WrapRedirectProps {

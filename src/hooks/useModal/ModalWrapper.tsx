@@ -1,5 +1,5 @@
 import { AntConfigProvider } from "@/App";
-import { CustomModalProps } from "@/components/CustomModal";
+import type { CustomModalProps } from "@/components/CustomModal";
 import { Provider } from "react-redux";
 import { store } from "@/store";
 

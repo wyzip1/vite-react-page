@@ -3,7 +3,6 @@ import { resolve } from "path";
 import react from "@vitejs/plugin-react";
 import packagesJSON from "./package.json";
 import buildFTL, { publicPath } from "build-ftl";
-import { viteMockServe } from "vite-plugin-mock";
 import AutoImport from "unplugin-auto-import/vite";
 import MultiPageAutoPlugin from "vite-plugin-multipage-auto";
 import https from "node:https";
@@ -21,7 +20,6 @@ export default defineConfig(({ mode }) => ({
     }),
     MultiPageAutoPlugin(),
     buildFTL({ ftlDir: "./dist2" }),
-    viteMockServe({ mockPath: "mock" }),
   ],
   optimizeDeps: {
     include: [...dependenciesList],

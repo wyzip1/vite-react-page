@@ -1,19 +1,26 @@
-import List from "@/api/model/List";
-import { RequestResponse } from "@/api/utils/request";
-import Pagination from "@/api/model/Pagination";
 import useRequest from "./useRequest";
 
-export type ItemType<T> = T extends (...args: any[]) => Promise<RequestResponse<List<infer V>>>
-  ? V
-  : never;
+interface Pagination {
+  pageNum: number;
+  pageSize: number;
+}
+
+export type ItemType<T extends (...args: any[]) => any> =
+  ReturnType<T> extends Promise<infer V>
+    ? V extends { data?: infer L }
+      ? L extends { total?: number; list?: Array<infer L2> }
+        ? L2
+        : never
+      : never
+    : never;
 
 export default function useFetchList<
-  T extends (...args: any[]) => Promise<RequestResponse<List<any>>>,
+  T extends (...args: any[]) => Promise<any>,
   PN extends string = "pageNum",
   PS extends string = "pageSize",
 >(
   fetchApi: T,
-  searchParams: Omit<Parameters<T>[0], PN | PS>,
+  searchParams: Parameters<T>[0],
   defaultOptions: {
     pageSize?: number;
     manual?: boolean;
@@ -26,7 +33,13 @@ export default function useFetchList<
   } = { manual: false },
 ): [
   (pageOptions: Pagination) => ReturnType<T>,
-  { pageNum: number; pageSize: number; total: number; loading: boolean; list: ItemType<T>[] },
+  {
+    pageNum: number;
+    pageSize: number;
+    total: number;
+    loading: boolean;
+    list: Array<ItemType<T>>;
+  },
   {
     doSearch: () => ReturnType<T>;
     updateList: (callback?: ((list: Array<ItemType<T>>) => void) | undefined) => void;
@@ -52,23 +65,26 @@ export default function useFetchList<
     }) as ReturnType<T>;
   };
 
-  const onSearch = (pageNum: number, pageSize: number) => {
-    const params = {
-      [defaultOptions.propName?.pageNum || "pageNum"]: pageNum,
-      [defaultOptions.propName?.pageSize || "pageSize"]: pageSize,
+  const onSearch = (pageNum: number, pageSize: number): ReturnType<T> => {
+    const params: Parameters<T>[0] = {
       ...searchParams,
     };
+    let paramsName = "query";
+    if (params?.body) paramsName = "body";
+    if (!params![paramsName]) (params![paramsName] as any) = {};
+    params![paramsName][defaultOptions.propName?.pageNum || "pageNum"] = pageNum;
+    params![paramsName][defaultOptions.propName?.pageSize || "pageSize"] = pageSize;
     return request(params) as ReturnType<T>;
   };
 
   const doSearch = (): ReturnType<T> => {
-    if (pageNum === 1) return onSearch(1, pageSize) as ReturnType<T>;
+    if (pageNum === 1) return onSearch(1, pageSize);
     else return updateParams({ pageNum: 1, pageSize });
   };
 
   const updateList = (callback?: (list: Array<ItemType<T>>) => void) => {
     setData(data => {
-      callback?.(data?.data?.[defaultOptions.propName?.list || "list"] || []);
+      callback?.(data?.[defaultOptions.propName?.list || "list"] || []);
       return data ? { ...data } : undefined;
     });
   };

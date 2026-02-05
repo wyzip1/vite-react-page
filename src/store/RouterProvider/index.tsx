@@ -1,6 +1,7 @@
 import type { Router } from "@remix-run/router";
 import RouterProviderContext from "./context";
-import { RouterProvider, RouterProviderProps } from "react-router-dom";
+import type { RouterProviderProps } from "react-router-dom";
+import { RouterProvider } from "react-router-dom";
 
 interface RouterStoreProps {
   router: Router;

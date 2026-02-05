@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useToken } from "@/store/theme";
 import { theme } from "antd";
-import { ThemeStyledProps } from "./MainStyled";
+import type { ThemeStyledProps } from "./MainStyled";
 export const AppStyledComponent = styled.div<ThemeStyledProps>`
   width: 100%;
   height: 100%;

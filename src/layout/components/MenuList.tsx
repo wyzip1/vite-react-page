@@ -1,5 +1,6 @@
-import { Menu, MenuProps } from "antd";
-import { CRouteObject } from "@/types";
+import type { MenuProps } from "antd";
+import { Menu } from "antd";
+import type { CRouteObject } from "@/types";
 import { useThemeMode } from "@/store/theme";
 import { useMatchRoutes, useMenuRoutes } from "@/router/components/PermissionRouter";
 

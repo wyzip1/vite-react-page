@@ -1,5 +1,5 @@
-import { SorterResult } from "antd/es/table/interface";
-import { RouteObject } from "react-router-dom";
+import type { SorterResult } from "antd/es/table/interface";
+import type { RouteObject } from "react-router-dom";
 
 export type SortType<T> = SorterResult<T> | SorterResult<T>[];
 

@@ -1,5 +1,5 @@
-import { useToken } from "@/store/theme";
-import { GlobalToken } from "antd";
+import type { useToken } from "@/store/theme";
+import type { GlobalToken } from "antd";
 import styled from "styled-components";
 
 export interface ThemeStyledProps {

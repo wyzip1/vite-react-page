@@ -1,4 +1,4 @@
-import { CRouteObject } from "@/types";
+import type { CRouteObject } from "@/types";
 import LayoutPage from "@/layout";
 import { createLazyLoad } from "@/components/LazyLoad";
 import AppMain from "@/App";

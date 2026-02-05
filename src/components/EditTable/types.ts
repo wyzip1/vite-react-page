@@ -1,5 +1,5 @@
-import Path from "@/utils/module/path";
-import {
+import type Path from "@/utils/module/path";
+import type {
   FormItemProps,
   InputNumberProps,
   InputProps,
@@ -8,8 +8,8 @@ import {
   TableColumnProps,
   TableProps,
 } from "antd";
-import { DatePickerProps, RangePickerProps } from "antd/es/date-picker";
-import { TextAreaProps } from "antd/es/input";
+import type { DatePickerProps, RangePickerProps } from "antd/es/date-picker";
+import type { TextAreaProps } from "antd/es/input";
 
 type EditOption<T, P> = {
   valueOption: { type: T; props: P };
