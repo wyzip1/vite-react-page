@@ -19,12 +19,7 @@ const mapComponent = (options: Options) => {
       );
     case "cascader":
       return (onChange: ChangeState, value: unknown) => (
-        <Cascader
-          value={value as any}
-          onChange={onChange}
-          style={{ width }}
-          {...options.props}
-        />
+        <Cascader value={value as any} onChange={onChange} style={{ width }} {...options.props} />
       );
     case "dateRange":
       return (onChange: ChangeState, value: RangeValue<string>) =>

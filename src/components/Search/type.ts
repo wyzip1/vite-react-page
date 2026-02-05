@@ -1,4 +1,4 @@
-import type { InputProps, SelectProps, DatePickerProps, CascaderProps } from "antd";
+import type { InputProps, SelectProps, DatePickerProps, CascaderAutoProps } from "antd";
 import { type RangePickerProps } from "antd/es/date-picker";
 
 export interface ComOptions<T = "input", P = {}> {
@@ -19,7 +19,7 @@ export type inputOptions = ComOptions<"input", InputProps>;
 export type selectProps = ComOptions<"select", SelectProps>;
 export type dateProps = ComOptions<"date", DatePickerProps>;
 export type dateRangeProps = ComOptions<"dateRange", RangePickerProps>;
-export type cascaderProps = ComOptions<"cascader", CascaderProps>;
+export type cascaderProps = ComOptions<"cascader", CascaderAutoProps>;
 
 export type Options = inputOptions | selectProps | dateRangeProps | dateProps | cascaderProps;
 export type Config = Options[][];
