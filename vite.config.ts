@@ -23,8 +23,7 @@ export default defineConfig(({ mode }) => ({
     }),
     tailwindcss(),
     MultiPageAutoPlugin(),
-    // @ts-ignore
-    buildFTL.default({ ftlDir: "./dist2" }),
+    buildFTL({ ftlDir: "./dist2" }),
     viteMockServe({ mockPath: "mock" }),
   ],
   optimizeDeps: {
