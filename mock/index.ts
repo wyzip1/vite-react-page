@@ -1,6 +1,6 @@
 import type { IncomingMessage } from "http";
 import type { MockMethod } from "vite-plugin-mock";
-import { parse } from "url";
+import { URL } from "url";
 
 const sleep = (ms: number) => new Promise(rev => setTimeout(rev, ms));
 
@@ -121,10 +121,11 @@ const mockMethods: MockMethod[] = [
       await sleep(1000);
 
       const body = await parseJsonBody(req);
-      const query = parse(req.url!, true).query;
-      const pageNum = Number(body.pageNum || query.pageNum);
-      const pageSize = Number(body.pageSize || query.pageSize);
-      const name = body.name || query.name;
+      const url = new URL(req.url!, "http://localhost");
+      const query = url.searchParams;
+      const pageNum = Number(body.pageNum || query.get("pageNum"));
+      const pageSize = Number(body.pageSize || query.get("pageSize"));
+      const name = body.name || query.get("name");
       const filterList = name ? mockList.filter(item => item.name.includes(name)) : mockList;
 
       const result = {

@@ -7,6 +7,8 @@ import { viteMockServe } from "vite-plugin-mock";
 import AutoImport from "unplugin-auto-import/vite";
 import MultiPageAutoPlugin from "vite-plugin-multipage-auto";
 import https from "node:https";
+import tailwindcss from "@tailwindcss/vite";
+import autoprefixer from "autoprefixer";
 
 const dependenciesList = Object.keys(packagesJSON.dependencies);
 
@@ -19,8 +21,10 @@ export default defineConfig(({ mode }) => ({
       imports: ["react", "react-router-dom"],
       include: [/\.ts$/, /\.tsx$/, /\.md$/],
     }),
+    tailwindcss(),
     MultiPageAutoPlugin(),
-    buildFTL({ ftlDir: "./dist2" }),
+    // @ts-ignore
+    buildFTL.default({ ftlDir: "./dist2" }),
     viteMockServe({ mockPath: "mock" }),
   ],
   optimizeDeps: {
@@ -78,8 +82,7 @@ export default defineConfig(({ mode }) => ({
     },
     postcss: {
       plugins: [
-        require("tailwindcss"),
-        require("autoprefixer"),
+        autoprefixer,
         // 删除样式库中的@charset: UTF-8
         {
           postcssPlugin: "internal:charset-removal",

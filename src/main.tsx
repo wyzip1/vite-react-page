@@ -2,7 +2,6 @@ import { Provider } from "react-redux";
 import { createRoot } from "react-dom/client";
 import { store } from "@/store";
 import router from "./router";
-import "@/styles/tailwind.css";
 import "@/styles/index.css";
 import { AntConfigProvider } from "@/App";
 import CRouterProvider from "@/store/RouterProvider";

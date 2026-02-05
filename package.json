@@ -12,6 +12,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "type": "module",
   "dependencies": {
     "@ant-design/icons": "^4.8.0",
     "@dnd-kit/sortable": "^10.0.0",
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.91.1",
+    "@tailwindcss/vite": "^4.1.18",
     "@types/node": "^18.11.9",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
@@ -48,7 +50,7 @@
     "prettier-eslint": "^16.4.2",
     "react-scan": "^0.0.54",
     "sass": "^1.77.1",
-    "tailwindcss": "^3.4.3",
+    "tailwindcss": "^4.1.18",
     "typescript": "^5.7.2",
     "unplugin-auto-import": "^0.18.3",
     "vite": "^5.2.11",
