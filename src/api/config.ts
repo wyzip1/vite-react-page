@@ -68,10 +68,6 @@ export const createClientConfig: CreateClientConfig = config => ({
   ...config,
   // 使用配置好的 axios instance（包含拦截器）
   axios: axiosInstance,
-  async responseValidator(data) {
-    console.log("1231", data);
-    return data;
-  },
   throwOnError: true,
   baseURL,
 });
