@@ -1,3 +1,4 @@
+import type { RequestResponse } from "@/api/config";
 import useRequest from "./useRequest";
 
 interface Pagination {
@@ -5,17 +6,16 @@ interface Pagination {
   pageSize: number;
 }
 
-export type ItemType<T extends (...args: any[]) => any> =
-  ReturnType<T> extends Promise<infer V>
-    ? V extends { data?: infer L }
-      ? L extends { total?: number; list?: Array<infer L2> }
-        ? L2
-        : never
-      : never
-    : never;
+export type ItemType<T> = T extends (
+  ...args: any[]
+) => Promise<RequestResponse<{ total?: number; list?: Array<infer V> }>>
+  ? V
+  : never;
 
 export default function useFetchList<
-  T extends (...args: any[]) => Promise<any>,
+  T extends (
+    ...args: any[]
+  ) => Promise<RequestResponse<{ total?: number; list?: Array<any> }>>,
   PN extends string = "pageNum",
   PS extends string = "pageSize",
 >(
