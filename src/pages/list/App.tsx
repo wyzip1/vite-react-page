@@ -10,7 +10,7 @@ import useModal from "@/hooks/useModal";
 import type { CustomModalProps } from "@/components/CustomModal";
 import CustomModal from "@/components/CustomModal";
 import { useThemeMode } from "@/store/theme";
-import { testApi } from "@/api/test";
+import { fetchMockList } from "@/api";
 
 interface SearchFormData {
   date?: [string, string];
@@ -38,7 +38,7 @@ const App: React.FC = () => {
   const [searchFormData, setSearchFormData] = useState<SearchFormData>({});
   const searchParams = useMemo(() => formatSearchParams(searchFormData), [searchFormData]);
 
-  const [setPageInfo, state, api] = useFetchList(testApi, searchParams);
+  const [setPageInfo, state, api] = useFetchList(fetchMockList, searchParams);
 
   const openModal = useModal(TestModal);
 
@@ -119,9 +119,11 @@ const App: React.FC = () => {
     const { date, ...params } = data;
     const [deliveryTimeBegin, deliveryTimeEnd] = date || [];
     return {
-      ...params,
-      deliveryTimeBegin,
-      deliveryTimeEnd,
+      body: {
+        ...params,
+        deliveryTimeBegin,
+        deliveryTimeEnd,
+      },
     };
   }
 

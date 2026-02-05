@@ -1,26 +1,29 @@
-import type { RequestResponse } from "@/api/config";
 import useRequest from "./useRequest";
 
-interface Pagination {
+export interface Pagination {
   pageNum: number;
   pageSize: number;
 }
 
-export type ItemType<T> = T extends (
-  ...args: any[]
-) => Promise<RequestResponse<{ total?: number; list?: Array<infer V> }>>
+export interface List<T> {
+  list?: T[];
+  total?: number;
+}
+
+export type ItemType<T> = T extends (...args: any[]) => Promise<{ data?: List<infer V> }>
   ? V
   : never;
 
 export default function useFetchList<
-  T extends (
-    ...args: any[]
-  ) => Promise<RequestResponse<{ total?: number; list?: Array<any> }>>,
+  T extends (...args: any[]) => Promise<{ data?: List<any> }>,
   PN extends string = "pageNum",
   PS extends string = "pageSize",
 >(
   fetchApi: T,
-  searchParams: Parameters<T>[0],
+  searchParams: Omit<Parameters<T>[0], "query" | "body"> & {
+    query?: Omit<Parameters<T>[0]["query"], PN | PS>;
+    body?: Omit<Parameters<T>[0]["body"], PN | PS>;
+  },
   defaultOptions: {
     pageSize?: number;
     manual?: boolean;

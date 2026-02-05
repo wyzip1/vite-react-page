@@ -72,6 +72,8 @@ export const createClientConfig: CreateClientConfig = config => ({
   baseURL,
 });
 
+export { axiosInstance };
+
 function handleArraybufferRequest(
   res: AxiosResponse<ArrayBuffer>,
 ): RequestResponse<RequestArraybufferResponse> {

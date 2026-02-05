@@ -2,6 +2,6 @@
   "tabWidth": 2,
   "useTabs": false,
   "arrowParens": "avoid",
-  "printWidth": 95,
+  "printWidth": 100,
   "switchCase": 100
 }
