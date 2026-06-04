@@ -13,10 +13,7 @@ interface ModalWrapperProps {
   modal: React.FC<any>;
 }
 
-const ModalWrapper = (
-  props: ModalWrapperProps,
-  ref: React.ForwardedRef<ModalWrapperInstance>,
-) => {
+const ModalWrapper = (props: ModalWrapperProps, ref: React.ForwardedRef<ModalWrapperInstance>) => {
   const [modalProps, setModalProps] = useState<CustomModalProps<any>>({});
   const [openModalState, setOpenModalState] = useState(false);
 

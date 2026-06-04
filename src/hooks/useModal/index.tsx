@@ -13,9 +13,7 @@ export default function useModal<T extends CustomModalProps<any>>(
   const modalRef = useRef<ModalWrapperInstance>(null);
   const modelNodeRef = useRef<HTMLDivElement>();
   const ModalRcEl = useMemo(
-    () => (
-      <ModalWrapper ref={modalRef} modal={Modal} getContainer={() => modelNodeRef.current!} />
-    ),
+    () => <ModalWrapper ref={modalRef} modal={Modal} getContainer={() => modelNodeRef.current!} />,
     [Modal],
   );
 
