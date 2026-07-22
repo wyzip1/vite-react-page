@@ -8,7 +8,8 @@
     "dev:scan": "vite --mode scan",
     "build": "vite build",
     "openapi": "openapi-ts",
-    "update-cookie": "playwright install chromium && node scripts/update-youzan-cookie/index.js"
+    "update-cookie": "node scripts/update-youzan-cookie/index.js",
+    "playwright:install": "playwright install chromium"
   },
   "keywords": [],
   "author": "",
