@@ -74,7 +74,7 @@ export default function useFetchList<
     };
     let paramsName = "query";
     if (params?.body) paramsName = "body";
-    if (!params![paramsName]) (params![paramsName] as any) = {};
+    params![paramsName] = { ...searchParams[paramsName] };
     params![paramsName][defaultOptions.propName?.pageNum || "pageNum"] = pageNum;
     params![paramsName][defaultOptions.propName?.pageSize || "pageSize"] = pageSize;
     return request(params) as ReturnType<T>;
