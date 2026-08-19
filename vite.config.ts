@@ -48,56 +48,40 @@ export default defineConfig(({ mode }) => ({
   build: {
     // 启用manifest.json 文件
     manifest: true,
-    rollupOptions: {
-      onwarn(warning, warn) {
-        if (warning.code === "MODULE_LEVEL_DIRECTIVE") return;
-        warn(warning);
-      },
+    rolldownOptions: {
       output: {
-        manualChunks(id) {
-          const packageChunks = {
-            react: ["react"],
-            "react-router-dom": ["react-router-dom"],
-            "react-dom": ["react-dom"],
-            antd: ["antd"],
-            "styled-components": ["styled-components"],
-          };
-
-          const normalizedId = id.replaceAll("\\\\", "/");
-          return Object.entries(packageChunks).find(([, packages]) =>
-            packages.some(packageName => normalizedId.includes(`/node_modules/${packageName}/`)),
-          )?.[0];
+        codeSplitting: {
+          groups: [
+            {
+              name: "react",
+              test: /node_modules[\\/](?:react|react-dom)[\\/]/,
+              priority: 30,
+            },
+            {
+              name: "react-router-dom",
+              test: /node_modules[\\/]react-router-dom[\\/]/,
+              priority: 25,
+            },
+            {
+              name: "antd",
+              test: /node_modules[\\/]antd[\\/]/,
+              maxSize: 1_200_000,
+              priority: 20,
+            },
+            {
+              name: "styled-components",
+              test: /node_modules[\\/]styled-components[\\/]/,
+              priority: 15,
+            },
+          ],
         },
       },
     },
   },
   base: ["development", "scan"].includes(mode) ? "/" : publicPath,
   css: {
-    preprocessorOptions: {
-      less: {
-        // 允许less语法链式调用
-        javascriptEnabled: true,
-      },
-      scss: {
-        // 禁止scss添加@charset: UTF-8
-        charset: false,
-      },
-    },
     postcss: {
-      plugins: [
-        autoprefixer,
-        // 删除样式库中的@charset: UTF-8
-        {
-          postcssPlugin: "internal:charset-removal",
-          AtRule: {
-            charset: atRule => {
-              if (atRule.name === "charset") {
-                atRule.remove();
-              }
-            },
-          },
-        },
-      ],
+      plugins: [autoprefixer],
     },
   },
 }));
