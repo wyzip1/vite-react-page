@@ -231,7 +231,7 @@ function useOnceState(callback: (v: any) => any): void
 ```ts
 useOnceState(state => {
   if (state?.fromCreate) {
-    api.doSearch();
+    api.doSearch(searchParams);
   }
 });
 ```
@@ -367,7 +367,7 @@ export function dispatchSubEvents(name: string, ...args: any[]) {
 useSub([
   {
     name: "refresh-list",
-    callback: () => api.refreshList(),
+    callback: () => api.doSearch(searchParams),
   },
   {
     name: "select-record",

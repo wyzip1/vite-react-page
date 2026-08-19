@@ -1,6 +1,5 @@
-import Search from "@/components/Search";
+import Search, { type SearchConfig } from "@/components/Search";
 import useFetchList from "@/hooks/useFetchList";
-import type { Config } from "@/components/Search/type";
 import AsyncButton from "@/components/AsyncButton";
 import type { TableColumnProps } from "antd";
 import { Table } from "antd";
@@ -15,11 +14,9 @@ interface SearchFormData {
   name?: string;
 }
 
-const searchOptions: Config = [
-  [
-    { label: "姓名", key: "name", props: { allowClear: true } },
-    { label: "时间", key: "date", type: "dateRange", props: { showTime: true } },
-  ],
+const searchOptions: SearchConfig = [
+  { label: "姓名", key: "name", props: { allowClear: true } },
+  { label: "时间", key: "date", type: "dateRange", props: { showTime: true } },
 ];
 
 const TestModal: React.FC<CustomModalProps<any>> = props => {
@@ -27,10 +24,7 @@ const TestModal: React.FC<CustomModalProps<any>> = props => {
 };
 
 const App: React.FC = () => {
-  const [searchFormData, setSearchFormData] = useState<SearchFormData>({});
-  const searchParams = useMemo(() => formatSearchParams(searchFormData), [searchFormData]);
-
-  const [setPageInfo, state, api] = useFetchList(fetchMockList, searchParams);
+  const [setPageInfo, state, api] = useFetchList(fetchMockList, { initParams: { body: {} } });
 
   const openModal = useModal(TestModal);
 
@@ -88,15 +82,11 @@ const App: React.FC = () => {
   return (
     <AppStyled>
       <Search
-        defaultLabelWidth={100}
+        labelWidth={100}
         loading={state.loading}
         config={searchOptions}
-        onChange={setSearchFormData}
-        onSearch={() => api.doSearch()}
-        onReset={state => {
-          Object.assign(searchParams, formatSearchParams(state));
-          api.doSearch();
-        }}
+        onSearch={state => api.doSearch(formatSearchParams(state))}
+        onReset={state => api.doSearch(formatSearchParams(state), { resetPageSize: true })}
       />
 
       <div className="flex gap-4 mt-4">

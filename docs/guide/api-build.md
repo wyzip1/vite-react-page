@@ -16,7 +16,9 @@
 import { fetchMockList } from "@/api";
 import useFetchList from "@/hooks/useFetchList";
 
-const [setPageInfo, state, api] = useFetchList(fetchMockList, searchParams);
+const [setPageInfo, state, api] = useFetchList(fetchMockList);
+
+api.doSearch(searchParams);
 ```
 
 ## axios 配置

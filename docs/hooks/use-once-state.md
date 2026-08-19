@@ -35,7 +35,7 @@ effect 依赖数组为空，后续路由 state 变化不会再次触发。
 ```ts
 useOnceState(state => {
   if (state?.fromCreate) {
-    api.doSearch();
+    api.doSearch(searchParams);
   }
 });
 ```

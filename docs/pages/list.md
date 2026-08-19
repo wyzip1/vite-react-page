@@ -16,7 +16,7 @@
 
 - 使用 `Search` 配置姓名和时间范围查询条件。
 - 使用 `formatSearchParams` 把页面搜索状态整理成接口 body。
-- 使用 `useFetchList(fetchMockList, searchParams)` 请求 mock 列表并管理分页。
+- 使用 `useFetchList(fetchMockList)` 管理分页，并在 `doSearch` 时传入查询参数。
 - 使用 `EditTable` 展示列表、进入编辑态、新增行、校验和保存行。
 - 使用 `AsyncButton` 处理异步按钮 loading。
 - 使用 `useModal(TestModal)` 打开 `CustomModal`。
@@ -75,53 +75,47 @@ export interface MockListParams extends Pagination {
 
 | 名称 | 类型 | 初始值 | 更新位置 | 影响 |
 | --- | --- | --- | --- | --- |
-| `searchFormData` | `SearchFormData` | `{}` | `Search.onChange` 调用 `setSearchFormData`。 | 页面搜索表单原始状态。 |
-| `searchParams` | `{ body: { name?: string; deliveryTimeBegin?: string; deliveryTimeEnd?: string } }` | 由 `searchFormData` 计算 | `useMemo(() => formatSearchParams(searchFormData), [searchFormData])`。 | 传给 `useFetchList`，最终作为 `fetchMockList` 的请求 body 基础。 |
 | `setPageInfo` | `(pageOptions: Pagination) => ReturnType<typeof fetchMockList>` | `useFetchList` 返回 | `EditTable.onChange` 调用。 | 修改页码/页大小并触发请求。 |
 | `state` | `{ pageNum: number; pageSize: number; total: number; loading: boolean; list: MockListItem[] }` | `useFetchList` 返回 | 请求成功、分页变化、`api.updateList`。 | 驱动表格数据、分页和 loading。 |
-| `api` | `{ doSearch; updateList; refreshList; resetState }` | `useFetchList` 返回 | 页面事件调用。 | 提供查询、刷新、局部更新和重置能力。 |
+| `api` | `{ doSearch; updateList; resetState }` | `useFetchList` 返回 | 页面事件调用。 | 提供查询、局部更新和重置能力。 |
 | `openModal` | `(props: CustomModalProps<any>) => void` | `useModal(TestModal)` 返回 | Test 按钮点击。 | 命令式打开 `TestModal`。 |
 | `eidtTableRef` | `React.RefObject<EditTableInstance>` | `null` | 传给 `EditTable ref`。 | “添加数据”按钮调用 `addEditItem()`。变量名源码拼写为 `eidtTableRef`。 |
 
 ## 搜索配置
 
-`searchOptions` 类型为 `Config`，即 `Options[][]`。外层数组表示行，内层数组表示该行字段。
+`searchOptions` 类型为 `SearchConfig`。配置为一维数组，具体换行由 `Search` 根据容器宽度自动完成。
 
 ```ts
-const searchOptions: Config = [
-  [
-    { label: "姓名", key: "name", props: { allowClear: true } },
-    { label: "时间", key: "date", type: "dateRange", props: { showTime: true } },
-  ],
+const searchOptions: SearchConfig = [
+  { label: "姓名", key: "name", props: { allowClear: true } },
+  { label: "时间", key: "date", type: "dateRange", props: { showTime: true } },
 ];
 ```
 
 | 字段 | 配置类型 | key | 值类型 | 组件类型 | props | 说明 |
 | --- | --- | --- | --- | --- | --- | --- |
-| 姓名 | `inputOptions` | `name` | `string \| undefined` | 默认 `input` | `{ allowClear: true }` | 未写 `type`，`Search` 的 `initComponentList` 会补为 `input`。 |
-| 时间 | `dateRangeProps` | `date` | `[string, string] \| undefined` | `dateRange` | `{ showTime: true }` | 日期范围选择器，值传入页面后拆成开始/结束时间。 |
+| 姓名 | `InputOption` | `name` | `string \| undefined` | 默认 `input` | `{ allowClear: true }` | 未写 `type` 时由控件渲染器直接按 `input` 处理。 |
+| 时间 | `DateRangeOption` | `date` | `[string, string] \| undefined` | `dateRange` | `{ showTime: true }` | 日期范围选择器，值传入页面后拆成开始/结束时间。 |
 
 传给 `Search` 的 props：
 
 | prop | 类型 | 当前值 | 影响 |
 | --- | --- | --- | --- |
-| `defaultLabelWidth` | `number \| string` | `100` | 标签宽度会转为 `100px`。 |
+| `labelWidth` | `number \| string` | `100` | 标签宽度会转为 `100px`。 |
 | `loading` | `boolean` | `state.loading` | 查询/重置按钮 loading。 |
-| `config` | `Config` | `searchOptions` | 渲染搜索项。 |
-| `onChange` | `(state: State) => void` | `setSearchFormData` | 搜索表单任意值变化后更新页面状态。 |
-| `onSearch` | `(state: State) => void` | `() => api.doSearch()` | 点击查询时触发列表查询，必要时先回到第 1 页。 |
-| `onReset` | `(state: State) => void` | 自定义函数 | 重置表单后用初始状态重算参数并查询。 |
+| `config` | `SearchConfig` | `searchOptions` | 渲染搜索项。 |
+| `onSearch` | `(state: State) => void` | `state => api.doSearch(formatSearchParams(state))` | 格式化当前条件并查询，页码回到 1。 |
+| `onReset` | `(state: State) => void` | 自定义函数 | 使用初始条件查询，并同时重置页大小。 |
 
 重置逻辑：
 
 ```ts
 onReset={state => {
-  Object.assign(searchParams, formatSearchParams(state));
-  api.doSearch();
+  api.doSearch(formatSearchParams(state), { resetPageSize: true });
 }}
 ```
 
-这里会直接修改当前 `searchParams` 对象，再调用 `api.doSearch()`。这是为了在 `setSearchFormData` 的异步更新完成前，让本次查询能拿到重置后的参数。
+查询参数由本次表单值直接生成，不再依赖组件外部缓存的 `searchParams`。
 
 ## 参数格式化
 
@@ -154,7 +148,7 @@ function formatSearchParams(data: SearchFormData) {
 页面调用：
 
 ```ts
-const [setPageInfo, state, api] = useFetchList(fetchMockList, searchParams);
+const [setPageInfo, state, api] = useFetchList(fetchMockList);
 ```
 
 `useFetchList` 默认配置：
@@ -162,9 +156,9 @@ const [setPageInfo, state, api] = useFetchList(fetchMockList, searchParams);
 | 配置 | 默认值 | 当前页面 |
 | --- | --- | --- |
 | `pageNum` 初始值 | `1` | 使用默认值。 |
-| `pageSize` 初始值 | `defaultOptions.pageSize || 10` | 使用默认 `10`。 |
+| `pageSize` 初始值 | `options.pageSize ?? 10` | 使用默认 `10`。 |
 | `manual` | `false` | 组件首次挂载后自动请求。 |
-| 分页字段名 | `pageNum`、`pageSize` | 写入 `body.pageNum`、`body.pageSize`。 |
+| 分页字段名 | `pageNum`、`pageSize` | 按最近一次查询参数写入 `body` 或 `query`。 |
 | 列表字段名 | `list` | 从响应 `data.list` 读取。 |
 | 总数字段名 | `total` | 从响应 `data.total` 读取。 |
 
@@ -182,9 +176,8 @@ const [setPageInfo, state, api] = useFetchList(fetchMockList, searchParams);
 
 | 方法 | 类型 | 行为 |
 | --- | --- | --- |
-| `doSearch` | `() => ReturnType<typeof fetchMockList>` | 如果当前是第 1 页，直接请求；否则先把页码改成 1，再由 effect 触发请求。 |
+| `doSearch` | `(params, options?) => ReturnType<typeof fetchMockList>` | 保存本次查询参数并回到第 1 页；`resetPageSize` 决定是否恢复默认页大小。 |
 | `updateList` | `(callback?: (list: MockListItem[]) => void) => void` | 基于现有响应数据浅拷贝触发状态更新，可选 callback 修改列表。 |
-| `refreshList` | `() => ReturnType<typeof fetchMockList>` | 使用当前页码和页大小重新请求。 |
 | `resetState` | `() => void` | 页码恢复 1、页大小恢复默认值、清空响应数据。当前页面没有调用。 |
 
 `EditTable.onChange` 处理分页：
@@ -294,7 +287,7 @@ function saveRecord(data: any) {
 - 调用 `api.updateList()` 触发列表状态浅拷贝更新。
 - 不会调用后端保存接口，也不会更新 mock 源数据；刷新或重新查询后会回到 mock 接口返回的数据。
 
-注意：这里直接修改了 `state.list` 数组，再通过 `updateList` 触发 setData。它能满足当前 demo，但如果接入真实接口，建议改成先调用保存 API，再 `refreshList()`。
+注意：这里直接修改了 `state.list` 数组，再通过 `updateList` 触发 setData。它能满足当前 demo，但如果接入真实接口，建议改成先调用保存 API，再通过 `doSearch(params)` 重新查询。
 
 ## 顶部按钮和弹窗
 
@@ -337,11 +330,8 @@ openModal({
 
 ```text
 App mount
-  -> searchFormData = {}
-  -> searchParams = { body: { deliveryTimeBegin: undefined, deliveryTimeEnd: undefined } }
   -> useFetchList effect
-  -> onSearch(1, 10)
-  -> fetchMockList({ body: { pageNum: 1, pageSize: 10 } })
+  -> fetchMockList 首次请求
   -> axiosInstance POST /developmentApi/api/list
   -> mock 返回 { list, total }
   -> state.list/state.total 更新
@@ -351,11 +341,9 @@ App mount
 查询：
 
 ```text
-Search item onChange
-  -> setSearchFormData
-  -> searchParams 重新计算
-  -> 点击 查询
-  -> api.doSearch()
+点击 查询
+  -> formatSearchParams(state)
+  -> api.doSearch(params)
   -> 页码是 1 则直接请求，否则先 setPageInfo({ pageNum: 1 })
   -> fetchMockList
   -> state 更新
@@ -367,7 +355,7 @@ Search item onChange
 EditTable pagination onChange
   -> setPageInfo({ pageNum: current, pageSize })
   -> useFetchList effect
-  -> searchParams.body 合并 pageNum/pageSize
+  -> 最近一次 doSearch 参数合并 pageNum/pageSize
   -> fetchMockList
   -> state 更新
 ```

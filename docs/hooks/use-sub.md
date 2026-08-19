@@ -88,7 +88,7 @@ dispatchSubEvents(name, ...args)
 useSub([
   {
     name: "refresh-list",
-    callback: () => api.refreshList(),
+    callback: () => api.doSearch(searchParams),
   },
   {
     name: "select-record",

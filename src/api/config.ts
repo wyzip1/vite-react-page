@@ -80,7 +80,7 @@ export { request };
 function handleArraybufferRequest(
   res: AxiosResponse<ArrayBuffer>,
 ): RequestResponse<RequestArraybufferResponse> {
-  const contentType: string = res.headers["content-type"];
+  const contentType: string = res.headers["content-type"] as string;
 
   if (contentType.includes("application/json")) {
     const text = new TextDecoder("utf-8");

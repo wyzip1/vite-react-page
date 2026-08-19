@@ -5,6 +5,10 @@ html, body {
   padding: 0;
 }
 
+#app {
+  height: 100vh;
+}
+
 /* css代码 */
 ._css-animation-router-enter {
   opacity: 0;

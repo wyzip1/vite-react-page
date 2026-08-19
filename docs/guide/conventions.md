@@ -47,7 +47,7 @@
 - 内部状态只管理组件自身交互。
 - 涉及异步行为时暴露明确回调，例如 `onChange`、`onSaveRecord`、`onConfirm`。
 - 需要命令式调用时使用 `forwardRef` 和 `useImperativeHandle`，例如 `EditTable`。
-- 类型靠近组件维护，例如 `src/components/EditTable/types.ts`、`src/components/Search/type.ts`。
+- 类型靠近组件维护，例如 `src/components/EditTable/types.ts`、`src/components/Search/types.ts`。
 
 ## Hook 开发
 
@@ -90,7 +90,7 @@ utils 应保持低耦合：
 
 ```text
 src/components/EditTable/types.ts
-src/components/Search/type.ts
+src/components/Search/types.ts
 ```
 
 当前全局类型：
