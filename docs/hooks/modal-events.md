@@ -1,6 +1,6 @@
 # 弹窗、事件与副作用 Hooks
 
-本文覆盖 `src/hooks/useModal`、`src/hooks/useWindowEvent.ts`、`src/hooks/useOnceState.ts`、`src/hooks/useUnFirstEffect.ts`、`src/hooks/useSub.ts`。
+本文覆盖 `src/hooks/useModal`、`src/hooks/useWindowEvent.ts`、`src/hooks/useConfigurableEffect.ts`、`src/hooks/useSub.ts`。
 
 ## useModal
 
@@ -25,7 +25,7 @@ function useModal<T extends CustomModalProps<any>>(
   options?: {
     getContainer?: () => HTMLElement;
   },
-): (modalProps?: T) => Promise<Parameters<NonNullable<T["onConfirm"]>>[0]>
+): (modalProps?: T) => Promise<Parameters<NonNullable<T["onConfirm"]>>[0]>;
 ```
 
 `CustomModalProps` 当前定义在 `src/components/CustomModal/index.tsx`：
@@ -58,15 +58,15 @@ interface ModalWrapperProps {
 
 ### 参数
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| `Modal` | `(props: T) => React.ReactNode` | 无 | 需要命令式打开的弹窗组件。组件会收到 `open`、`getContainer`、包装后的 `onConfirm`、`onCancel`、`afterClose` 以及调用 `openModal` 时传入的其它 props。 |
-| `options.getContainer` | `() => HTMLElement` | `() => document.getElementById("app")!` | 指定创建挂载节点的父容器。 |
+| 参数                   | 类型                            | 默认值                                  | 说明                                                                                                                                                  |
+| ---------------------- | ------------------------------- | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Modal`                | `(props: T) => React.ReactNode` | 无                                      | 需要命令式打开的弹窗组件。组件会收到 `open`、`getContainer`、包装后的 `onConfirm`、`onCancel`、`afterClose` 以及调用 `openModal` 时传入的其它 props。 |
+| `options.getContainer` | `() => HTMLElement`             | `() => document.getElementById("app")!` | 指定创建挂载节点的父容器。                                                                                                                            |
 
 返回值：
 
-| 名称 | 类型 | 说明 |
-| --- | --- | --- |
+| 名称        | 类型                                                                      | 说明                                                                                     |
+| ----------- | ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | `openModal` | `(modalProps?: T) => Promise<Parameters<NonNullable<T["onConfirm"]>>[0]>` | 打开弹窗，并返回一个 Promise。确认成功 resolve `onConfirm` 的第一个参数，取消时 reject。 |
 
 ### 挂载容器与生命周期
@@ -168,15 +168,15 @@ async function handleEdit() {
 function useWindowEvent<T extends keyof WindowEventMap>(
   name: T,
   callback: Parameters<typeof window.addEventListener<T>>[1],
-): void
+): void;
 ```
 
 参数：
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| `name` | `T extends keyof WindowEventMap` | 无 | `window` 事件名，例如 `"resize"`、`"scroll"`、`"keydown"`。 |
-| `callback` | `Parameters<typeof window.addEventListener<T>>[1]` | 无 | 事件回调，按事件名获得对应事件类型。 |
+| 参数       | 类型                                               | 默认值 | 说明                                                        |
+| ---------- | -------------------------------------------------- | ------ | ----------------------------------------------------------- |
+| `name`     | `T extends keyof WindowEventMap`                   | 无     | `window` 事件名，例如 `"resize"`、`"scroll"`、`"keydown"`。 |
+| `callback` | `Parameters<typeof window.addEventListener<T>>[1]` | 无     | 事件回调，按事件名获得对应事件类型。                        |
 
 生命周期与清理：
 
@@ -200,93 +200,49 @@ useWindowEvent("resize", () => {
 - 因为监听注册发生在 render 阶段，组件频繁渲染时会频繁 remove/add。
 - 如果 `name` 变化，源码只会按新 `name` 移除旧 callback，无法移除旧事件名下注册的 listener。
 
-## useOnceState
+## useConfigurableEffect
 
-文件路径：`src/hooks/useOnceState.ts`
+文件路径：`src/hooks/useConfigurableEffect.ts`
 
-职责：首次挂载后读取一次 React Router 的 `location.state`，传给回调，然后清空浏览器 history state 中的 `usr` 字段，避免后续重复消费跳转状态。
-
-### 类型
-
-```ts
-function useOnceState(callback: (v: any) => any): void
-```
-
-参数：
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| `callback` | `(v: any) => any` | 无 | 接收 `Location.state` 的回调。返回值不会被使用。 |
-
-生命周期：
-
-- 内部调用 `useLocation()` 读取当前 `Location`。
-- 首次挂载后执行一次 effect。
-- effect 中先执行 `callback(Location.state)`。
-- 然后执行 `window.history.replaceState({ ...(window.history.state || {}), usr: null }, "")`。
-- 没有卸载清理逻辑。
-
-示例：
-
-```ts
-useOnceState(state => {
-  if (state?.fromCreate) {
-    api.doSearch(searchParams);
-  }
-});
-```
-
-边界：
-
-- 依赖 React Router 把 location state 存在 `history.state.usr` 的约定。
-- 只清空 `usr`，保留 `history.state` 上其它字段。
-- effect 依赖被显式禁用，后续路由 state 变化不会再次触发。
-- 如果 `callback` 抛错，后面的 `replaceState` 不会执行。
-- hook 直接访问 `window.history`，不适用于 SSR。
-
-## useUnFirstEffect
-
-文件路径：`src/hooks/useUnFirstEffect.ts`
-
-职责：包装 `useEffect`，跳过首次 effect 执行，只在依赖后续变化时运行 callback。
+职责：包装 `useEffect`，通过 `runOnMount`、`once` 和 `consumeRouteState` 统一控制首次执行、单次执行以及路由 state 的读取与清理。
 
 ### 类型
 
 ```ts
-function useUnFirstEffect(
-  cb: Parameters<typeof useEffect>[0],
-  deps: Parameters<typeof useEffect>[1],
-): void
+function useConfigurableEffect<T = unknown>(
+  callback: (routeState?: T) => void | (() => void),
+  deps: DependencyList | undefined,
+  options?: {
+    runOnMount?: boolean;
+    once?: boolean;
+    consumeRouteState?: boolean;
+  },
+): void;
 ```
 
-参数：
+配置：
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| `cb` | `Parameters<typeof useEffect>[0]` | 无 | 依赖变化后要执行的函数。源码调用 `cb()`，但不使用其返回值。 |
-| `deps` | `Parameters<typeof useEffect>[1]` | 无 | 传给内部 `useEffect` 的依赖数组。 |
-
-生命周期与清理：
-
-- `initRef.current` 初始为 `true`。
-- 首次 effect 执行时只把 `initRef.current` 置为 `false`，不调用 `cb`。
-- 之后每次 `deps` 变化都会调用 `cb()`。
-- 当前实现没有返回 `cb()` 的结果，因此即使 `cb` 返回清理函数，也不会被 React 注册和执行。
+| 配置                | 默认值  | 说明                                                                   |
+| ------------------- | ------- | ---------------------------------------------------------------------- |
+| `runOnMount`        | `true`  | 是否在首次挂载时执行 callback。                                        |
+| `once`              | `false` | callback 是否最多执行一次。                                            |
+| `consumeRouteState` | `false` | 是否把 `history.state.usr` 传给 callback，并在 callback 后清空 `usr`。 |
 
 示例：
 
 ```ts
-useUnFirstEffect(() => {
-  form.resetFields();
-}, [form, open]);
+useConfigurableEffect(() => form.resetFields(), [form, open], { runOnMount: false });
+
+useConfigurableEffect<{ fromCreate?: boolean }>(
+  state => {
+    if (state?.fromCreate) api.doSearch(searchParams);
+  },
+  undefined,
+  { once: true, consumeRouteState: true },
+);
 ```
 
-源码中的 `CustomModal` 使用它在弹窗关闭后重置表单，同时避免初始化时重置。
-
-边界：
-
-- 如果需要 effect cleanup，当前 hook 不适合直接承载，应在源码层补充 `return cb()`。
-- 内部禁用了 `react-hooks/exhaustive-deps`，调用方需要自行保证 `deps` 完整。
+callback 返回的 cleanup 会交给 React。调用方需保证 `deps` 完整；开启 `consumeRouteState` 时依赖浏览器 history 的 `usr` 存储约定，如果 callback 抛错则不会清理路由 state。
 
 ## useSub 与 dispatchSubEvents
 
@@ -324,12 +280,12 @@ const globalEvents: Record<string, EventItem[]> = {};
 
 结构：
 
-| 层级 | 类型 | 说明 |
-| --- | --- | --- |
-| key | `string` | 每个调用 `useSub` 的组件实例生成一个 `guid()` 作为订阅 ID。 |
-| value | `EventItem[]` | 该组件实例传入的事件数组。 |
-| `EventItem.name` | `string` | 事件名。 |
-| `EventItem.callback` | `(...args: any[]) => any` | 事件回调。 |
+| 层级                 | 类型                      | 说明                                                        |
+| -------------------- | ------------------------- | ----------------------------------------------------------- |
+| key                  | `string`                  | 每个调用 `useSub` 的组件实例生成一个 `guid()` 作为订阅 ID。 |
+| value                | `EventItem[]`             | 该组件实例传入的事件数组。                                  |
+| `EventItem.name`     | `string`                  | 事件名。                                                    |
+| `EventItem.callback` | `(...args: any[]) => any` | 事件回调。                                                  |
 
 注册和清理：
 

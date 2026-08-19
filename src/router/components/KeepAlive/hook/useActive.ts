@@ -1,17 +1,36 @@
 import { useMatchRoutes } from "../../PermissionRouter";
 
-export function useActive(activeCallBack?: () => any) {
-  const matchRoutes = useMatchRoutes();
-  const route = useMemo(() => matchRoutes.at(-1)?.route, [matchRoutes]);
-  const initPathRef = useRef<string>(null);
+const UNINITIALIZED = Symbol("useActive.uninitialized");
 
-  useEffect(() => {
-    if (!initPathRef.current) {
-      initPathRef.current = route?.fullPath || null;
+function reportCallbackError(error: unknown) {
+  console.error("[useActive] 激活回调执行失败。", error);
+}
+
+export function useActive(activeCallback?: () => void | Promise<void>) {
+  const matchRoutes = useMatchRoutes();
+  const fullPath = matchRoutes.at(-1)?.route.fullPath;
+  const initialPathRef = useRef<string | typeof UNINITIALIZED>(UNINITIALIZED);
+  const wasActiveRef = useRef(false);
+
+  useLayoutEffect(() => {
+    if (initialPathRef.current === UNINITIALIZED) {
+      if (fullPath === undefined) return;
+
+      initialPathRef.current = fullPath;
+      wasActiveRef.current = true;
       return;
     }
-    if (initPathRef.current !== route?.fullPath) return;
-    activeCallBack?.();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [route?.fullPath]);
+
+    const isActive = initialPathRef.current === fullPath;
+    const shouldNotify = isActive && !wasActiveRef.current;
+    wasActiveRef.current = isActive;
+
+    if (!shouldNotify || !activeCallback) return;
+
+    try {
+      void Promise.resolve(activeCallback()).catch(reportCallbackError);
+    } catch (error) {
+      reportCallbackError(error);
+    }
+  }, [activeCallback, fullPath]);
 }

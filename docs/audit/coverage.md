@@ -4,10 +4,10 @@
 
 状态含义：
 
-| 状态 | 含义 |
-| --- | --- |
-| 已覆盖 | 有独立文档页，且包含路径、职责、字段类型、默认值、事件/生命周期、边界条件。 |
-| 组合页保留 | 保留原组合页作为导航或主题汇总，不作为唯一覆盖依据。 |
+| 状态       | 含义                                                                        |
+| ---------- | --------------------------------------------------------------------------- |
+| 已覆盖     | 有独立文档页，且包含路径、职责、字段类型、默认值、事件/生命周期、边界条件。 |
+| 组合页保留 | 保留原组合页作为导航或主题汇总，不作为唯一覆盖依据。                        |
 
 <script setup>
 const columns = [
@@ -183,21 +183,12 @@ const rows = [
         },
       },
       {
-        id: "hook-use-once-state",
+        id: "hook-use-configurable-effect",
         cells: {
-          module: { text: "useOnceState", link: "/hooks/use-once-state" },
-          source: { code: "src/hooks/useOnceState.ts" },
+          module: { text: "useConfigurableEffect", link: "/hooks/use-configurable-effect" },
+          source: { code: "src/hooks/useConfigurableEffect.ts" },
           status: { badge: "已覆盖" },
-          check: "callback、Location.state、history.state.usr、一次性消费、SSR 边界。",
-        },
-      },
-      {
-        id: "hook-use-un-first-effect",
-        cells: {
-          module: { text: "useUnFirstEffect", link: "/hooks/use-un-first-effect" },
-          source: { code: "src/hooks/useUnFirstEffect.ts" },
-          status: { badge: "已覆盖" },
-          check: "cb/deps 类型、跳过首次、cleanup 不生效、依赖完整性。",
+          check: "callback/deps 类型、runOnMount、once、路由 state 消费、cleanup、依赖完整性。",
         },
       },
       {

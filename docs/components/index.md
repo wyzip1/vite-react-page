@@ -4,26 +4,26 @@
 
 ## 组件清单
 
-| 组件 | 路径 | 主要职责 |
-| --- | --- | --- |
-| [Search](/components/search) | `src/components/Search` | 配置化查询表单，支持输入、选择、级联、日期、日期范围和自定义组件。 |
-| [EditTable](/components/edit-table) | `src/components/EditTable` | 基于 Ant Design Table 的行编辑表格，支持新增临时行、表单校验和点路径字段。 |
-| [AsyncButton](/components/async-button) | `src/components/AsyncButton.tsx` | 自动处理异步点击 loading 的按钮。 |
-| [CustomModal](/components/custom-modal) | `src/components/CustomModal` | 支持异步确认、表单提交和关闭重置的弹窗。 |
-| [Action](/components/action) | `src/components/Action` | 按需组合 Button 与 Popconfirm。 |
-| [AutoActions](/components/auto-actions) | `src/components/AutoActions` | 将超出数量的操作项折叠到 Popover。 |
-| [DropFolderUpload](/components/drop-folder-upload) | `src/components/DropFolderUpload` | 支持拖拽文件夹、图片过滤、校验、预览和自定义上传请求。 |
-| [UploadSorter](/components/upload-sorter) | `src/components/UploadSorter` | 支持图片上传、上传态展示、预览、删除和拖拽排序。 |
-| [LazyLoad](/components/lazy-load) | `src/components/LazyLoad` | 用 Suspense 包裹懒加载组件，并展示统一 Loading。 |
-| [Loading](/components/loading) | `src/components/Loading.tsx` | 通用居中 Spin 加载占位。 |
-| [Template](/components/template) | `src/components/Template` | 渲染 React Router `Outlet` 的自动路由中间层占位。 |
+| 组件                                               | 路径                              | 主要职责                                                                   |
+| -------------------------------------------------- | --------------------------------- | -------------------------------------------------------------------------- |
+| [Search](/components/search)                       | `src/components/Search`           | 配置化查询表单，支持输入、选择、级联、日期、日期范围和自定义组件。         |
+| [EditTable](/components/edit-table)                | `src/components/EditTable`        | 基于 Ant Design Table 的行编辑表格，支持新增临时行、表单校验和点路径字段。 |
+| [AsyncButton](/components/async-button)            | `src/components/AsyncButton.tsx`  | 自动处理异步点击 loading 的按钮。                                          |
+| [CustomModal](/components/custom-modal)            | `src/components/CustomModal`      | 支持异步确认、表单提交和关闭重置的弹窗。                                   |
+| [Action](/components/action)                       | `src/components/Action`           | 按需组合 Button 与 Popconfirm。                                            |
+| [AutoActions](/components/auto-actions)            | `src/components/AutoActions`      | 将超出数量的操作项折叠到 Popover。                                         |
+| [DropFolderUpload](/components/drop-folder-upload) | `src/components/DropFolderUpload` | 支持拖拽文件夹、图片过滤、校验、预览和自定义上传请求。                     |
+| [UploadSorter](/components/upload-sorter)          | `src/components/UploadSorter`     | 支持图片上传、上传态展示、预览、删除和拖拽排序。                           |
+| [LazyLoad](/components/lazy-load)                  | `src/components/LazyLoad`         | 用 Suspense 包裹懒加载组件，并展示统一 Loading。                           |
+| [Loading](/components/loading)                     | `src/components/Loading.tsx`      | 通用居中 Spin 加载占位。                                                   |
+| [Template](/components/template)                   | `src/components/Template`         | 渲染 React Router `Outlet` 的自动路由中间层占位。                          |
 
 ## 共同依赖
 
 - Ant Design 是主要 UI 基础。
 - `Search`、`EditTable`、`DropFolderUpload`、`UploadSorter` 会把部分 props 透传给 Ant Design 控件，但同名字段可能被组件接管或覆盖，需以各组件文档为准。
 - `EditTable` 和上传组件依赖本地 `utils`，例如 `guid`、`getValue`、`setValue`、`sleep`。
-- `CustomModal` 依赖本地 `useUnFirstEffect`。
+- `CustomModal` 依赖本地 `useConfigurableEffect`。
 - `UploadSorter` 依赖 `@dnd-kit` 和 `styled-components`。
 
 ## 使用建议

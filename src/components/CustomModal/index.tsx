@@ -1,4 +1,4 @@
-import useUnFirstEffect from "@/hooks/useUnFirstEffect";
+import useConfigurableEffect from "@/hooks/useConfigurableEffect";
 import type { FormInstance, FormProps, ModalProps } from "antd";
 import { Form, Modal } from "antd";
 
@@ -26,10 +26,14 @@ export default function CustomModal<T = any>({
     }
   }
 
-  useUnFirstEffect(() => {
-    if (props.open) return;
-    form?.resetFields();
-  }, [form, props.open]);
+  useConfigurableEffect(
+    () => {
+      if (props.open) return;
+      form?.resetFields();
+    },
+    [form, props.open],
+    { runOnMount: false },
+  );
 
   return (
     <Modal
