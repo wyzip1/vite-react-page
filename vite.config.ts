@@ -5,6 +5,7 @@ import packagesJSON from "./package.json" with { type: "json" };
 import buildFTL, { publicPath } from "build-ftl";
 import { viteMockServe } from "vite-plugin-mock";
 import AutoImport from "unplugin-auto-import/vite";
+import MultiPageAutoPlugin from "vite-plugin-multipage-auto";
 import tailwindcss from "@tailwindcss/vite";
 import autoprefixer from "autoprefixer";
 
@@ -19,6 +20,7 @@ export default defineConfig(({ mode }) => ({
       include: [/\.ts$/, /\.tsx$/, /\.md$/],
     }),
     tailwindcss(),
+    MultiPageAutoPlugin(),
     buildFTL({ ftlDir: "./dist2" }),
     viteMockServe({ mockPath: "mock" }),
   ],
