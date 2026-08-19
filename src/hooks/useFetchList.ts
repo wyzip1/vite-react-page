@@ -58,7 +58,7 @@ export default function useFetchList<
   const pageChangeRequestRef = useRef<{
     resolve: (v: any) => void;
     reject: (reason: any) => void;
-  }>();
+  }>(null);
 
   const updateParams = (params: Pagination) => {
     return new Promise((rev, rej) => {
@@ -120,7 +120,7 @@ export default function useFetchList<
       .then(pageChangeRequestRef.current?.resolve)
       .catch(pageChangeRequestRef.current?.reject)
       .finally(() => {
-        pageChangeRequestRef.current = undefined;
+        pageChangeRequestRef.current = null;
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNum, pageSize]);

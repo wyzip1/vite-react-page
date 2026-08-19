@@ -1,13 +1,12 @@
 export function useWindowEvent<T extends keyof WindowEventMap>(
   name: T,
-  callback: Parameters<typeof window.addEventListener<T>>[1],
+  callback: (event: WindowEventMap[T]) => void,
 ) {
-  const cbRef = useRef<Parameters<typeof window.addEventListener<T>>[1]>();
+  useEffect(() => {
+    window.addEventListener(name, callback);
 
-  if (cbRef.current) {
-    window.removeEventListener?.(name, cbRef.current);
-  }
-
-  cbRef.current = callback;
-  window.addEventListener?.(name as any, cbRef.current);
+    return () => {
+      window.removeEventListener(name, callback);
+    };
+  }, [callback, name]);
 }

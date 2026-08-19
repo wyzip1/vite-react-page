@@ -1,19 +1,16 @@
 import { defineConfig } from "vite";
 import { resolve } from "path";
 import react from "@vitejs/plugin-react";
-import packagesJSON from "./package.json";
+import packagesJSON from "./package.json" with { type: "json" };
 import buildFTL, { publicPath } from "build-ftl";
 import { viteMockServe } from "vite-plugin-mock";
 import AutoImport from "unplugin-auto-import/vite";
-import MultiPageAutoPlugin from "vite-plugin-multipage-auto";
-import https from "node:https";
 import tailwindcss from "@tailwindcss/vite";
 import autoprefixer from "autoprefixer";
 
 const dependenciesList = Object.keys(packagesJSON.dependencies);
 
 // https://vitejs.dev/config/
-/* eslint-env node */
 export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
@@ -22,7 +19,6 @@ export default defineConfig(({ mode }) => ({
       include: [/\.ts$/, /\.tsx$/, /\.md$/],
     }),
     tailwindcss(),
-    MultiPageAutoPlugin(),
     buildFTL({ ftlDir: "./dist2" }),
     viteMockServe({ mockPath: "mock" }),
   ],
@@ -31,7 +27,7 @@ export default defineConfig(({ mode }) => ({
   },
   resolve: {
     alias: {
-      "@": resolve(__dirname, "./src"),
+      "@": resolve(import.meta.dirname, "./src"),
     },
     extensions: [".js", ".tsx", ".vue", ".jsx", ".ts"],
   },
@@ -42,7 +38,6 @@ export default defineConfig(({ mode }) => ({
       "/developmentApi": {
         target: "",
         changeOrigin: true,
-        agent: new https.Agent({ family: 4 }),
         rewrite: (path: string) => path.replace(/^\/developmentApi/, ""),
       },
     },
@@ -57,12 +52,19 @@ export default defineConfig(({ mode }) => ({
         warn(warning);
       },
       output: {
-        manualChunks: {
-          react: ["react"],
-          "react-router-dom": ["react-router-dom"],
-          "react-dom": ["react-dom"],
-          antd: ["antd"],
-          "styled-components": ["styled-components"],
+        manualChunks(id) {
+          const packageChunks = {
+            react: ["react"],
+            "react-router-dom": ["react-router-dom"],
+            "react-dom": ["react-dom"],
+            antd: ["antd"],
+            "styled-components": ["styled-components"],
+          };
+
+          const normalizedId = id.replaceAll("\\\\", "/");
+          return Object.entries(packageChunks).find(([, packages]) =>
+            packages.some(packageName => normalizedId.includes(`/node_modules/${packageName}/`)),
+          )?.[0];
         },
       },
     },

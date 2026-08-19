@@ -1,6 +1,4 @@
-import { Provider } from "react-redux";
 import { createRoot } from "react-dom/client";
-import { store } from "@/store";
 import router from "./router";
 import "@/styles/index.css";
 import { AntConfigProvider } from "@/App";
@@ -12,6 +10,7 @@ function autoSetCookie() {
   const cookiesImport = import.meta.glob("../cookies.json")["../cookies.json"];
   if (!cookiesImport) return;
   cookiesImport().then(res => {
+    // @ts-ignore
     // eslint-disable-next-line @typescript-eslint/consistent-type-imports
     (res as typeof import("../cookies.json")).cookies.forEach(cookie => {
       document.cookie = `${cookie.name}=${cookie.value};`;
@@ -32,11 +31,9 @@ if (typeof window !== "undefined" && import.meta.env.MODE === "scan") {
 
 const root = createRoot(document.getElementById("app")!);
 root.render(
-  <Provider store={store}>
-    <AntConfigProvider>
-      <KeepAliveProvider>
-        <CRouterProvider router={router} />
-      </KeepAliveProvider>
-    </AntConfigProvider>
-  </Provider>,
+  <AntConfigProvider>
+    <KeepAliveProvider>
+      <CRouterProvider router={router} />
+    </KeepAliveProvider>
+  </AntConfigProvider>,
 );

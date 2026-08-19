@@ -1,7 +1,6 @@
 import type { MenuProps } from "antd";
 import { Menu } from "antd";
 import type { CRouteObject } from "@/types";
-import { useThemeMode } from "@/store/theme";
 import { useMatchRoutes, useMenuRoutes } from "@/router/components/PermissionRouter";
 
 const getItems = (routes?: CRouteObject[]): MenuProps["items"] => {
@@ -23,7 +22,6 @@ const getItems = (routes?: CRouteObject[]): MenuProps["items"] => {
 
 const MenuList: React.FC = () => {
   const navigate = useNavigate();
-  const theme = useThemeMode();
 
   const menuRoutes = useMenuRoutes();
   const matchRoutes = useMatchRoutes();
@@ -49,7 +47,6 @@ const MenuList: React.FC = () => {
       items={items}
       theme="dark"
       mode="inline"
-      style={{ backgroundColor: theme === "dark" ? "transparent" : "" }}
       defaultOpenKeys={expandAll}
       selectedKeys={activePaths?.length ? activePaths : selectKeys}
       onSelect={({ selectedKeys }) => {

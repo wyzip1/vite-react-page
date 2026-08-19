@@ -1,14 +1,14 @@
 import styled from "styled-components";
 
 export const SearchStyled = styled.div<{
-  defaultLabelWidth: string;
-  inline?: boolean;
-  autoWrap?: boolean;
+  $defaultLabelWidth: string;
+  $inline?: boolean;
+  $autoWrap?: boolean;
 }>`
   width: 100%;
-  --default-label-width: ${props => props.defaultLabelWidth};
+  --default-label-width: ${props => props.$defaultLabelWidth};
   font-size: var(--base-size, 14px);
-  display: ${props => (props.inline ? "flex" : "block")};
+  display: ${props => (props.$inline ? "flex" : "block")};
   justify-content: space-between;
 
   & > .input-content {
@@ -19,7 +19,7 @@ export const SearchStyled = styled.div<{
       display: flex;
       align-items: center;
       row-gap: 10px;
-      flex-wrap: ${props => (props.autoWrap ? "wrap" : "nowrap")};
+      flex-wrap: ${props => (props.$autoWrap ? "wrap" : "nowrap")};
       & > .search-item {
         display: flex;
         align-items: center;

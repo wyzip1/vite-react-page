@@ -22,6 +22,7 @@ class Storage {
     if (value) {
       try {
         return JSON.parse(value);
+        // eslint-disable-next-line no-unused-vars
       } catch (err) {
         return value;
       }

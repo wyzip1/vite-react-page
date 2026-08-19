@@ -1,8 +1,8 @@
 import { createContext } from "react";
-import type { Router } from "@remix-run/router";
+import type { RouterProviderProps } from "react-router-dom";
 
 export interface RouterProviderContextType {
-  router: Router;
+  router: RouterProviderProps["router"];
 }
 
 const RouterProviderContext = createContext<RouterProviderContextType>({} as any);

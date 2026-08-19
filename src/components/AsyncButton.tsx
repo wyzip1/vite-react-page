@@ -3,12 +3,10 @@ import { Button } from "antd";
 
 interface AsyncButtonProps extends Omit<ButtonProps, "onClick"> {
   onClick?(): any | Promise<any>;
+  ref?: React.Ref<HTMLButtonElement | HTMLAnchorElement>;
 }
 
-const AsyncButton = (
-  { children, onClick, ...props }: AsyncButtonProps,
-  ref: React.LegacyRef<HTMLButtonElement | HTMLAnchorElement>,
-) => {
+const AsyncButton = ({ children, onClick, ref, ...props }: AsyncButtonProps) => {
   const [actionLoading, setActionLoading] = useState<boolean>(false);
   const click: ButtonProps["onClick"] = async () => {
     setActionLoading(true);
@@ -26,4 +24,4 @@ const AsyncButton = (
   );
 };
 
-export default forwardRef(AsyncButton);
+export default AsyncButton;

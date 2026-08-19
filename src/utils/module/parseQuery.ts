@@ -11,6 +11,7 @@ export function transferDataToQuery(data: object, isStart = true): string {
 export function parseJSON(value: string): Record<string, unknown> | string {
   try {
     return JSON.parse(value);
+    // eslint-disable-next-line no-unused-vars
   } catch (_) {
     /* empty */
   }

@@ -25,9 +25,7 @@ const KeepAliveProvider: React.FC<{ children?: React.ReactNode }> = ({ children 
   }
 
   return (
-    <KeepAliveContext.Provider value={{ catchNodes, addCatchNode, removeNode }}>
-      {children}
-    </KeepAliveContext.Provider>
+    <KeepAliveContext value={{ catchNodes, addCatchNode, removeNode }}>{children}</KeepAliveContext>
   );
 };
 

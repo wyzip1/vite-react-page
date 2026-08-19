@@ -24,8 +24,8 @@ export default function useRequest<T extends (...args: any[]) => Promise<any>>(
   const cancelTokenSourceRef = useRef<CancelTokenSource>(axios.CancelToken.source());
 
   async function request(params: Parameters<T>[0]) {
-    setLoading(true);
     try {
+      setLoading(true);
       const res = await requestApi({
         cancelToken: cancelTokenSourceRef.current.token,
         ...params,
@@ -49,9 +49,7 @@ export default function useRequest<T extends (...args: any[]) => Promise<any>>(
 
   useEffect(() => {
     if (options?.manual) return cancelRequest;
-    if (options?.params) {
-      request(options.params);
-    }
+    request(options?.params);
     return cancelRequest;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

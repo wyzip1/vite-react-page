@@ -11,11 +11,11 @@ export default function useSub(events?: EventItem[]) {
   const subIdRef = useRef(guid());
 
   useEffect(() => {
-    globalEvents[subIdRef.current] = events || [];
+    const subId = subIdRef.current;
+    globalEvents[subId] = events || [];
 
     return () => {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      delete globalEvents[subIdRef.current];
+      delete globalEvents[subId];
     };
   }, [events]);
 }

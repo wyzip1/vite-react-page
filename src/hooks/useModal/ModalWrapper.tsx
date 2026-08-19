@@ -1,7 +1,5 @@
 import { AntConfigProvider } from "@/App";
 import type { CustomModalProps } from "@/components/CustomModal";
-import { Provider } from "react-redux";
-import { store } from "@/store";
 
 export interface ModalWrapperInstance {
   open: (props: CustomModalProps<any>) => void;
@@ -11,9 +9,10 @@ export interface ModalWrapperInstance {
 interface ModalWrapperProps {
   getContainer?: () => HTMLElement;
   modal: React.FC<any>;
+  ref?: React.Ref<ModalWrapperInstance>;
 }
 
-const ModalWrapper = (props: ModalWrapperProps, ref: React.ForwardedRef<ModalWrapperInstance>) => {
+const ModalWrapper = ({ getContainer, modal: Modal, ref }: ModalWrapperProps) => {
   const [modalProps, setModalProps] = useState<CustomModalProps<any>>({});
   const [openModalState, setOpenModalState] = useState(false);
 
@@ -26,28 +25,26 @@ const ModalWrapper = (props: ModalWrapperProps, ref: React.ForwardedRef<ModalWra
   }));
 
   return (
-    <Provider store={store}>
-      <AntConfigProvider>
-        <props.modal
-          getContainer={props.getContainer}
-          {...modalProps}
-          afterClose={() => {
-            modalProps.afterClose?.();
-            setModalProps({});
-          }}
-          open={openModalState}
-          onConfirm={async data => {
-            await modalProps?.onConfirm?.(data);
-            setOpenModalState(false);
-          }}
-          onCancel={e => {
-            modalProps.onCancel?.(e);
-            setOpenModalState(false);
-          }}
-        />
-      </AntConfigProvider>
-    </Provider>
+    <AntConfigProvider>
+      <Modal
+        getContainer={getContainer}
+        {...modalProps}
+        afterClose={() => {
+          modalProps.afterClose?.();
+          setModalProps({});
+        }}
+        open={openModalState}
+        onConfirm={async data => {
+          await modalProps?.onConfirm?.(data);
+          setOpenModalState(false);
+        }}
+        onCancel={e => {
+          modalProps.onCancel?.(e);
+          setOpenModalState(false);
+        }}
+      />
+    </AntConfigProvider>
   );
 };
 
-export default forwardRef(ModalWrapper);
+export default ModalWrapper;

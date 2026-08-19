@@ -31,8 +31,7 @@ export const SortItemStyled = styled.div<{
       & .percent {
         margin-top: 10px;
         width: 100%;
-        background-color: ${props =>
-          props.token.Progress?.remainingColor || "rgba(0, 0, 0, 0.06)"};
+        background-color: ${props => props.token.Progress?.remainingColor || "rgba(0, 0, 0, 0.06)"};
         border-radius: ${props => props.token.Progress?.lineBorderRadius || "100px"};
 
         &::before {

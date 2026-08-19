@@ -1,18 +1,14 @@
 import { ConfigProvider, theme } from "antd";
 import zhCN from "antd/es/locale/zh_CN";
 import "dayjs/locale/zh-cn";
-import { store } from "@/store";
-import { setTheme, useThemeMode, useToken } from "@/store/theme";
 import MainStyled from "@/styles/MainStyled";
 
 export const AntConfigProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
-  const themeMode = useThemeMode();
-
   return (
     <ConfigProvider
       locale={zhCN}
       theme={{
-        algorithm: themeMode === "dark" ? [theme.darkAlgorithm] : [theme.defaultAlgorithm],
+        algorithm: [theme.defaultAlgorithm],
         token: { colorPrimary: "#155bd4", borderRadius: 0 },
       }}
     >
@@ -22,31 +18,10 @@ export const AntConfigProvider: React.FC<{ children?: React.ReactNode }> = ({ ch
 };
 
 export default function App() {
-  const themeMode = useThemeMode();
-  const themeToken = useToken();
   const { token: antToken } = theme.useToken();
 
-  useEffect(() => {
-    function changeTheme() {
-      const isDark = prefers.matches;
-      store.dispatch(setTheme({ mode: isDark ? "dark" : "light", isOsChange: true }));
-    }
-    // 获取系统主题 是否为暗色，当然也可以匹配亮色：prefers-color-scheme: light
-    const prefers = window.matchMedia?.("(prefers-color-scheme: dark)");
-    prefers.addEventListener("change", changeTheme);
-
-    return () => {
-      prefers.removeEventListener("change", changeTheme);
-    };
-  }, []);
-
   return (
-    <MainStyled
-      mode={themeMode}
-      token={themeToken}
-      antToken={antToken}
-      style={{ width: "100%", height: "100vh" }}
-    >
+    <MainStyled $antToken={antToken} style={{ width: "100%", height: "100vh" }}>
       <Outlet />
     </MainStyled>
   );

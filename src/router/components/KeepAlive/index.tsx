@@ -3,7 +3,7 @@ import { KeepAliveContext } from "./context";
 import { useMatchRoutes } from "../PermissionRouter";
 
 const KeepAliveView: React.FC<{ children?: React.ReactNode }> = () => {
-  const { catchNodes, addCatchNode } = useContext(KeepAliveContext);
+  const { catchNodes, addCatchNode } = use(KeepAliveContext);
   const outlet = useOutlet();
   const matchRoutes = useMatchRoutes();
   const route = useMemo(() => matchRoutes.at(-1)?.route, [matchRoutes]);

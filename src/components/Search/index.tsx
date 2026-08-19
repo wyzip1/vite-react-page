@@ -67,7 +67,7 @@ function Search(
   };
 
   return (
-    <SearchStyled defaultLabelWidth={_defaultLabelWidth} inline={inline} autoWrap={autoWrap}>
+    <SearchStyled $defaultLabelWidth={_defaultLabelWidth} $inline={inline} $autoWrap={autoWrap}>
       <div className="input-content">
         {componentList.map((item, idx) => (
           <RenderRow

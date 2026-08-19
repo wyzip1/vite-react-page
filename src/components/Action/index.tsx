@@ -15,10 +15,9 @@ type GetProps<T extends TypeMap> = T extends "button" ? ButtonProps : Popconfirm
 function getNode<T extends TypeMap>(type: T, node: React.ReactNode, props?: GetProps<T>) {
   if (!props) return <>{node}</>;
   switch (type) {
-    // eslint-disable-next-line prettier/prettier
     case "button":
       return <Button {...(props as ButtonProps)}>{node}</Button>;
-    // eslint-disable-next-line prettier/prettier
+
     case "confirm":
       return <Popconfirm {...(props as PopconfirmProps)}>{node}</Popconfirm>;
   }

@@ -1,29 +1,24 @@
-import type { Router } from "@remix-run/router";
 import RouterProviderContext from "./context";
 import type { RouterProviderProps } from "react-router-dom";
 import { RouterProvider } from "react-router-dom";
 
 interface RouterStoreProps {
-  router: Router;
+  router: RouterProviderProps["router"];
   children: React.ReactNode;
 }
 const RouterStore: React.FC<RouterStoreProps> = ({ children, router }) => {
-  return (
-    <RouterProviderContext.Provider value={{ router }}>
-      {children}
-    </RouterProviderContext.Provider>
-  );
+  return <RouterProviderContext value={{ router }}>{children}</RouterProviderContext>;
 };
 
 export const useRouter = () => {
-  const context = useContext(RouterProviderContext);
+  const context = use(RouterProviderContext);
   return context.router;
 };
 
 const CRouterProvider: React.FC<RouterProviderProps> = ({ router, ...props }) => {
   return (
     <RouterStore router={router}>
-      <RouterProvider future={{ v7_startTransition: true }} router={router} {...props} />
+      <RouterProvider router={router} {...props} />
     </RouterStore>
   );
 };

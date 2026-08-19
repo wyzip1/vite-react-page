@@ -12,21 +12,35 @@ interface AutoActionsProps {
   len?: number;
 }
 
+type ProxyNodeProps = Omit<React.HTMLAttributes<HTMLElement>, "onClick"> & {
+  onConfirm?: (e: React.MouseEvent) => any;
+  getPopupContainer?: (e: HTMLElement) => HTMLElement;
+  onClick?: (e: React.MouseEvent) => any;
+  onOpenChange?: (open: boolean) => void;
+};
+
 export function proxyNode(
   node: React.ReactNode,
-  callback: (
-    cn: Omit<React.HTMLAttributes<HTMLElement>, "onClick"> & {
-      onConfirm?: (e: React.MouseEvent) => any;
-      getPopupContainer?: (e: HTMLElement) => HTMLElement;
-      onClick?: (e: React.MouseEvent) => any;
-      onOpenChange?: (open: boolean) => void;
-    },
-  ) => React.HTMLAttributes<HTMLElement>,
+  callback: (props: ProxyNodeProps) => Partial<ProxyNodeProps>,
 ) {
-  if (React.isValidElement(node)) {
+  if (React.isValidElement<ProxyNodeProps>(node)) {
+    // Event proxying must preserve the original child type, key, ref, and props.
+    // eslint-disable-next-line @eslint-react/no-clone-element
     return React.cloneElement(node, callback(node.props));
   }
   return node;
+}
+
+function normalizeChildren(children: React.ReactNode): React.ReactNode[] {
+  if (Array.isArray(children)) return children.flatMap(normalizeChildren);
+  if (children == null || typeof children === "boolean") return [];
+  return [children];
+}
+
+function getChildKey(child: React.ReactNode, position: number) {
+  return React.isValidElement(child) && child.key != null
+    ? String(child.key)
+    : `auto-action-${position}`;
 }
 
 export const ProxyClickNode: React.FC<{
@@ -83,32 +97,34 @@ const AutoActions: React.FC<AutoActionsProps> = ({
   len = 3,
 }) => {
   const [open, setOpen] = useState<boolean>(false);
-  const childrenNodes = React.Children.map(children, c => c);
-  const [childsHangOpen, setChildsHangOpen] = useState<boolean[]>([]);
+  const childrenNodes = normalizeChildren(children);
+  const [childOpenStates, setChildOpenStates] = useState<Record<string, boolean>>({});
 
   return (
-    <div className={`inline-flex ${className}`} style={style}>
-      {childrenNodes?.slice(0, len)}
-      {(childrenNodes?.length || len + 1) > len && (
+    <div className={["inline-flex", className].filter(Boolean).join(" ")} style={style}>
+      {childrenNodes.slice(0, len).map((child, position) => (
+        <React.Fragment key={getChildKey(child, position)}>{child}</React.Fragment>
+      ))}
+      {childrenNodes.length > len && (
         <Popover
           overlayInnerStyle={{ padding: "4px 0" }}
           trigger={trigger}
-          open={open || childsHangOpen.some(v => v)}
+          open={open || Object.values(childOpenStates).some(Boolean)}
           onOpenChange={setOpen}
           content={
             <div className="flex flex-col">
-              {childrenNodes?.slice(len).map((child, i) => {
+              {childrenNodes.slice(len).map((child, position) => {
+                const childKey = getChildKey(child, len + position);
                 return (
                   <div
-                    key={i}
+                    key={childKey}
                     className="mb-1 flex items-center justify-center"
                     style={{ minWidth: 88, height: 28 }}
                   >
                     <ProxyClickNode
                       autoLoading={autoLoading}
                       onChildHangOpenChange={v => {
-                        childsHangOpen[i] = v;
-                        setChildsHangOpen([...childsHangOpen]);
+                        setChildOpenStates(states => ({ ...states, [childKey]: v }));
                       }}
                       onClick={() => {
                         setOpen(false);

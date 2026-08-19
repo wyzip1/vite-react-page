@@ -1,5 +1,5 @@
 import type { CreateClientConfig } from "./generated/client.gen";
-import type { AxiosError, AxiosResponse } from "axios";
+import type { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import axios from "axios";
 import { filterObjEmpty } from "@/utils";
 import { message } from "antd";
@@ -72,7 +72,10 @@ export const createClientConfig: CreateClientConfig = config => ({
   baseURL,
 });
 
-export { axiosInstance };
+const request = <T>(config: AxiosRequestConfig): Promise<RequestResponse<T>> =>
+  axiosInstance(config);
+
+export { request };
 
 function handleArraybufferRequest(
   res: AxiosResponse<ArrayBuffer>,

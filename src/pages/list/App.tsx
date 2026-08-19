@@ -2,14 +2,12 @@ import Search from "@/components/Search";
 import useFetchList from "@/hooks/useFetchList";
 import type { Config } from "@/components/Search/type";
 import AsyncButton from "@/components/AsyncButton";
-import EditTable from "@/components/EditTable";
-import { Button } from "antd";
-import type { EditTableColumn, EditTableInstance } from "@/components/EditTable/types";
+import type { TableColumnProps } from "antd";
+import { Table } from "antd";
 import AppStyled from "@/styles/AppStyled";
 import useModal from "@/hooks/useModal";
 import type { CustomModalProps } from "@/components/CustomModal";
 import CustomModal from "@/components/CustomModal";
-import { useThemeMode } from "@/store/theme";
 import { fetchMockList } from "@/api";
 
 interface SearchFormData {
@@ -25,12 +23,6 @@ const searchOptions: Config = [
 ];
 
 const TestModal: React.FC<CustomModalProps<any>> = props => {
-  const themeMode = useThemeMode();
-
-  useEffect(() => {
-    console.log("themeMode", themeMode);
-  }, [themeMode]);
-
   return <CustomModal {...props} />;
 };
 
@@ -42,76 +34,42 @@ const App: React.FC = () => {
 
   const openModal = useModal(TestModal);
 
-  const eidtTableRef = useRef<EditTableInstance>(null);
-
-  const columns: EditTableColumn<any>[] = [
+  const columns: TableColumnProps<any>[] = [
     {
       title: "姓名",
       dataIndex: "name",
-      valueType: "string",
-      formItemProps: {
-        rules: [{ required: true, message: "请输入姓名" }],
-      },
     },
     {
       title: "性别",
       dataIndex: "sex",
-      valueType: "boolean",
-      render(v) {
-        return v === 0 ? "女" : v === 1 ? "男" : "未知";
-      },
     },
     {
       title: "test",
       dataIndex: "test",
-      valueType: "select",
-      valueProps: {
-        options: [
-          { label: "name1", value: 1 },
-          { label: "name2", value: 2 },
-        ],
-      },
     },
     {
       title: "日期",
       width: 240,
       dataIndex: "date",
-      valueType: "date",
-      valueProps: {
-        format: "YYYY-MM-DD HH:mm:ss",
-        showTime: true,
-      },
     },
     {
       title: "日期范围",
       width: 480,
       dataIndex: "dateRange",
-      valueType: "dateRange",
-      valueProps: {
-        format: "YYYY-MM-DD HH:mm:ss",
-        showTime: true,
-      },
       render: v => v?.join(" - "),
     },
     {
       title: "钱包",
-      valueType: "number",
       dataIndex: "data.money",
-      valueProps: {
-        precision: 2,
-      },
     },
     {
       title: "描述",
-      valueType: "string",
       dataIndex: "desc",
     },
-    { title: "empty", empty: "-" },
     { title: "defaultEmpty" },
     {
       title: "操作",
-      valueType: "action",
-      render: edit => edit,
+      render: () => <></>,
     },
   ];
 
@@ -125,13 +83,6 @@ const App: React.FC = () => {
         deliveryTimeEnd,
       },
     };
-  }
-
-  function saveRecord(data: any) {
-    const idx = state.list.findIndex(i => i.id === data.id);
-    if (idx > -1) state.list[idx] = data;
-    else state.list.push(data);
-    api.updateList();
   }
 
   return (
@@ -153,7 +104,6 @@ const App: React.FC = () => {
           导出
         </AsyncButton>
 
-        <Button onClick={() => eidtTableRef.current?.addEditItem()}>添加数据</Button>
         <AsyncButton
           onClick={() =>
             openModal({
@@ -166,25 +116,18 @@ const App: React.FC = () => {
         </AsyncButton>
       </div>
 
-      <EditTable
+      <Table
         tableLayout="fixed"
-        ref={eidtTableRef}
         bordered
         className="mt-4"
         loading={state.loading}
         dataSource={state.list}
-        defaultEmptyColumn={<div>暂无数据</div>}
         columns={columns}
         rowKey="id"
         scroll={{ x: columns.reduce((c, i) => c + ((i.width as number) || 125), 0) }}
         onChange={({ current, pageSize }) => {
           setPageInfo({ pageNum: current!, pageSize: pageSize! });
         }}
-        onSaveRecord={saveRecord}
-        createEditRecord={() => ({
-          id: -1,
-          name: "test-add",
-        })}
         pagination={{
           current: state.pageNum,
           pageSize: state.pageSize,

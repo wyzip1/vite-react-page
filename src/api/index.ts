@@ -1,6 +1,6 @@
 import type { List, Pagination } from "@/hooks/useFetchList";
 import type { RequestResponse } from "./config";
-import { axiosInstance } from "./config";
+import { request } from "./config";
 import type { CancelTokenSource } from "axios";
 
 export interface MockListItem {
@@ -27,7 +27,7 @@ export const fetchMockList = ({
   cancelToken?: CancelTokenSource["token"];
   body?: MockListParams;
 }) => {
-  return axiosInstance({
+  return request({
     url: "/api/list",
     method: "POST",
     cancelToken: cancelToken,

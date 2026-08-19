@@ -1,6 +1,4 @@
-import { Provider } from "react-redux";
 import { createRoot } from "react-dom/client";
-import { store } from "@/store";
 import router from "./router";
 import "@/styles/index.css";
 import { AntConfigProvider } from "@/App";
@@ -9,11 +7,9 @@ import KeepAliveProvider from "@/router/components/KeepAlive/context";
 
 const root = createRoot(document.getElementById("app")!);
 root.render(
-  <Provider store={store}>
-    <AntConfigProvider>
-      <KeepAliveProvider>
-        <CRouterProvider router={router} />
-      </KeepAliveProvider>
-    </AntConfigProvider>
-  </Provider>,
+  <AntConfigProvider>
+    <KeepAliveProvider>
+      <CRouterProvider router={router} />
+    </KeepAliveProvider>
+  </AntConfigProvider>,
 );

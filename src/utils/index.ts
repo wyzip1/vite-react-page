@@ -21,7 +21,7 @@ export function guid(): string {
 }
 
 export function debounce(event: Function, delay = 300) {
-  let timer: NodeJS.Timer | undefined;
+  let timer: NodeJS.Timeout | undefined;
   return (...args: unknown[]) => {
     timer && clearTimeout(timer as unknown as number);
     timer = setTimeout(() => event(...args), delay);
@@ -29,8 +29,7 @@ export function debounce(event: Function, delay = 300) {
 }
 
 export function throttle(fn: Function, delay = 300) {
-  // eslint-disable-next-line no-undef
-  let timer: NodeJS.Timer | undefined;
+  let timer: NodeJS.Timeout | undefined;
   return (...args: unknown[]) => {
     if (timer) return;
     fn(...args);

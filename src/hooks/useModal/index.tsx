@@ -5,13 +5,13 @@ import type { ModalWrapperInstance } from "./ModalWrapper";
 import ModalWrapper from "./ModalWrapper";
 
 export default function useModal<T extends CustomModalProps<any>>(
-  Modal: (props: T) => React.ReactNode,
+  Modal: React.FC<T>,
   options?: {
     getContainer?: () => HTMLElement;
   },
 ) {
   const modalRef = useRef<ModalWrapperInstance>(null);
-  const modelNodeRef = useRef<HTMLDivElement>();
+  const modelNodeRef = useRef<HTMLDivElement>(null);
   const ModalRcEl = useMemo(
     () => <ModalWrapper ref={modalRef} modal={Modal} getContainer={() => modelNodeRef.current!} />,
     [Modal],

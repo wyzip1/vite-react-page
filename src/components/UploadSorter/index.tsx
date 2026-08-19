@@ -1,9 +1,12 @@
 import type { UploadFile, UploadProps } from "antd";
-import { Image, theme, Upload } from "antd";
+import { Image, theme } from "antd";
 import { SortableList } from "./SortableList";
 import { PlusOutlined } from "@ant-design/icons";
 import SortableItem from "./SortableItem";
 import ImageItem from "./ImageItem";
+import UploadImage from "../UploadImage";
+import type { RequestResponse } from "@/api/config";
+import type { ImageInfo } from "../UploadImage/services";
 
 const UploadSorter: React.FC<
   Omit<UploadProps, "fileList" | "onChange"> & {
@@ -14,58 +17,72 @@ const UploadSorter: React.FC<
       file?: UploadFile<any>,
       events?: { percent: number },
     ) => void;
+    maxSize?: number;
   }
 > = ({ value, onChange, disabledSorter, disabled, multiple, ...uploadProps }) => {
-  const [fileList, setFileList] = useState<UploadFile<any>[]>([]);
+  const [internalFileList, setInternalFileList] = useState<
+    UploadFile<RequestResponse<ImageInfo>>[]
+  >([]);
+  const fileList = value ?? internalFileList;
+
+  function updateFileList(
+    nextFileList: UploadFile<any>[],
+    file?: UploadFile<any>,
+    events?: { percent: number },
+  ) {
+    if (value === undefined) setInternalFileList(nextFileList);
+    onChange?.(nextFileList, file, events);
+  }
 
   const { token } = theme.useToken();
 
-  const [previewItem, setPrewviewItem] = useState<UploadFile<any>>();
-  const [previewOpen, setPreviewOpen] = useState(false);
+  const previewList = useMemo(() => {
+    return fileList.map(i => ({
+      src: i.response?.data.image_url || i.url || "",
+    }));
+  }, [fileList]);
 
-  useEffect(() => {
-    setFileList(value || []);
-  }, [value]);
+  const [previewIdx, setPreviewIdx] = useState<number>();
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   return (
     <>
       <SortableList
         items={fileList.map(v => ({ id: v.uid, ...v }))}
         onChange={items => {
-          setFileList(items);
-          onChange?.(items);
+          updateFileList(items);
         }}
-        renderItem={item => (
+        renderItem={(item, idx) => (
           <SortableItem id={item.id} disabled={disabledSorter || disabled || !multiple}>
             <ImageItem
               token={token}
               item={item}
               itemDisabled={disabled}
-              onPreview={item => {
-                setPrewviewItem(item);
+              onPreview={() => {
+                setPreviewIdx(idx);
                 setPreviewOpen(true);
               }}
               onDelete={() => {
                 const list = fileList.filter(i => i.uid !== item.uid);
-                setFileList(list);
-                onChange?.(list);
+                updateFileList(list);
               }}
             />
           </SortableItem>
         )}
       >
         <div>
-          <Upload
-            accept="image/*"
-            listType="picture-card"
+          <UploadImage
             fileList={fileList}
             showUploadList={false}
             onChange={info => {
-              setFileList(info.fileList);
-              onChange?.(info.fileList, info.file, info.event);
+              updateFileList(info.fileList, info.file, info.event);
             }}
             disabled={disabled}
             multiple={multiple}
+            onPreview={file => {
+              setPreviewIdx(fileList.indexOf(file));
+              setPreviewOpen(true);
+            }}
             {...uploadProps}
           >
             {!disabled && (uploadProps.maxCount || -Infinity) < fileList.length && (
@@ -74,21 +91,22 @@ const UploadSorter: React.FC<
                 <div style={{ marginTop: 8 }}>上传图片</div>
               </div>
             )}
-          </Upload>
+          </UploadImage>
         </div>
       </SortableList>
 
-      {previewItem && (
-        <Image
-          wrapperStyle={{ display: "none" }}
-          preview={{
-            visible: previewOpen,
-            onVisibleChange: visible => setPreviewOpen(visible),
-            afterOpenChange: visible => !visible && setPrewviewItem(undefined),
-          }}
-          src={previewItem.url}
-        />
-      )}
+      <Image.PreviewGroup
+        items={previewList}
+        preview={{
+          current: previewIdx,
+          open: previewOpen,
+          onChange(current) {
+            setPreviewIdx(current);
+          },
+          onOpenChange: open => setPreviewOpen(open),
+          afterOpenChange: open => !open && setPreviewIdx(undefined),
+        }}
+      />
     </>
   );
 };
