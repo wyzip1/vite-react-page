@@ -1,20 +1,15 @@
 import { Form } from "antd";
 import styled from "styled-components";
 
-export const SearchForm = styled(Form)<{
-  $maxItemsPerRow: number;
-  $autoWrap: boolean;
-}>`
+export const SearchForm = styled(Form)`
   width: 100%;
-  --search-item-width: ${props =>
-    `calc((100% - ${(props.$maxItemsPerRow - 1) * 12}px) / ${props.$maxItemsPerRow})`};
   display: flex;
   align-items: center;
-  flex-wrap: ${props => (props.$autoWrap ? "wrap" : "nowrap")};
+  flex-wrap: wrap;
   gap: 10px 12px;
 
   &.ant-form-inline > .search-item {
-    flex: 0 0 var(--search-item-width);
+    flex: 0 0 auto;
     max-width: 100%;
     margin: 0;
 
@@ -25,7 +20,7 @@ export const SearchForm = styled(Form)<{
   }
 
   & > .search-actions {
-    flex: 0 0 var(--search-item-width);
+    flex: 0 0 auto;
     min-width: max-content;
     display: flex;
     align-items: center;

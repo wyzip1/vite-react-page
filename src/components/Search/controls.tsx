@@ -1,6 +1,5 @@
 import { Cascader, DatePicker, Input, Select } from "antd";
 import dayjs from "dayjs";
-import { toCssLength } from "./utils";
 import type {
   CascaderOption,
   DateOption,
@@ -30,8 +29,6 @@ export default function SearchControl({ option, value, onChange, onSearch }: Sea
     );
   }
 
-  const width = toCssLength(option.width) ?? "100%";
-
   switch (option.type ?? "input") {
     case "select": {
       const props = (option as SelectOption).props;
@@ -39,7 +36,7 @@ export default function SearchControl({ option, value, onChange, onSearch }: Sea
         <Select
           {...props}
           value={value}
-          style={{ width, ...props?.style }}
+          style={{ width: "100%", ...props?.style }}
           onChange={value => onChange?.(value)}
         />
       );
@@ -50,7 +47,7 @@ export default function SearchControl({ option, value, onChange, onSearch }: Sea
         <CascaderControl
           {...props}
           value={value as any}
-          style={{ width, ...props?.style }}
+          style={{ width: "100%", ...props?.style }}
           onChange={value => onChange?.(value)}
         />
       );
@@ -61,7 +58,7 @@ export default function SearchControl({ option, value, onChange, onSearch }: Sea
         <DatePicker
           {...props}
           value={toDayjs(value as string)}
-          style={{ width, ...props?.style }}
+          style={{ width: "100%", ...props?.style }}
           onChange={(_, date) => onChange?.(date)}
         />
       );
@@ -73,7 +70,7 @@ export default function SearchControl({ option, value, onChange, onSearch }: Sea
         <DatePicker.RangePicker
           {...props}
           value={[toDayjs(start), toDayjs(end)]}
-          style={{ width, ...props?.style }}
+          style={{ width: "100%", ...props?.style }}
           onChange={(_, date) => onChange?.(date)}
         />
       );
@@ -84,7 +81,7 @@ export default function SearchControl({ option, value, onChange, onSearch }: Sea
         <Input
           {...props}
           value={(value ?? "") as string}
-          style={{ width, ...props?.style }}
+          style={{ width: "100%", ...props?.style }}
           onChange={event => onChange?.(event.target.value)}
           onKeyDown={event => {
             props?.onKeyDown?.(event);

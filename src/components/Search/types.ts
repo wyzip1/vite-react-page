@@ -8,8 +8,7 @@ export interface SearchOptionBase<T, P> {
   label: React.ReactNode;
   key: string;
   type?: T;
-  width?: number | string;
-  minWidth?: number | string;
+  inputWidth?: number | string;
   labelWidth?: number | string;
   props?: P;
   defaultValue?: unknown;
@@ -36,8 +35,7 @@ export interface SearchProps {
   ref?: React.Ref<SearchInstance>;
   config: SearchConfig;
   labelWidth?: number | string;
-  minItemWidth?: number | string;
-  maxItemsPerRow?: number;
+  inputWidth?: number | string;
   loading?: boolean;
   onChange?(values: SearchValues): void;
   onSearch(values: SearchValues): void;
@@ -45,7 +43,6 @@ export interface SearchProps {
   searchBtnExtend?: React.ReactNode;
   actionStyle?: React.CSSProperties;
   actionClassName?: string;
-  autoWrap?: boolean;
 }
 
 type OptionKey<T> = T extends { key: infer K extends string } ? K : never;

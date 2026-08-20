@@ -2,15 +2,14 @@ import { Button, Form } from "antd";
 import { useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import SearchField from "./SearchField";
 import { SearchForm } from "./styles";
-import { createInitialValues, toCssLength } from "./utils";
+import { createInitialValues } from "./utils";
 import type { SearchProps, SearchValues } from "./types";
 
 export default function Search({
   ref,
   config,
   labelWidth = 60,
-  minItemWidth = 220,
-  maxItemsPerRow = 4,
+  inputWidth = 220,
   loading,
   onChange,
   onSearch,
@@ -18,12 +17,10 @@ export default function Search({
   searchBtnExtend,
   actionClassName,
   actionStyle,
-  autoWrap = true,
 }: SearchProps) {
   const [form] = Form.useForm();
   const [lastAction, setLastAction] = useState<"search" | "reset">("search");
   const initialValues = useMemo(() => createInitialValues(config), [config]);
-  const columnCount = Math.max(1, Math.floor(maxItemsPerRow));
   const onChangeRef = useRef(onChange);
 
   useEffect(() => {
@@ -67,15 +64,17 @@ export default function Search({
       layout="inline"
       colon={false}
       initialValues={initialValues}
-      labelCol={{ flex: toCssLength(labelWidth) }}
-      wrapperCol={{ flex: "1 1 0", style: { minWidth: toCssLength(minItemWidth) } }}
-      $maxItemsPerRow={columnCount}
-      $autoWrap={autoWrap}
       onFinish={search}
       onValuesChange={(_, values) => onChange?.(values as SearchValues)}
     >
       {config.map(option => (
-        <SearchField option={option} onSearch={search} key={option.key} />
+        <SearchField
+          option={option}
+          defaultLabelWidth={labelWidth}
+          defaultInputWidth={inputWidth}
+          onSearch={search}
+          key={option.key}
+        />
       ))}
       <div className={`search-actions ${actionClassName ?? ""}`} style={actionStyle}>
         <Button htmlType="submit" type="primary" loading={lastAction === "search" && loading}>
