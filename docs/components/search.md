@@ -51,9 +51,9 @@ const config: SearchConfig = [
 
 - `config` 使用一维 `SearchOption[]`，具体换行完全由响应式布局决定。
 - 表单使用 `layout="inline"`，查询项可以换行；action 使用一个标准单项宽度，自动排在最后一个筛选项之后的下一块区域。
-- `minItemWidth` 设置所有查询项的默认最小宽度，默认为 `220px`；单项可通过 `minWidth` 覆盖。
+- `minItemWidth` 通过 `wrapperCol` 设置所有控件区的默认最小宽度，默认为 `220px`；单项可通过 `minWidth` 覆盖。
 - `maxItemsPerRow` 设置单行筛选项上限，默认为 `4`。即使实际筛选项不足上限，也仍按上限列数计算单项宽度，不会铺满整行。
-- `labelWidth` 设置所有 label 的默认宽度，默认为 `60px`；单项可通过 `labelWidth` 覆盖。
+- `labelWidth` 通过 `labelCol` 设置所有 label 的默认宽度，默认为 `60px`；单项可通过 `labelWidth` 覆盖。
 - 数字宽度按 px 处理，字符串值（如 `"18rem"`、`"30%"`）会原样写入 CSS。
 - `autoWrap={false}` 可关闭自动换行，默认开启。
 
@@ -64,7 +64,7 @@ const config: SearchConfig = [
 | `config`          | `SearchConfig`           | 必填    | 一维查询项配置。                   |
 | `onSearch`        | `(state: State) => void` | 必填    | 提交表单或输入框回车时触发。       |
 | `labelWidth`      | `number \| string`       | `60`    | 默认 label 宽度。                  |
-| `minItemWidth`    | `number \| string`       | `220`   | 查询项默认最小宽度。               |
+| `minItemWidth`    | `number \| string`       | `220`   | 控件区默认最小宽度。               |
 | `maxItemsPerRow`  | `number`                 | `4`     | 单行筛选项上限，用于计算单项宽度。 |
 | `loading`         | `boolean`                | `false` | 查询和重置的交互锁。               |
 | `onChange`        | `(state: State) => void` | -       | 初始化及字段值变化后触发。         |
@@ -90,7 +90,7 @@ interface ComOptions<T = "input", P = {}> {
 }
 ```
 
-`width` 控制控件宽度，`minWidth` 控制整个查询项（label + 控件）的最小布局宽度。内置类型包括 `input`、`select`、`cascader`、`date` 和 `dateRange`；未指定 `type` 时使用 `input`。
+`width` 控制控件宽度，`minWidth` 通过 `wrapperCol` 控制单个查询项的控件区最小宽度。内置类型包括 `input`、`select`、`cascader`、`date` 和 `dateRange`；未指定 `type` 时使用 `input`。
 
 ## Ref
 

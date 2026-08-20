@@ -2,14 +2,10 @@ import { Form } from "antd";
 import styled from "styled-components";
 
 export const SearchForm = styled(Form)<{
-  $labelWidth: string;
-  $minItemWidth: string;
   $maxItemsPerRow: number;
   $autoWrap: boolean;
 }>`
   width: 100%;
-  --search-label-width: ${props => props.$labelWidth};
-  --search-item-min-width: ${props => props.$minItemWidth};
   --search-item-width: ${props =>
     `calc((100% - ${(props.$maxItemsPerRow - 1) * 12}px) / ${props.$maxItemsPerRow})`};
   display: flex;
@@ -19,23 +15,12 @@ export const SearchForm = styled(Form)<{
 
   &.ant-form-inline > .search-item {
     flex: 0 0 var(--search-item-width);
-    min-width: min(100%, var(--search-item-min-width));
+    max-width: 100%;
     margin: 0;
 
     & > .ant-form-item-row {
       width: 100%;
       flex-wrap: nowrap;
-    }
-
-    .ant-form-item-label {
-      flex: 0 0 var(--search-label-width);
-      max-width: var(--search-label-width);
-      padding: 0 10px 0 0;
-    }
-
-    .ant-form-item-control {
-      min-width: 0;
-      flex: 1 1 0;
     }
   }
 

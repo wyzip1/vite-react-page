@@ -67,8 +67,8 @@ export default function Search({
       layout="inline"
       colon={false}
       initialValues={initialValues}
-      $labelWidth={toCssLength(labelWidth)!}
-      $minItemWidth={toCssLength(minItemWidth)!}
+      labelCol={{ flex: toCssLength(labelWidth) }}
+      wrapperCol={{ flex: "1 1 0", style: { minWidth: toCssLength(minItemWidth) } }}
       $maxItemsPerRow={columnCount}
       $autoWrap={autoWrap}
       onFinish={search}

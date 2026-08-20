@@ -13,23 +13,26 @@ interface FormControlProps extends SearchFieldProps {
   onChange?(value: unknown): void;
 }
 
-type SearchItemStyle = React.CSSProperties & {
-  "--search-item-min-width"?: string;
-  "--search-label-width"?: string;
-};
-
 function FormControl({ option, onSearch, value, onChange }: FormControlProps) {
   return <SearchControl option={option} value={value} onChange={onChange} onSearch={onSearch} />;
 }
 
 export default function SearchField({ option, onSearch }: SearchFieldProps) {
-  const style: SearchItemStyle = {
-    "--search-item-min-width": toCssLength(option.minWidth),
-    "--search-label-width": toCssLength(option.labelWidth),
-  };
+  const labelCol =
+    option.labelWidth !== undefined ? { flex: toCssLength(option.labelWidth) } : undefined;
+  const wrapperCol =
+    option.minWidth !== undefined
+      ? { flex: "1 1 0", style: { minWidth: toCssLength(option.minWidth) } }
+      : undefined;
 
   return (
-    <Form.Item className="search-item" name={option.key} label={option.label} style={style}>
+    <Form.Item
+      className="search-item"
+      name={option.key}
+      label={option.label}
+      labelCol={labelCol}
+      wrapperCol={wrapperCol}
+    >
       <FormControl option={option} onSearch={onSearch} />
     </Form.Item>
   );
