@@ -6,6 +6,7 @@ export type CustomModalProps<T = any> = Omit<ModalProps, "onOk"> & {
   onConfirm?: (data: T) => any | Promise<any>;
   form?: FormInstance;
   formProps?: FormProps;
+  initialValues?: T;
 };
 
 export default function CustomModal<T = any>({
@@ -13,6 +14,7 @@ export default function CustomModal<T = any>({
   onConfirm,
   form,
   formProps,
+  initialValues,
   ...props
 }: CustomModalProps<T>) {
   const [actionLoading, setActionLoading] = useState(false);
@@ -28,10 +30,13 @@ export default function CustomModal<T = any>({
 
   useConfigurableEffect(
     () => {
-      if (props.open) return;
+      if (props.open) {
+        form?.setFieldsValue(initialValues ?? {});
+        return;
+      }
       form?.resetFields();
     },
-    [form, props.open],
+    [form, props.open, initialValues],
     { runOnMount: false },
   );
 
