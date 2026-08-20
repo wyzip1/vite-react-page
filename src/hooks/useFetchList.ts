@@ -61,7 +61,7 @@ export default function useFetchList<
     list: Array<ItemType<T>>;
   },
   {
-    doSearch: (params: FetchListParams<T, PN, PS>, options?: DoSearchOptions) => ReturnType<T>;
+    doSearch: (params?: FetchListParams<T, PN, PS>, options?: DoSearchOptions) => ReturnType<T>;
     updateList: (callback?: (list: Array<ItemType<T>>) => void) => void;
     resetState: () => void;
   },
@@ -110,10 +110,10 @@ export default function useFetchList<
   };
 
   const doSearch = (
-    params: FetchListParams<T, PN, PS>,
+    params?: FetchListParams<T, PN, PS>,
     searchOptions: DoSearchOptions = {},
   ): ReturnType<T> => {
-    searchParamsRef.current = params;
+    if (params) searchParamsRef.current = params;
     const nextPageSize = searchOptions.resetPageSize ? defaultPageSize : pageSize;
     return updatePagination(1, nextPageSize);
   };

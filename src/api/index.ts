@@ -3,6 +3,12 @@ import type { RequestResponse } from "./config";
 import { request } from "./config";
 import type { CancelTokenSource } from "axios";
 
+export interface BaseRequestParams<T> {
+  cancelToken?: CancelTokenSource["token"];
+  body?: T;
+  query?: T;
+}
+
 export interface MockListItem {
   id: number;
   name: string;
@@ -20,13 +26,7 @@ export interface MockListParams extends Pagination {
   name?: string;
 }
 
-export const fetchMockList = ({
-  cancelToken,
-  body,
-}: {
-  cancelToken?: CancelTokenSource["token"];
-  body?: MockListParams;
-}) => {
+export const fetchMockList = ({ cancelToken, body }: BaseRequestParams<MockListParams>) => {
   return request({
     url: "/api/list",
     method: "POST",
