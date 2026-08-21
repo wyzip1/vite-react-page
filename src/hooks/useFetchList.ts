@@ -40,8 +40,8 @@ export type FetchListParams<
   PN extends string = "pageNum",
   PS extends string = "pageSize",
 > = Omit<Parameters<T>[0], "query" | "body"> & {
-  query?: Omit<Parameters<T>[0]["query"], PN | PS>;
-  body?: Omit<Parameters<T>[0]["body"], PN | PS>;
+  query?: Omit<NonNullable<Parameters<T>[0]["query"]>, PN | PS>;
+  body?: Omit<NonNullable<Parameters<T>[0]["body"]>, PN | PS>;
 };
 
 export default function useFetchList<
@@ -64,6 +64,7 @@ export default function useFetchList<
     doSearch: (params?: FetchListParams<T, PN, PS>, options?: DoSearchOptions) => ReturnType<T>;
     updateList: (callback?: (list: Array<ItemType<T>>) => void) => void;
     resetState: () => void;
+    getSearchParams: () => FetchListParams<T, PN, PS>;
   },
 ] {
   const defaultPageSize = options.pageSize ?? 10;
@@ -81,6 +82,7 @@ export default function useFetchList<
 
   const requestList = (nextPageNum: number, nextPageSize: number): ReturnType<T> => {
     const searchParams = searchParamsRef.current;
+    // @ts-ignore
     const paramsName = searchParams.body ? "body" : "query";
     const params = {
       [paramsName]: {
@@ -163,6 +165,11 @@ export default function useFetchList<
       loading,
       list: data?.data?.[options.propName?.list ?? "list"] || [],
     },
-    { doSearch, updateList, resetState },
+    {
+      doSearch,
+      updateList,
+      resetState,
+      getSearchParams: () => JSON.parse(JSON.stringify(searchParamsRef.current)),
+    },
   ];
 }
