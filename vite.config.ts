@@ -8,6 +8,7 @@ import AutoImport from "unplugin-auto-import/vite";
 import MultiPageAutoPlugin from "vite-plugin-multipage-auto";
 import tailwindcss from "@tailwindcss/vite";
 import autoprefixer from "autoprefixer";
+import youzanCookie from "vite-plugin-youzan-cookie";
 
 const dependenciesList = Object.keys(packagesJSON.dependencies);
 
@@ -23,6 +24,11 @@ export default defineConfig(({ mode }) => ({
     MultiPageAutoPlugin(),
     buildFTL({ ftlDir: "./dist2" }),
     viteMockServe({ mockPath: "mock" }),
+    youzanCookie({
+      viewURL: "",
+      browser: "chrome",
+      connectTimeoutMs: 30_000,
+    }),
   ],
   optimizeDeps: {
     include: [...dependenciesList],
@@ -65,7 +71,6 @@ export default defineConfig(({ mode }) => ({
             {
               name: "antd",
               test: /node_modules[\\/]antd[\\/]/,
-              maxSize: 1_200_000,
               priority: 20,
             },
             {

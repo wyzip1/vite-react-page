@@ -6,22 +6,6 @@ import CRouterProvider from "@/store/RouterProvider";
 import { scan } from "react-scan";
 import KeepAliveProvider from "@/router/components/KeepAlive/context";
 
-function autoSetCookie() {
-  const cookiesImport = import.meta.glob("../cookies.json")["../cookies.json"];
-  if (!cookiesImport) return;
-  cookiesImport().then(res => {
-    // @ts-ignore
-    // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-    (res as typeof import("../cookies.json")).cookies.forEach(cookie => {
-      document.cookie = `${cookie.name}=${cookie.value};`;
-    });
-  });
-}
-
-if (process.env.NODE_ENV === "development") {
-  autoSetCookie();
-}
-
 if (typeof window !== "undefined" && import.meta.env.MODE === "scan") {
   scan({
     enabled: true,
