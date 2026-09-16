@@ -52,4 +52,12 @@ export default [
       "@typescript-eslint/consistent-type-imports": "error",
     },
   },
+  {
+    files: ["src/api/generated/**/*.ts"],
+    rules: {
+      // @hey-api emits intentional placeholders that the base rule cannot
+      // distinguish from unused runtime variables in TypeScript source.
+      "no-unused-vars": "off",
+    },
+  },
 ];
