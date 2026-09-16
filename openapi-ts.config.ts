@@ -11,7 +11,7 @@ export default defineConfig({
     "@hey-api/schemas",
     {
       name: "@hey-api/client-axios",
-      runtimeConfigPath: "../config",
+      runtimeConfigPath: "./src/api/config",
     },
     {
       enums: "javascript",
