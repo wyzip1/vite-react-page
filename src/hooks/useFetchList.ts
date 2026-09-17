@@ -1,4 +1,4 @@
-import useRequest from "./useRequest";
+import useRequest, { type RequestResult } from "./useRequest";
 
 export interface Pagination {
   pageNum: number;
@@ -31,9 +31,7 @@ export interface FetchListOptions<
   };
 }
 
-export type ItemType<T> = T extends (...args: any[]) => Promise<{ data?: List<infer V> }>
-  ? V
-  : never;
+export type ItemType<T> = RequestResult<T> extends { data?: List<infer V> } ? V : never;
 
 export type FetchListParams<
   T extends (...args: any[]) => Promise<any>,
@@ -45,14 +43,14 @@ export type FetchListParams<
 };
 
 export default function useFetchList<
-  T extends (...args: any[]) => Promise<{ data?: List<any> }>,
+  T extends (...args: any[]) => Promise<any>,
   PN extends string = "pageNum",
   PS extends string = "pageSize",
 >(
   fetchApi: T,
   options: FetchListOptions<T, PN, PS> = { manual: false },
 ): [
-  (pageOptions: Pagination) => ReturnType<T>,
+  (pageOptions: Pagination) => Promise<RequestResult<T>>,
   {
     pageNum: number;
     pageSize: number;
@@ -61,7 +59,10 @@ export default function useFetchList<
     list: Array<ItemType<T>>;
   },
   {
-    doSearch: (params?: FetchListParams<T, PN, PS>, options?: DoSearchOptions) => ReturnType<T>;
+    doSearch: (
+      params?: FetchListParams<T, PN, PS>,
+      options?: DoSearchOptions,
+    ) => Promise<RequestResult<T>>;
     updateList: (callback?: (list: Array<ItemType<T>>) => void) => void;
     resetState: () => void;
     getSearchParams: () => FetchListParams<T, PN, PS>;
@@ -80,7 +81,7 @@ export default function useFetchList<
     reject: (reason: unknown) => void;
   }>(null);
 
-  const requestList = (nextPageNum: number, nextPageSize: number): ReturnType<T> => {
+  const requestList = (nextPageNum: number, nextPageSize: number): Promise<RequestResult<T>> => {
     const searchParams = searchParamsRef.current;
     // @ts-ignore
     const paramsName = searchParams.body ? "body" : "query";
@@ -92,10 +93,13 @@ export default function useFetchList<
       },
     } as Parameters<T>[0];
 
-    return request(params) as ReturnType<T>;
+    return request(params);
   };
 
-  const updatePagination = (nextPageNum: number, nextPageSize: number): ReturnType<T> => {
+  const updatePagination = (
+    nextPageNum: number,
+    nextPageSize: number,
+  ): Promise<RequestResult<T>> => {
     if (nextPageNum === pageNum && nextPageSize === pageSize) {
       return requestList(nextPageNum, nextPageSize);
     }
@@ -104,17 +108,17 @@ export default function useFetchList<
       pageChangeRequestRef.current = { resolve, reject };
       setPageNum(nextPageNum);
       setPageSize(nextPageSize);
-    }) as ReturnType<T>;
+    }) as Promise<RequestResult<T>>;
   };
 
-  const setPageInfo = (pageOptions: Pagination): ReturnType<T> => {
+  const setPageInfo = (pageOptions: Pagination): Promise<RequestResult<T>> => {
     return updatePagination(pageOptions.pageNum ?? pageNum, pageOptions.pageSize ?? pageSize);
   };
 
   const doSearch = (
     params?: FetchListParams<T, PN, PS>,
     searchOptions: DoSearchOptions = {},
-  ): ReturnType<T> => {
+  ): Promise<RequestResult<T>> => {
     if (params) searchParamsRef.current = params;
     const nextPageSize = searchOptions.resetPageSize ? defaultPageSize : pageSize;
     return updatePagination(1, nextPageSize);
@@ -156,14 +160,16 @@ export default function useFetchList<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNum, pageSize]);
 
+  const listData = (data as { data?: Record<string, any> } | undefined)?.data;
+
   return [
     setPageInfo,
     {
       pageNum,
       pageSize,
-      total: data?.data?.[options.propName?.total ?? "total"] || 0,
+      total: listData?.[options.propName?.total ?? "total"] || 0,
       loading,
-      list: data?.data?.[options.propName?.list ?? "list"] || [],
+      list: listData?.[options.propName?.list ?? "list"] || [],
     },
     {
       doSearch,

@@ -1,7 +1,19 @@
-import type { CancelTokenSource } from "axios";
-import axios from "axios";
+import type { AxiosError, AxiosResponse, CancelTokenSource } from "axios";
+import axios, { isAxiosError } from "axios";
 
-export type RequestResult<T> = T extends (...args: any[]) => Promise<infer V> ? V : never;
+type ApiResult<T> = T extends (...args: any[]) => Promise<infer V> ? V : never;
+type SuccessResult<T> = Exclude<ApiResult<T>, AxiosError>;
+
+export type RequestResult<T> =
+  SuccessResult<T> extends AxiosResponse<infer V> ? V : SuccessResult<T>;
+
+function unwrapResponse<T>(response: T): T extends AxiosResponse<infer V> ? V : T {
+  if (axios.isAxiosError(response)) return response as any;
+  if (response && typeof response === "object" && "status" in response && "headers" in response) {
+    return (response as unknown as AxiosResponse).data as any;
+  }
+  return response as any;
+}
 
 export default function useRequest<T extends (...args: any[]) => Promise<any>>(
   requestApi: T,
@@ -26,10 +38,12 @@ export default function useRequest<T extends (...args: any[]) => Promise<any>>(
   async function request(params: Parameters<T>[0]) {
     try {
       setLoading(true);
-      const res = await requestApi({
+      const response = await requestApi({
         cancelToken: cancelTokenSourceRef.current.token,
         ...params,
       });
+      if (isAxiosError(response)) throw response;
+      const res = unwrapResponse(response);
       if (handlerData) {
         const value = handlerData(res);
         setData(value ? res : value);
