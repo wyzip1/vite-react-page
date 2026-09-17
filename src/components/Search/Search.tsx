@@ -76,7 +76,10 @@ export default function Search({
           key={option.key}
         />
       ))}
-      <div className={`search-actions ${actionClassName ?? ""}`} style={actionStyle}>
+      <div
+        className={`search-actions ${actionClassName ?? ""}`}
+        style={{ paddingLeft: labelWidth, ...actionStyle }}
+      >
         <Button htmlType="submit" type="primary" loading={lastAction === "search" && loading}>
           查询
         </Button>

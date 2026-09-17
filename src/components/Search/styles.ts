@@ -26,5 +26,7 @@ export const SearchForm = styled(Form)`
     align-items: center;
     justify-content: flex-start;
     gap: 10px;
+    min-width: 100%;
+    box-sizing: border-box;
   }
 `;
